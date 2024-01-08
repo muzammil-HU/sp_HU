@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import ProfileCard from '../../components/reuseable/Cards/ProfileCard';
+import ProfileCard from '../../../../components/reuseable/Cards/ProfileCard';
 
 const Profile = () => {
   const cardProfileData = {

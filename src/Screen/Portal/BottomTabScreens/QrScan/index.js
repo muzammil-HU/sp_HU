@@ -19,7 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 import {showMessage} from 'react-native-flash-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import WifiInfo from 'react-native-wifi-reborn';
-import {COLORS} from '../../../Constants/COLORS';
+import {COLORS} from '../../../../Constants/COLORS';
 import {useSelector} from 'react-redux';
 
 const QrScan = () => {

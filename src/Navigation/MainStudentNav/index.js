@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TopTab from '../TopTab';
-import Settings from '../../Screen/Portal/Dashboard/Settings';
+import Settings from '../../Screen/StackScreens/Settings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../Constants/COLORS';
 

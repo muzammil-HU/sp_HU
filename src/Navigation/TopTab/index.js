@@ -6,7 +6,7 @@ import Register from '../../Screen/Auth/Register';
 import CHeader from '../../components/header/CustomHeader';
 import CustomTabBar from '../../components/header/CustomTabBar';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Settings from '../../Screen/Portal/Dashboard/Settings';
+import Settings from '../../Screen/StackScreens/Settings';
 import BottomBar from './BottomBar';
 import {COLORS} from '../../Constants/COLORS';
 

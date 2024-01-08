@@ -1,10 +1,10 @@
 import {Dimensions, StyleSheet, View} from 'react-native';
 import React from 'react';
-import TopCard from '../../../components/reuseable/Cards/TopCards';
-import DashboardCard from '../../../components/reuseable/Cards/DashboardCard';
+import TopCard from '../../../../components/reuseable/Cards/TopCards';
+import DashboardCard from '../../../../components/reuseable/Cards/DashboardCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {COLORS} from '../../../Constants/COLORS';
+import {COLORS} from '../../../../Constants/COLORS';
 
 const BottomHome = () => {
   const width = Dimensions.get('window').width;
@@ -42,7 +42,7 @@ const BottomHome = () => {
       Icon: {
         type: 'image',
         // IconComp: Ionicons,
-        source: require('../../../assets/dashicon.png'),
+        source: require('../../../../assets/dashicon.png'),
         iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },

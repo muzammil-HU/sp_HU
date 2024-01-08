@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import TopCard from '../../../components/reuseable/Cards/TopCards';
+import TopCard from '../../../../components/reuseable/Cards/TopCards';
 
 const Attendence = () => {
   return (

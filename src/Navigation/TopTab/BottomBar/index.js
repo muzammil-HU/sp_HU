@@ -1,16 +1,16 @@
 import {StyleSheet, View, useColorScheme} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Profile from '../../../Screen/Profile';
-import Attendence from '../../../Screen/Portal/Attendence';
-import QrScan from '../../../Screen/Portal/QrScan';
+import Profile from '../../../Screen/Portal/BottomTabScreens/Profile';
+import Attendence from '../../../Screen/Portal/BottomTabScreens/Attendence';
+import QrScan from '../../../Screen/Portal/BottomTabScreens/QrScan';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import BottomHome from '../../../Screen/Portal/Home';
-import Settings from '../../../Screen/Portal/Dashboard/Settings';
+import BottomHome from '../../../Screen/Portal/BottomTabScreens/Home';
+import Settings from '../../../Screen/StackScreens/Settings';
 import DeviceInfo, {
   getIpAddress,
   getMacAddress,
