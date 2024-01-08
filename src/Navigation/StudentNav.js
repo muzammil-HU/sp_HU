@@ -32,6 +32,7 @@ import {showMessage} from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import CHeader from '../components/header/CustomHeader';
+import {COLORS} from '../Constants/COLORS';
 // import {Image} from 'react-native-reanimated/lib/typescript/Animated';
 
 const Drawer = createDrawerNavigator();
@@ -83,13 +84,13 @@ const StudentNav = () => {
       showMessage({
         message: 'Logged out Sucessfully',
         type: 'success',
-        backgroundColor: '#2BA36F',
-        color: '#fff',
+        backgroundColor: COLORS.themeColor,
+        color: COLORS.white,
         icon: () => (
           <FontAwesome6
             name="check-circle"
             size={windowwidth / 16}
-            color="#fff"
+            color={COLORS.white}
             style={{paddingRight: 20}}
           />
         ),
@@ -110,14 +111,14 @@ const StudentNav = () => {
       screenOptions={{
         headerShown: true,
         headerStyle: {
-          backgroundColor: '#2BA36F',
+          backgroundColor: COLORS.themeColor,
           overflow: 'hidden',
           borderBottomStartRadius: 10,
           borderBottomEndRadius: 10,
         },
         header: () => <CHeader />,
         drawerStyle: {
-          backgroundColor: '#2BA36F',
+          backgroundColor: COLORS.themeColor,
           width: 240,
           overflow: 'hidden',
           borderBottomStartRadius: 10,
@@ -132,7 +133,7 @@ const StudentNav = () => {
                 source={require('../assets/whitelogo.png')}
                 resizeMode="contain"
               />
-              {/* <Text style={[styles.userName, {color: '#fff'}]}>
+              {/* <Text style={[styles.userName, {color: COLORS.white}]}>
                 Student Portal
               </Text> */}
               {/* <Text style={styles.userEmail}>Email</Text> */}
@@ -196,7 +197,7 @@ export default StudentNav;
 const Colors = {
   bg: '#0C8C45',
   barbg: '#26ed80',
-  active: '#fff',
+  active: COLORS.white,
   inactive: '#eee',
   transparent: 'transparent',
 };

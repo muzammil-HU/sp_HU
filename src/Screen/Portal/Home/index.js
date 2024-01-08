@@ -4,6 +4,7 @@ import TopCard from '../../../components/reuseable/Cards/TopCards';
 import DashboardCard from '../../../components/reuseable/Cards/DashboardCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {COLORS} from '../../../Constants/COLORS';
 
 const BottomHome = () => {
   const width = Dimensions.get('window').width;
@@ -12,24 +13,24 @@ const BottomHome = () => {
       cardhead: 'Required Credit Hrs',
       carddesc: 'No of credit hours required for degree completion',
       cardvalue: '135',
-      backgroundColor: '#2BA36F',
-      color: '#fff',
+      backgroundColor: COLORS.themeColor,
+      color: COLORS.white,
       fontSize: width / 11,
     },
     {
       cardhead: 'Passed Credit Hrs',
       carddesc: 'No of credit hours required for degree completion',
       cardvalue: '8',
-      backgroundColor: '#fff',
-      color: '#2BA36F',
+      backgroundColor: COLORS.white,
+      color: COLORS.themeColor,
       fontSize: width / 11,
     },
     {
       cardhead: 'Degree Status',
       carddesc: 'Either student elgible for degree or not',
       cardvalue: 'Not Eligible For Degree (Incomplete)',
-      backgroundColor: '#2BA36F',
-      color: '#fff',
+      backgroundColor: COLORS.themeColor,
+      color: COLORS.white,
       fontSize: width / 23,
     },
   ];
@@ -42,7 +43,7 @@ const BottomHome = () => {
         type: 'image',
         // IconComp: Ionicons,
         source: require('../../../assets/dashicon.png'),
-        iconColor: '#2BA36F',
+        iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
     },
@@ -54,7 +55,7 @@ const BottomHome = () => {
         type: 'icon',
         IconComp: Ionicons,
         iconName: 'stats-chart-outline',
-        iconColor: '#2BA36F',
+        iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
     },
@@ -67,7 +68,7 @@ const BottomHome = () => {
         type: 'icon',
         IconComp: MaterialIcons,
         iconName: 'class',
-        iconColor: '#2BA36F',
+        iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
     },
@@ -79,7 +80,7 @@ const BottomHome = () => {
         type: 'icon',
         IconComp: Ionicons,
         iconName: 'stats-chart-outline',
-        iconColor: '#2BA36F',
+        iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
       // Icon: Entypo,
@@ -95,7 +96,7 @@ const BottomHome = () => {
         type: 'icon',
         IconComp: Ionicons,
         iconName: 'stats-chart-outline',
-        iconColor: '#2BA36F',
+        iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
     },
@@ -107,7 +108,7 @@ const BottomHome = () => {
         type: 'icon',
         IconComp: Ionicons,
         iconName: 'stats-chart-outline',
-        iconColor: '#2BA36F',
+        iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
     },
@@ -129,7 +130,7 @@ const BottomHome = () => {
         flex: 1,
         paddingVertical: '4%',
         paddingHorizontal: '2%',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.white,
       }}>
       <TopCard cards={cards} />
       <DashboardCard Dashcards={Dashcards} />

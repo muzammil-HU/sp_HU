@@ -16,6 +16,7 @@ export default axios.create({
   baseURL:
     // 'https://sp.hamdard.edu.pk/api'
     'http://192.168.137.193:8085/api/v1/',
+
   headers: {
     'Content-type': 'application/json',
   },

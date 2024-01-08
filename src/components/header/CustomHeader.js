@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ProfieTopCard from './ProfieTopCard';
 import {useSelector} from 'react-redux';
+import {COLORS} from '../../Constants/COLORS';
 
 const CHeader = () => {
   const WindowWidth = Dimensions.get('window').width;
@@ -31,7 +32,7 @@ const CHeader = () => {
         elevation: 10,
         borderBottomStartRadius: 10,
         borderBottomEndRadius: 10,
-        backgroundColor: '#2BA36F',
+        backgroundColor: COLORS.themeColor,
         flexDirection: 'row',
         justifyContent: 'space-between',
         overflow: 'hidden',
@@ -50,33 +51,3 @@ const CHeader = () => {
 export default CHeader;
 
 const styles = StyleSheet.create({});
-
-{
-  /* <TouchableOpacity
-          style={{paddingLeft: 10, paddingTop: 5}}
-          onPress={() => navigation.openDrawer()}>
-          <AntDesign name="arrowleft" size={30} color={'#fff'} />
-        </TouchableOpacity> */
-}
-
-//{' '}
-{
-  /* <Image
-    //   source={require('../../assets/Headerimg.png')}
-    //   resizeMode="cover"
-    //   style={{height: '50%', opacity: 0.2}}
-    // /> */
-}
-// {/* </ImageBackground> */}
-{
-  /* <Image
-        source={require('../../assets/Headerimg.png')}
-        resizeMode="contain"
-        style={{
-          height: WindowHeight / 12,
-          width: '100%',
-          backgroundColor: '#007E40',
-          opacity: 0.4,
-        }}
-      /> */
-}

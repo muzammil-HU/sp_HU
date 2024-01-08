@@ -18,10 +18,10 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Profile from '../../Profile';
 import Attendence from '../Attendence';
-import QrScan from '../../../components/QrScan';
+import QrScan from '../QrScan';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import BottomBar from '../../../Navigation/BottomBar';
+import BottomBar from '../../../Navigation/TopTab/BottomBar';
 
 // import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const {width} = Dimensions.get('window');
@@ -37,7 +37,7 @@ const {width} = Dimensions.get('window');
 //               onPress={() => navigation.navigate('QR Scanner')}
 //               style={[
 //                 styles.mainItemContainer,
-//                 {backgroundColor: '#fff', height: '100%', elevation: 10},
+//                 {backgroundColor: COLORS.white, height: '100%', elevation: 10},
 //               ]}>
 //               <Image
 //                 source={require('../../assets/qrIcon.png')}
@@ -78,7 +78,7 @@ const {width} = Dimensions.get('window');
 //             <Pressable
 //               onPress={onPress}
 //               style={{
-//                 backgroundColor: isFocused ? '#fff' : '#2BA344',
+//                 backgroundColor: isFocused ? COLORS.white : '#2BA344',
 //                 borderRadius: 10,
 //               }}>
 //               <View
@@ -98,61 +98,61 @@ const {width} = Dimensions.get('window');
 //   );
 // };
 
-const Dashboard = () => {
-  const theme = useColorScheme() === 'dark';
-  const isDarkTheme = theme === 'dark';
-  const Tab = createBottomTabNavigator();
-  const screenOptions = {
-    tabBarShowLabel: false,
-    headerShown: false,
-    tabBarStyle: {
-      position: 'absolute',
-      bottom: 0,
-      right: 0,
-      left: 0,
-      elevation: 0,
-      height: 60,
-      backgroundColor: '#2BA36F',
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-    },
-  };
+// const Dashboard = () => {
+//   const theme = useColorScheme() === 'dark';
+//   const isDarkTheme = theme === 'dark';
+//   const Tab = createBottomTabNavigator();
+//   const screenOptions = {
+//     tabBarShowLabel: false,
+//     headerShown: false,
+//     tabBarStyle: {
+//       position: 'absolute',
+//       bottom: 0,
+//       right: 0,
+//       left: 0,
+//       elevation: 0,
+//       height: 60,
+//       backgroundColor: COLORS.themeColor,
+//       borderTopLeftRadius: 10,
+//       borderTopRightRadius: 10,
+//     },
+//   };
 
-  return (
-    <View
-      style={[
-        {
-          flex: 1,
-          // backgroundColor: 'red',
-          // paddingHorizontal: '5%',
-        },
-      ]}>
-      {/* <TopCard />
-      <ProfileCard /> */}
-      <BottomBar />
-    </View>
-  );
-};
+//   return (
+//     <View
+//       style={[
+//         {
+//           flex: 1,
+//           // backgroundColor: 'red',
+//           // paddingHorizontal: '5%',
+//         },
+//       ]}>
+//       {/* <TopCard />
+//       <ProfileCard /> */}
+//       <BottomBar />
+//     </View>
+//   );
+// };
 
-export default Dashboard;
+// export default Dashboard;
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flexDirection: 'row',
-    // bottom: 0,
-    height: '10%',
-    backgroundColor: '#2BA36F',
-    // borderRadius: 25,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    // marginHorizontal: width * 0.1,
-  },
-  mainItemContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10,
-    borderRadius: 1,
-    borderColor: '#333B42',
-  },
-});
+// const styles = StyleSheet.create({
+//   mainContainer: {
+//     flexDirection: 'row',
+//     // bottom: 0,
+//     height: '10%',
+//     backgroundColor: COLORS.themeColor,
+//     // borderRadius: 25,
+//     borderTopLeftRadius: 10,
+//     borderTopRightRadius: 10,
+//     // marginHorizontal: width * 0.1,
+//   },
+//   mainItemContainer: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     marginVertical: 10,
+//     borderRadius: 1,
+//     borderColor: '#333B42',
+//   },
+// });

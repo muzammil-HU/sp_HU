@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import AuthNavigation from './AuthNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import StudentNav from './StudentNav';
 import TopTab from './TopTab';
 import {useSelector} from 'react-redux';
+import MainStudentNav from './MainStudentNav';
+import AuthNavigation from './AuthNavigation';
 
 const MainNavigation = () => {
   // var localStorage;
@@ -26,7 +27,7 @@ const MainNavigation = () => {
     //   {/* <StudentNav /> */}
     // </NavigationContainer>
     <NavigationContainer>
-      {AuthState ? <TopTab /> : <AuthNavigation />}
+      {AuthState ? <MainStudentNav /> : <AuthNavigation />}
     </NavigationContainer>
   );
 };

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {COLORS} from '../../Constants/COLORS';
 
 const Customheader = () => {
   const WindowWidth = Dimensions.get('window').width;
@@ -26,7 +27,7 @@ const Customheader = () => {
         elevation: 10,
         borderBottomStartRadius: 10,
         borderBottomEndRadius: 10,
-        backgroundColor: '#2BA36F',
+        backgroundColor: COLORS.themeColor,
         flexDirection: 'row',
         justifyContent: 'space-between',
         overflow: 'hidden',
@@ -87,7 +88,7 @@ const Customheader = () => {
             <Text
               style={{
                 fontWeight: '800',
-                color: '#fff',
+                color: COLORS.white,
                 // fontSize: WindowWidth / 22,
               }}>
               Faiza Hameed
@@ -95,7 +96,7 @@ const Customheader = () => {
             <Text
               style={{
                 fontWeight: '800',
-                color: '#fff',
+                color: COLORS.white,
                 // fontSize: WindowWidth / 22,
               }}>
               (277-2017)
@@ -123,25 +124,3 @@ const Customheader = () => {
 export default Customheader;
 
 const styles = StyleSheet.create({});
-
-//{' '}
-{
-  /* <Image
-    //   source={require('../../assets/Headerimg.png')}
-    //   resizeMode="cover"
-    //   style={{height: '50%', opacity: 0.2}}
-    // /> */
-}
-// {/* </ImageBackground> */}
-{
-  /* <Image
-        source={require('../../assets/Headerimg.png')}
-        resizeMode="contain"
-        style={{
-          height: WindowHeight / 12,
-          width: '100%',
-          backgroundColor: '#007E40',
-          opacity: 0.4,
-        }}
-      /> */
-}

@@ -6,6 +6,7 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
+import {COLORS} from '../../../../Constants/COLORS';
 
 const DashboardCard = ({Dashcards}) => {
   return (
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     elevation: 24,
     width: '100%',
     height: '30%',
-    backgroundColor: '#2BA36F',
+    backgroundColor: COLORS.themeColor,
     // marginBottom: '1%',
   },
   cardcol1: {
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textsty: {
-    color: '#fff',
+    color: COLORS.white,
     fontSize: width / 20,
     fontWeight: '700',
     // textAlignVertical: 'center',

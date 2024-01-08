@@ -2,11 +2,11 @@ import {View, Text} from 'react-native';
 import React, {useEffect} from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Login from '../Screen/Auth/Login';
-import Register from '../Screen/Auth/Register';
-import StudentNav from './StudentNav';
-import ForgotPassword from '../Screen/Auth/ForgotPassword';
-import TopTab from './TopTab';
+import Login from '../../Screen/Auth/Login';
+import Register from '../../Screen/Auth/Register';
+import StudentNav from '../StudentNav';
+import ForgotPassword from '../../Screen/Auth/ForgotPassword';
+import TopTab from '../TopTab';
 const Stack = createNativeStackNavigator();
 
 const AuthNavigation = () => {

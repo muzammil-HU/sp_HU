@@ -10,7 +10,7 @@ const Attendence = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor: '#2BA36F',
+        // backgroundColor: COLORS.themeColor,
       }}>
       {/* <TopCard /> */}
       <Text>Attendence</Text>

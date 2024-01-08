@@ -12,7 +12,7 @@ const ForgotPassword = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#2BA36F',
+        backgroundColor: COLORS.themeColor,
       }}>
       <Text style={{color: 'white', fontSize: windowwidth / 30}}>
         ForgotPassword

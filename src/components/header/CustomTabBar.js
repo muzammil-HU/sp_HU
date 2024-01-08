@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useRef} from 'react';
 import ProfieTopCard from './ProfieTopCard';
-
+import {COLORS} from '../../Constants/COLORS';
 const CustomTabBar = ({state, descriptors, navigation}) => {
   //   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
@@ -31,7 +31,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
         elevation: 25,
         borderBottomStartRadius: 20,
         borderBottomEndRadius: 20,
-        backgroundColor: '#2BA36F',
+        backgroundColor: COLORS.themeColor,
         flexDirection: 'column',
         justifyContent: 'space-between',
         // overflow: 'scroll',
@@ -72,7 +72,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
           let isfocused = index === state.index;
           if (isfocused) {
             // Active tab color
-            tabColor = options.activeBackgroundColor || '#fff';
+            tabColor = options.activeBackgroundColor || COLORS.white;
           } else {
             // Inactive tab color
             tabColor = options.inactiveBackgroundColor || 'transparent';
@@ -104,7 +104,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
                   borderRadius: 15,
                   // paddingHorizontal: '2%',
                   borderWidth: 2,
-                  borderColor: '#fff',
+                  borderColor: COLORS.white,
                   ...shadowStyle.ios,
                 },
               ]}>
@@ -112,7 +112,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
                 style={{
                   fontSize: WindowWidth / 25,
                   fontWeight: '500',
-                  color: isfocused ? '#2BA36F' : '#fff',
+                  color: isfocused ? COLORS.themeColor : COLORS.white,
                   textAlign: 'center',
                 }}>
                 {label}

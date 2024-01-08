@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import React from 'react';
+import {COLORS} from '../../../../Constants/COLORS';
 const TopCard = ({cards}) => {
   return (
     <View style={styles.container}>
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   },
   content: {
     fontWeight: '800',
-    color: '#007E40',
+    color: COLORS.TextthemeColor,
     textAlign: 'center',
     fontSize: Dimensions.get('window').width / 12,
   },

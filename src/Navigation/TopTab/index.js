@@ -5,15 +5,19 @@ import Dashboard from '../../Screen/Portal/Dashboard';
 import Register from '../../Screen/Auth/Register';
 import CHeader from '../../components/header/CustomHeader';
 import CustomTabBar from '../../components/header/CustomTabBar';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Settings from '../../Screen/Portal/Dashboard/Settings';
+import BottomBar from './BottomBar';
+import {COLORS} from '../../Constants/COLORS';
 
 const TopTab = () => {
   const tabscreens = [
     {
       name: 'Home',
-      component: Dashboard,
+      component: BottomBar,
       options: {
         tabBarLabel: 'Dashboard',
-        activeBackgroundColor: '#fff',
+        activeBackgroundColor: COLORS.white,
         inactiveBackgroundColor: 'transparent',
       },
     },
@@ -22,7 +26,7 @@ const TopTab = () => {
       component: Register,
       options: {
         tabBarLabel: 'Academics',
-        activeBackgroundColor: '#fff',
+        activeBackgroundColor: COLORS.white,
         inactiveBackgroundColor: 'transparent',
       },
     },
@@ -31,7 +35,7 @@ const TopTab = () => {
       component: Register,
       options: {
         tabBarLabel: 'Examination',
-        activeBackgroundColor: '#fff',
+        activeBackgroundColor: COLORS.white,
         inactiveBackgroundColor: 'transparent',
       },
     },
@@ -40,7 +44,7 @@ const TopTab = () => {
       component: Register,
       options: {
         tabBarLabel: 'Evaluation',
-        activeBackgroundColor: '#fff',
+        activeBackgroundColor: COLORS.white,
         inactiveBackgroundColor: 'transparent',
       },
     },
@@ -53,9 +57,7 @@ const TopTab = () => {
       screenOptions={{
         tabBarScrollEnabled: true,
         swipeEnabled: true,
-      }}
-      // style={{ paddingHorizontal: 0 }}
-    >
+      }}>
       {tabscreens.map(tab => (
         <TTab.Screen
           key={tab.name}
@@ -63,18 +65,26 @@ const TopTab = () => {
           component={tab.component}
           options={{
             tabBarLabel: tab.options.tabBarLabel,
-            activeBackgroundColor: '#fff',
+            activeBackgroundColor: COLORS.white,
             inactiveBackgroundColor: 'transparent',
           }}
         />
       ))}
+    </TTab.Navigator>
+  );
+};
 
-      {/* <TTab.Screen
+export default TopTab;
+
+const styles = StyleSheet.create({});
+
+{
+  /* <TTab.Screen
         name="Home"
         component={Dashboard}
         options={{
           tabBarLabel: 'Dashboard',
-          activeBackgroundColor: '#fff',
+          activeBackgroundColor: COLORS.white,
           inactiveBackgroundColor: 'transparent',
         }}
       />
@@ -83,7 +93,7 @@ const TopTab = () => {
         component={Register}
         options={{
           tabBarLabel: 'Academics',
-          activeBackgroundColor: '#fff',
+          activeBackgroundColor: COLORS.white,
           inactiveBackgroundColor: 'transparent',
         }}
       />
@@ -92,7 +102,7 @@ const TopTab = () => {
         component={Register}
         options={{
           tabBarLabel: 'Examinations',
-          activeBackgroundColor: '#fff',
+          activeBackgroundColor: COLORS.white,
           inactiveBackgroundColor: 'transparent',
         }}
       />
@@ -101,7 +111,7 @@ const TopTab = () => {
         component={Register}
         options={{
           tabBarLabel: 'SETTINGS',
-          activeBackgroundColor: '#fff',
+          activeBackgroundColor: COLORS.white,
           inactiveBackgroundColor: 'transparent',
         }}
       />
@@ -110,14 +120,8 @@ const TopTab = () => {
         component={Register}
         options={{
           tabBarLabel: 'SETTINGS',
-          activeBackgroundColor: '#fff',
+          activeBackgroundColor: COLORS.white,
           inactiveBackgroundColor: 'transparent',
         }}
-      /> */}
-    </TTab.Navigator>
-  );
-};
-
-export default TopTab;
-
-const styles = StyleSheet.create({});
+      /> */
+}

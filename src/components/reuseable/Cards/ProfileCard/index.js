@@ -1,5 +1,6 @@
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {COLORS} from '../../../../Constants/COLORS';
 
 const ProfileCard = ({cardProfileData}) => {
   const WindowWidth = Dimensions.get('window').width;
@@ -35,7 +36,7 @@ const ProfileCard = ({cardProfileData}) => {
           <Text
             style={{
               fontWeight: '800',
-              color: '#000',
+              color: COLORS.black,
               fontSize: WindowWidth / 22,
             }}>
             Faiza Hameed(277-2017)
@@ -59,7 +60,7 @@ const ProfileCard = ({cardProfileData}) => {
           <Text
             style={{
               fontWeight: '800',
-              color: '#000',
+              color: COLORS.black,
               fontSize: WindowWidth / 25,
             }}>
             Personal Information:
@@ -70,7 +71,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.email}
             </Text>
@@ -81,7 +82,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.admissionDate}
             </Text>
@@ -92,7 +93,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.campus}
             </Text>
@@ -103,7 +104,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.program}
             </Text>
@@ -114,7 +115,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.class}
             </Text>
@@ -125,7 +126,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.dob}
             </Text>
@@ -140,7 +141,7 @@ const ProfileCard = ({cardProfileData}) => {
             <Text style={{fontSize: WindowWidth / 25}}>Status: </Text>
             <View
               style={{
-                backgroundColor: '#007E40',
+                backgroundColor: COLORS.TextthemeColor,
                 padding: '1%',
                 borderRadius: 8,
               }}>
@@ -148,7 +149,7 @@ const ProfileCard = ({cardProfileData}) => {
                 style={{
                   fontSize: WindowWidth / 25,
                   fontWeight: '700',
-                  color: '#fff',
+                  color: COLORS.white,
                 }}>
                 {cardProfileData.status}
               </Text>
@@ -160,7 +161,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.cnic}
             </Text>
@@ -171,7 +172,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.phoneNum}
             </Text>
@@ -182,7 +183,7 @@ const ProfileCard = ({cardProfileData}) => {
               style={{
                 fontSize: WindowWidth / 25,
                 fontWeight: '700',
-                color: '#007E40',
+                color: COLORS.TextthemeColor,
               }}>
               {cardProfileData.address}
             </Text>

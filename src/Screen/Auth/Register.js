@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import wifiReborn from 'react-native-wifi-reborn';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {COLORS} from '../../Constants/COLORS';
 
 const Register = () => {
   const isemulator = useIsEmulator();
@@ -78,7 +79,7 @@ const Register = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.white,
         paddingHorizontal: '5%',
       }}>
       {/* <Text>{mac}</Text> */}

@@ -7,6 +7,7 @@ import {Provider} from 'react-redux';
 import {persistor, store} from './src/Redux/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import FlashMessage from 'react-native-flash-message';
+import {COLORS} from './src/Constants/COLORS';
 export default function App() {
   const [splash, setSplash] = useState(true);
   const statusheight = StatusBar.currentHeight;
@@ -20,7 +21,7 @@ export default function App() {
         <View style={{flex: 1}}>
           <StatusBar
             barStyle={'light-content'}
-            backgroundColor={'#2BA36F'}
+            backgroundColor={COLORS.themeColor}
             // style="light" translucent={true}
           />
           {/* <MainNavigation /> */}
