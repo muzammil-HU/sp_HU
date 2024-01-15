@@ -21,7 +21,7 @@ const ProfileCard = ({cardProfileData}) => {
           <Image
             source={require('../../../../assets/test.png')}
             resizeMode="stretch"
-            style={{height: '45%', width: '70%', borderRadius: 50}}
+            style={{height: '40%', width: '85%', borderRadius: 50}}
           />
         </View>
         <View
@@ -31,23 +31,30 @@ const ProfileCard = ({cardProfileData}) => {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'flex-start',
-            // backgroundColor: 'blue',
           }}>
           <Text
-            style={{
-              fontWeight: '800',
-              color: COLORS.black,
-              fontSize: WindowWidth / 22,
-            }}>
-            Faiza Hameed(277-2017)
+            style={[
+              styles.Textsty,
+              {
+                fontWeight: '800',
+                // color: COLORS.black,
+                fontSize: WindowWidth / 22,
+              },
+            ]}>
+            {cardProfileData.name}
           </Text>
           <Text
-            style={{
-              fontSize: WindowWidth / 28,
-            }}>
-            Faiza Hameed D/O Hameed-Ul-Haq
+            style={[
+              styles.Textsty,
+              {
+                fontSize: WindowWidth / 28,
+              },
+            ]}>
+            {cardProfileData.desc}
           </Text>
-          <Text>Admission Status Confirmed</Text>
+          <Text style={[styles.Textsty]}>
+            {cardProfileData.addmision_status}
+          </Text>
         </View>
       </View>
 
@@ -58,15 +65,18 @@ const ProfileCard = ({cardProfileData}) => {
         }}>
         <View style={{flexDirection: 'column'}}>
           <Text
-            style={{
-              fontWeight: '800',
-              color: COLORS.black,
-              fontSize: WindowWidth / 25,
-            }}>
+            style={[
+              styles.Textsty,
+              {
+                fontWeight: '800',
+              },
+            ]}>
             Personal Information:
           </Text>
           <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>Office Email: </Text>
+            <Text style={[styles.Textsty, {fontSize: WindowWidth / 25}]}>
+              Office Email:{' '}
+            </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -77,7 +87,7 @@ const ProfileCard = ({cardProfileData}) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>Admission Date: </Text>
+            <Text style={[styles.Textsty]}>Admission Date: </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -88,7 +98,7 @@ const ProfileCard = ({cardProfileData}) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>Campus: </Text>
+            <Text style={[styles.Textsty]}>Campus: </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -99,7 +109,7 @@ const ProfileCard = ({cardProfileData}) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>Program: </Text>
+            <Text style={[styles.Textsty]}>Program: </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -110,7 +120,7 @@ const ProfileCard = ({cardProfileData}) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>Class: </Text>
+            <Text style={[styles.Textsty]}>Class: </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -121,7 +131,7 @@ const ProfileCard = ({cardProfileData}) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>Date of Birth: </Text>
+            <Text style={[styles.Textsty]}>Date of Birth: </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -138,7 +148,7 @@ const ProfileCard = ({cardProfileData}) => {
               flexWrap: 'wrap',
               alignItems: 'center',
             }}>
-            <Text style={{fontSize: WindowWidth / 25}}>Status: </Text>
+            <Text style={[styles.Textsty]}>Status: </Text>
             <View
               style={{
                 backgroundColor: COLORS.TextthemeColor,
@@ -156,7 +166,7 @@ const ProfileCard = ({cardProfileData}) => {
             </View>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>CNIC: </Text>
+            <Text style={[styles.Textsty]}>CNIC: </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -167,7 +177,7 @@ const ProfileCard = ({cardProfileData}) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>Phone Number: </Text>
+            <Text style={[styles.Textsty]}>Phone Number: </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -177,8 +187,13 @@ const ProfileCard = ({cardProfileData}) => {
               {cardProfileData.phoneNum}
             </Text>
           </View>
-          <View style={{flexDirection: 'row', paddingTop: 5, flexWrap: 'wrap'}}>
-            <Text style={{fontSize: WindowWidth / 25}}>Address: </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingTop: 5,
+              flexWrap: 'wrap',
+            }}>
+            <Text style={[styles.Textsty]}>Address: </Text>
             <Text
               style={{
                 fontSize: WindowWidth / 25,
@@ -203,6 +218,10 @@ export default ProfileCard;
           </View>
         </View> */
 }
+
+const WindowWidth = Dimensions.get('window').width;
+const WindowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
@@ -212,5 +231,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     elevation: 5,
+  },
+  Textsty: {
+    fontSize: WindowWidth / 25,
+    color: COLORS.black,
   },
 });

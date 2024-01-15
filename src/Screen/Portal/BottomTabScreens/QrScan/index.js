@@ -7,9 +7,10 @@ import {
   View,
   PermissionsAndroid,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Camera,
+  getCameraDevice,
   useCameraDevice,
   useCameraDevices,
   useCameraPermission,
@@ -20,54 +21,69 @@ import {showMessage} from 'react-native-flash-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import WifiInfo from 'react-native-wifi-reborn';
 import {COLORS} from '../../../../Constants/COLORS';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {useAppState} from '@react-native-community/hooks';
+import {useIsFocused, useFocusEffect} from '@react-navigation/native';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import NetInfo from '@react-native-community/netinfo';
+import {getwifiname} from '../../../../Redux/Actions/GlobalStatesFunctions';
+import CameraComp from '../../../../components/CameraComp';
 
 const QrScan = () => {
+  const SSID = useSelector(state => {
+    return state?.GlobalStatesReducer.WifiName;
+  });
   const navigation = useNavigation();
-  const [wifiName, setWifiName] = useState();
-  const [deviceId, setDeviceId] = useState();
+  const dispatch = useDispatch();
+  const [load, setLoad] = useState(true);
+  const cameraRef = React.useRef(null);
+  // const [deviceId, setDeviceId] = useState();
+  const [isCameraInitialized, setIsCameraInitialized] = useState(false);
   const windowHeight = Dimensions.get('window').height;
   const windowwidth = Dimensions.get('window').width;
   const {hasPermission, requestPermission} = useCameraPermission();
-  const device = useCameraDevice('back');
-  const AuthState = useSelector(state => {
-    return state?.AuthReducer.TokenId;
+  const devices = Camera.getAvailableCameraDevices();
+  const device = getCameraDevice(devices, 'back', {
+    physicalDevices: ['wide-angle-camera'],
   });
+  const currentAppState = useAppState();
+  const IsFocused = useIsFocused();
+  const camActive = IsFocused && currentAppState === 'active';
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
     onCodeScanned: codes => {
       console.log(`Scanned ${codes[0].value} codes!`);
-      ToastAndroid.show(codes[0].value, ToastAndroid.LONG);
+      if (codes[0].value !== '') {
+        Alert.alert('Scanned..!');
+      }
+      // ToastAndroid.show(codes[0].value, ToastAndroid.LONG);
       navigation.navigate('Attendence');
+      showMessage({
+        message: 'My message title',
+        description: 'My message description',
+        type: 'default',
+        backgroundColor: 'purple',
+        color: '#606060',
+      });
+      // console.log(first)
     },
   });
-  const permission = async () => {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'Location permision is required',
-        message: 'This app requires location',
-        buttonNegative: 'DENY',
-        buttonPositive: 'ALLOW',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      // console.log('GRANTED');
-    } else {
-      console.log('DENIED');
-    }
-  };
-  useEffect(() => {
-    // console.log(AuthState, 'AuthState');
-    permission();
-    const getwifiname = async () => {
-      try {
-        const wifi = await WifiInfo.getCurrentWifiSSID();
-        setWifiName(wifi);
-      } catch (error) {
-        console.log(error, 'error');
+  const onError = useCallback(error => {
+    console.error(error);
+  }, []);
+  const onInitialized = useCallback(async () => {
+    console.log('Camera initialized!');
+    setIsCameraInitialized(true);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getwifiname(dispatch, setLoad);
+      // console.log(SSID, 'SSID');
+      if (SSID !== 'HUWifi') {
+        console.log('Not Connected to HUWIFI');
         showMessage({
-          message: '500 Server Error',
+          message: '505 Server Error',
           type: 'danger',
           // backgroundColor: ,
           color: COLORS.white,
@@ -82,27 +98,11 @@ const QrScan = () => {
           ),
         });
       }
-    };
-    getwifiname();
-    if (wifiName !== 'HUWifi') {
-      showMessage({
-        message: '500 Server Error',
-        type: 'danger',
-        // backgroundColor: ,
-        color: COLORS.white,
-        style: {justifyContent: 'center', alignItems: 'center'},
-        icon: () => (
-          <MaterialIcons
-            name="error-outline"
-            size={windowwidth / 16}
-            color={COLORS.white}
-            style={{paddingRight: 20}}
-          />
-        ),
-      });
-    }
+    }, []),
+  );
+  useEffect(() => {
     requestPermission();
-  }, [navigation]);
+  }, []);
 
   if (device == null)
     return (
@@ -110,18 +110,11 @@ const QrScan = () => {
         <Text>Permission Denied</Text>
       </View>
     );
-  // else {
   return (
-    <>
-      {wifiName === 'HUWifi' ? (
-        <Camera
-          style={StyleSheet.absoluteFill}
-          device={device}
-          isActive={true}
-          codeScanner={codeScanner}
-          enableZoomGesture={true}
-        />
-      ) : (
+    <View style={styles.container}>
+      {/* {SSID === 'HUWifi' ? ( */}
+      <CameraComp />
+      {/* ) : (
         <View
           style={{
             flex: 1,
@@ -148,15 +141,23 @@ const QrScan = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text>QR Scanner not Accessable</Text>
+            <Text style={styles.text}>QR Scanner not Accessable</Text>
           </View>
         </View>
-      )}
-    </>
+      )} */}
+    </View>
   );
   // }
 };
 
 export default QrScan;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // backgroundColor: 'red',
+  },
+  text: {
+    color: COLORS.black,
+  },
+});

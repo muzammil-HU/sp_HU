@@ -11,9 +11,9 @@ import {
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import ProfieTopCard from './ProfieTopCard';
 import {useSelector} from 'react-redux';
 import {COLORS} from '../../Constants/COLORS';
+import ProfileTopCard from './ProfileTopCard';
 
 const CHeader = () => {
   const WindowWidth = Dimensions.get('window').width;
@@ -42,7 +42,7 @@ const CHeader = () => {
           flexDirection: 'column',
           width: '100%',
         }}>
-        <ProfieTopCard />
+        <ProfileTopCard />
       </View>
     </View>
   );

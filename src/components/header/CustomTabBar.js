@@ -7,8 +7,9 @@ import {
   View,
 } from 'react-native';
 import React, {useRef} from 'react';
-import ProfieTopCard from './ProfieTopCard';
+
 import {COLORS} from '../../Constants/COLORS';
+import ProfileTopCard from './ProfileTopCard';
 const CustomTabBar = ({state, descriptors, navigation}) => {
   //   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
@@ -44,7 +45,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
           alignItems: 'center',
           width: '100%',
         }}>
-        <ProfieTopCard />
+        <ProfileTopCard />
       </View>
       <ScrollView
         ref={scrollViewRef}

@@ -31,7 +31,7 @@ const InputText = ({
 InputText.defaultProps = {
   placeholder: 'Your Placeholder',
   placeholderTextColor: '@000',
-  style: {width: '100%', height: '100%'},
+  style: {width: '100%', height: '100%', color: '#000'},
 };
 export default InputText;
 

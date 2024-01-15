@@ -17,72 +17,39 @@ import {useNavigation} from '@react-navigation/native';
 import {COLORS} from '../../Constants/COLORS';
 import {LogOutUserApi} from '../../Redux/Actions/AuthFunctions';
 
-const ProfieTopCard = () => {
+const ProfileTopCard = () => {
   const AuthState = useSelector(state => {
     return state.AuthReducer.UserDetail;
   });
   const TokenState = useSelector(state => {
     return state.AuthReducer.TokenId;
   });
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [load, setLoad] = useState(false);
   const handleLogout = () => {
-    // try {
-    //   setLoad(true);
-    //   let data = {
-    //     TokenState,
-    //   };
-    //   LogOutUserApi(data, dispatch, setLoad);
-    // } catch (error) {
-    //   console.log(error.message);
-    //   showMessage({
-    //     message: 'error',
-    //     type: 'danger',
-    //     style: {justifyContent: 'center', alignItems: 'center'},
-    //     icon: () => (
-    //       <MaterialIcons
-    //         name="error-outline"
-    //         size={windowwidth / 16}
-    //         color={COLORS.white}
-    //         style={{paddingRight: 20}}
-    //       />
-    //     ),
-    //   });
-    // }
-    dispatch(LogOut([]));
-    showMessage({
-      message: 'Logged out Sucessfully',
-      type: 'success',
-      position: 'top',
-      backgroundColor: COLORS.themeColor,
-      color: COLORS.white,
-      style: {justifyContent: 'center', alignItems: 'center'},
-      icon: () => (
-        <FontAwesome6
-          name="check-circle"
-          size={windowwidth / 16}
-          color={COLORS.white}
-          style={{paddingRight: 20}}
-        />
-      ),
-    });
+    setLoad(true);
+    let data = {
+      token: TokenState,
+    };
+    LogOutUserApi(data, dispatch, setLoad);
   };
   return (
     <View
       style={{
         flexDirection: 'row',
-        height: '70%',
-        width: '90%',
-        justifyContent: 'space-around',
+        height: '85%',
+        width: '95%',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: COLORS.white,
         borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
+        borderTopLeftRadius: 40,
         borderBottomRightRadius: 20,
-        borderBottomLeftRadius: 20,
+        borderBottomLeftRadius: 40,
       }}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           flexDirection: 'column',
           width: '20%',
@@ -93,22 +60,20 @@ const ProfieTopCard = () => {
           borderBottomLeftRadius: 20,
           height: '100%',
         }}
-        onPress={() => {
-          handleLogout();
-        }}>
+        onPress={() => handleLogout()}>
         <SimpleLineIcons
           name="logout"
           size={25}
           iconStyle={{fontWeight: '900', marginRight: 0}}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View
         style={{
           flexDirection: 'column',
-          width: '60%',
+          width: '100%',
           alignItems: 'center',
           justifyContent: 'flex-start',
-          marginHorizontal: '2%',
+          // marginHorizontal: '4%',
           borderTopLeftRadius: 20,
           borderBottomLeftRadius: 20,
           height: '100%',
@@ -127,7 +92,7 @@ const ProfieTopCard = () => {
               // justifyContent: 'flex-start',
               // alignItems: 'flex-start',
               borderRadius: 150,
-              borderWidth: 10,
+              borderWidth: 12,
               // marginHorizontal: 10,
               marginRight: 10,
               marginLeft: 0,
@@ -157,7 +122,7 @@ const ProfieTopCard = () => {
           </View>
         </View>
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           flexDirection: 'column',
           width: '20%',
@@ -176,12 +141,12 @@ const ProfieTopCard = () => {
           source={require('../../assets/settingicon.png')}
           resizeMode="contain"
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
 
-export default ProfieTopCard;
+export default ProfileTopCard;
 
 const windowwidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

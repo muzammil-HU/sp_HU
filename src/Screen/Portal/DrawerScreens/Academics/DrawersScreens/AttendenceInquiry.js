@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const index = () => {
+const AttendenceInquiry = () => {
   return (
     <View>
-      <Text>index</Text>
+      <Text>AttendenceInquiry</Text>
     </View>
   );
 };
 
-export default index;
+export default AttendenceInquiry;
 
 const styles = StyleSheet.create({});

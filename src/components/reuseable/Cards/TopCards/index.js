@@ -10,12 +10,49 @@ import {
 } from 'react-native';
 import React from 'react';
 import {COLORS} from '../../../../Constants/COLORS';
-const TopCard = ({cards}) => {
+const TopCard = ({cards, DynaimcCards}) => {
   return (
     <View style={styles.container}>
+      {DynaimcCards?.map(c => (
+        <TouchableOpacity
+          key={c.head}
+          style={{
+            flexDirection: 'column',
+            marginBottom: 10,
+            marginHorizontal: '1%',
+            // paddingVertical: '5%',
+            borderRadius: 10,
+            width: '31%',
+            height: '45%',
+            backgroundColor: '#ffffff',
+            elevation: 24,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View style={styles.headView}>
+            {c.Icon ? (
+              c.Icon.type === 'image' ? (
+                <Image
+                  source={c.Icon.source}
+                  resizeMode="cover"
+                  style={{height: c.Icon.iconSize, width: c.Icon.iconSize}}
+                />
+              ) : (
+                <c.Icon.IconComp
+                  name={c.Icon.iconName}
+                  size={c.Icon.iconSize}
+                  color={c.Icon.iconColor}
+                />
+              )
+            ) : null}
+            <Text style={styles.head}>{c.head}</Text>
+            {c?.content ? <Text style={styles.head}>{c?.content}</Text> : null}
+          </View>
+        </TouchableOpacity>
+      ))}
       {cards.map(c => (
         <TouchableOpacity
-          key={c.id}
+          key={c.head}
           style={{
             flexDirection: 'column',
             marginBottom: 10,
@@ -60,6 +97,9 @@ const styles = StyleSheet.create({
     height: '40%',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
   },
   headView: {
     flexDirection: 'column',
@@ -69,6 +109,7 @@ const styles = StyleSheet.create({
   head: {
     fontSize: width / 30,
     textAlign: 'center',
+    color: COLORS.black,
   },
   row: {
     flexDirection: 'row',

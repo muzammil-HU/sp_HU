@@ -11,6 +11,8 @@ import TopTab from '../TopTab';
 import Settings from '../../Screen/StackScreens/Settings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../Constants/COLORS';
+import DrawerNav from '../DrawerNavigation';
+import QrScan from '../../Screen/Portal/BottomTabScreens/QrScan';
 
 const MainStudentNav = () => {
   const Stack = createNativeStackNavigator();
@@ -40,19 +42,24 @@ const MainStudentNav = () => {
   };
   return (
     <Stack.Navigator
-      initialRouteName="TabNav"
+      initialRouteName="Drawer"
       style={{}}
       screenOptions={{
         header: props => <CustomHeader {...props} />,
       }}>
       <Stack.Screen
+        name="Drawer"
+        component={DrawerNav}
+        options={{headerShown: false}}
+      />
+      {/* <Stack.Screen
         name="TabNav"
         component={TopTab}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="Settings"
-        component={Settings}
+        component={QrScan}
         options={{
           title: 'Settings',
           // Add additional screen-specific options here
@@ -75,6 +82,31 @@ const MainStudentNav = () => {
         //   },
         // }}
       />
+      {/* <Stack.Screen
+        name="Attend"
+        component={AttendenceInquiry}
+        options={{
+          title: 'Settings',
+          // Add additional screen-specific options here
+        }}
+        // options={{
+        //   header: () => {
+        //     <View
+        //       style={{
+        //         height: '30%',
+        //         width: '100%',
+        //         elevation: 25,
+        //         borderBottomStartRadius: 20,
+        //         borderBottomEndRadius: 20,
+        //         backgroundColor: COLORS.themeColor,
+        //         flexDirection: 'column',
+        //         justifyContent: 'space-between',
+        //       }}>
+        //       <Text>Hello</Text>
+        //     </View>;
+        //   },
+        // }}
+      /> */}
     </Stack.Navigator>
   );
 };

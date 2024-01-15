@@ -20,6 +20,7 @@ import DeviceInfo, {
 import wifiReborn, {getCurrentWifiSSID} from 'react-native-wifi-reborn';
 import {showMessage} from 'react-native-flash-message';
 import {COLORS} from '../../../Constants/COLORS';
+import CameraComp from '../../../components/CameraComp';
 const BottomBar = ({state, descriptors, navigation}) => {
   const theme = useColorScheme();
   const Tab = createBottomTabNavigator();
@@ -93,7 +94,7 @@ const BottomBar = ({state, descriptors, navigation}) => {
       />
       <Tab.Screen
         name="QR Scanner"
-        component={QrScan}
+        component={CameraComp}
         options={{
           tabBarIcon: ({focused}) => {
             return (

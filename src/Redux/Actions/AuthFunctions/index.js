@@ -1,6 +1,7 @@
 import {showMessage} from 'react-native-flash-message';
 import clientapi from '../../../api/clientapi';
 import {
+  LogOut,
   LoginUser,
   TokenId,
   UserDetail,
@@ -16,13 +17,14 @@ const windowwidth = Dimensions.get('window').width;
 const LoginUserApi = async (data, dispatch, setLoad) => {
   try {
     const response = await clientapi.post(`/auth/login`, data);
-
+    console.log(response, 'res');
     if (response?.data?.success === true) {
-      dispatch(LoginUser(true));
       dispatch(TokenId(response?.data?.token));
-      dispatch(UserDetail(response?.data?.user));
+      dispatch(UserDetail(response?.data?.userdata));
+      dispatch(LoginUser(true));
+
       showMessage({
-        message: 'Logged in Successfully',
+        message: response?.data?.output?.response?.messages,
         type: 'success',
         position: 'top',
         backgroundColor: COLORS.themeColor,
@@ -39,8 +41,9 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
       });
     } else if (response?.data?.success === false) {
       showMessage({
-        message: `Inactive Student`,
+        message: response?.data?.output?.response?.messages,
         type: 'danger',
+        position: 'top',
         style: {justifyContent: 'center', alignItems: 'center'},
         icon: () => (
           <Entypo
@@ -54,10 +57,11 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
       setLoad(false);
     }
   } catch (error) {
-    // console.log('LoginUser error', error);
+    console.log('LoginUser error', error);
     showMessage({
-      message: `Incorrect studentId or password`,
+      message: `500 Server Error`,
       type: 'danger',
+      position: 'top',
       style: {justifyContent: 'center', alignItems: 'center'},
       icon: () => (
         <Entypo
@@ -75,11 +79,10 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
 const LogOutUserApi = async (data, dispatch, setLoad) => {
   try {
     const response = await clientapi.post(`/auth/logout`, data);
-
     if (response?.data?.success === true) {
       dispatch(LogOut([]));
       showMessage({
-        message: 'Logged Out Successfully',
+        message: response?.data?.output?.response?.messages,
         type: 'success',
         position: 'top',
         backgroundColor: COLORS.themeColor,

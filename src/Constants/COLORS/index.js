@@ -40,4 +40,10 @@ export const COLORS = {
   pink: '#f59096',
 
   mustard: '#ebae34',
+  red: '#c90202',
+  menu1: '#f9a3b3',
+  menu2: '#81c3eb',
+  menu3: '#facd94',
+  dark: '#010101',
+  light: '#ccc',
 };

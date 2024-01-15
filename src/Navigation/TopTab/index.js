@@ -9,6 +9,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Settings from '../../Screen/StackScreens/Settings';
 import BottomBar from './BottomBar';
 import {COLORS} from '../../Constants/COLORS';
+import Academics from '../../Screen/Portal/DrawerScreens/Academics';
+import AcademicsDrawerNav from '../AcademicsDrawerNav';
 
 const TopTab = () => {
   const tabscreens = [
@@ -23,7 +25,7 @@ const TopTab = () => {
     },
     {
       name: 'Academics',
-      component: Register,
+      component: AcademicsDrawerNav,
       options: {
         tabBarLabel: 'Academics',
         activeBackgroundColor: COLORS.white,
