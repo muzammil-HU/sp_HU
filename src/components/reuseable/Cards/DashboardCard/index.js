@@ -14,6 +14,7 @@ const DashboardCard = ({Dashcards}) => {
       {Dashcards.map(dc => (
         <TouchableOpacity
           key={dc.cardhead}
+          onPress={dc.onPress}
           style={[styles.card, {backgroundColor: dc.backgroundColor}]}>
           <View style={styles.cardcol1}>
             <Text style={[styles.textsty, {color: dc.color}]}>

@@ -1,8 +1,9 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Alert, Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {
   Code,
   useCameraDevice,
+  useCameraPermission,
   useCodeScanner,
 } from 'react-native-vision-camera';
 import {Camera} from 'react-native-vision-camera';
@@ -14,24 +15,33 @@ import {
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
 import {useIsForeground} from '../hooks/useIsForeground';
+import clientapi from '../../api/clientapi';
+import {useDispatch, useSelector} from 'react-redux';
+import Loader from '../reuseable/Modals/LoaderModal';
 
-const showCodeAlert = (value, onDismissed) => {
+const showCodeAlert = (
+  value,
+  onDismissed,
+  markAttendanceCallback,
+  setIsScannerActive,
+) => {
   const buttons = [
     {
-      text: 'Close',
+      text: 'Try Again',
       style: 'cancel',
-      onPress: onDismissed,
-    },
-  ];
-  if (value.startsWith('http')) {
-    buttons.push({
-      text: 'Open URL',
       onPress: () => {
-        Linking.openURL(value);
+        setIsScannerActive(true);
         onDismissed();
       },
-    });
-  }
+    },
+    {
+      text: 'Mark Attendance',
+      onPress: () => {
+        markAttendanceCallback(value);
+        onDismissed();
+      },
+    },
+  ];
   Alert.alert('Scanned Code', value, buttons);
 };
 
@@ -40,21 +50,64 @@ const CameraComp = ({navigation}) => {
   const isFocused = useIsFocused();
   const isForeground = useIsForeground();
   const isActive = isFocused && isForeground;
+  const {hasPermission, requestPermission} = useCameraPermission();
   const [torch, setTorch] = useState(false);
   const isShowingAlert = useRef(false);
   const [isScannerActive, setIsScannerActive] = useState(true);
-
-  const onCodeScanned = useCallback(codes => {
-    console.log(`Scanned ${codes.length} codes:`, codes);
-    setIsScannerActive(false);
-    const value = codes[0]?.value;
-    if (value == null) return;
-    if (isShowingAlert.current) return;
-    showCodeAlert(value, () => {
-      isShowingAlert.current = false;
-    });
-    isShowingAlert.current = true;
+  const [shouldScan, setShouldScan] = useState(true);
+  const [load, setLoad] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    requestPermission();
   }, []);
+  const TokenState = useSelector(state => {
+    return state.AuthReducer.TokenId;
+  });
+  const MarkAttendence = async (value, dispatch) => {
+    data = {
+      token: TokenState,
+      qr_code: value,
+    };
+
+    setLoad(true);
+    try {
+      const res = await clientapi.post('/student/attendance', data);
+      if (res.data.success === true) {
+        console.log(res.data.output.response.messages);
+      } else {
+        console.log(res.data.output.response.messages);
+      }
+    } catch (error) {
+      console.log(error.response.data, 'error');
+    }
+    setLoad(false);
+  };
+
+  const onCodeScanned = codes => {
+    if (shouldScan) {
+      console.log(`Scanned ${codes.length} codes:`, codes);
+      const value = codes[0]?.value;
+      if (value == null) return;
+      if (isShowingAlert.current) return;
+      showCodeAlert(
+        value,
+        () => {
+          isShowingAlert.current = false;
+          setShouldScan(true);
+        },
+        MarkAttendence,
+        setIsScannerActive,
+      );
+      isShowingAlert.current = true;
+    } else {
+      // console.log('Already Scanned');
+    }
+
+    setShouldScan(false);
+    setIsScannerActive(false);
+  };
+
+  // );
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
@@ -73,7 +126,6 @@ const CameraComp = ({navigation}) => {
           enableZoomGesture={true}
         />
       )}
-
       <View style={styles.rightButtonRow}>
         <TouchableOpacity
           style={styles.button}
@@ -87,6 +139,7 @@ const CameraComp = ({navigation}) => {
           />
         </TouchableOpacity>
       </View>
+      <Loader load={load} setLoad={setLoad} />
     </View>
   );
 };

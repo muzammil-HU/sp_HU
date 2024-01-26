@@ -26,6 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {LoginUserApi} from '../../Redux/Actions/AuthFunctions';
 import {COLORS} from '../../Constants/COLORS';
+import Loader from '../../components/reuseable/Modals/LoaderModal';
 
 const Login = () => {
   const [studentId, setStudentId] = useState();
@@ -42,7 +43,25 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // console.log('first');
+    // var myHeaders = new Headers();
+    // myHeaders.append('Content-Type', 'application/json');
+    // var raw = JSON.stringify({
+    //   student_id: '1005-2022',
+    //   password: '@r5054514Hu',
+    // });
+    // var requestOptions = {
+    //   method: 'POST',
+    //   headers: myHeaders,
+    //   body: raw,
+    //   redirect: 'follow',
+    // };
+    // fetch('http://sp.hamdard.edu.pk/api/auth/login', requestOptions)
+    //   .then(response => response.text())
+    //   .then(result => console.log(result))
+    //   .catch(error => console.log('error', error));
+  }, []);
   const handleStuIdChange = text => {
     // console.log(text, 'text');
     const numericValue = text.replace(/[^0-9-]/g, '');
@@ -276,6 +295,7 @@ const Login = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <Loader load={load} setLoad={setLoad} />
     </ScrollView>
   );
 };

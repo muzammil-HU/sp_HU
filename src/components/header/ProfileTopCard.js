@@ -91,22 +91,51 @@ const ProfileTopCard = () => {
               flexDirection: 'row',
               // justifyContent: 'flex-start',
               // alignItems: 'flex-start',
+              width: windowwidth / 6.5,
+              height: windowwidth / 6.5,
               borderRadius: 150,
-              borderWidth: 12,
+              borderWidth: 5,
               // marginHorizontal: 10,
               marginRight: 10,
               marginLeft: 0,
               overflow: 'hidden',
               borderColor: COLORS.themeColor,
             }}>
-            <Image
-              source={require('../../assets/test.png')}
-              style={{
-                width: undefined,
-                height: windowwidth / 6.5,
-                aspectRatio: 1,
-              }}
-            />
+            {AuthState?.picture ? (
+              <Image
+                // source={require('../../assets/N_A_logo.png')}
+                source={{
+                  uri:
+                    AuthState?.picture === '' ||
+                    AuthState?.picture === null ||
+                    AuthState?.picture
+                      ? AuthState.picture
+                      : require('../../assets/N_A_logo.png'),
+                }}
+                resizeMode="contain"
+                style={{
+                  aspectRatio: 1,
+                }}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/N_A_logo.png')}
+                // source={{
+                //   uri:
+                //     AuthState?.picture === '' ||
+                //     AuthState?.picture === null ||
+                //     AuthState?.picture
+                //       ? AuthState.picture
+                //       : require('../../assets/N_A_logo.png'),
+                // }}
+                resizeMode="stretch"
+                style={{
+                  width: undefined,
+                  height: '100%',
+                  aspectRatio: 1,
+                }}
+              />
+            )}
           </View>
           <View
             style={

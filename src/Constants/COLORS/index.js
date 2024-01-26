@@ -1,6 +1,10 @@
+import {Dimensions} from 'react-native';
+
 export const COLORS = {
   themeColor: '#00742C',
   TextthemeColor: '#007E40',
+  activeDrawerItem: '#053316',
+  DrawerDDActive: '#02451a',
   black: '#000000',
   white: '#ffffff',
   smokeWhite: '#e8e8e8',
@@ -47,3 +51,5 @@ export const COLORS = {
   dark: '#010101',
   light: '#ccc',
 };
+export const windowWidth = Dimensions.get('window').width;
+export const windowHeight = Dimensions.get('window').height;

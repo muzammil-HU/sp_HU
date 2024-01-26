@@ -1,11 +1,15 @@
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {COLORS} from '../../../../Constants/COLORS';
+import {useSelector} from 'react-redux';
 
 const ProfileCard = ({cardProfileData}) => {
   const WindowWidth = Dimensions.get('window').width;
   const WindowHeight = Dimensions.get('window').height;
-
+  const AuthState = useSelector(state => {
+    return state?.AuthReducer.UserDetail;
+  });
+  const ImageUri = AuthState?.picture;
   return (
     <View style={styles.container}>
       <View
@@ -18,11 +22,37 @@ const ProfileCard = ({cardProfileData}) => {
             justifyContent: 'center',
             alignItems: 'flex-start',
           }}>
-          <Image
-            source={require('../../../../assets/test.png')}
-            resizeMode="stretch"
-            style={{height: '40%', width: '85%', borderRadius: 50}}
-          />
+          <View
+            style={{
+              flexDirection: 'row',
+              // justifyContent: 'flex-start',
+              // alignItems: 'flex-start',
+              width: WindowWidth / 5,
+              height: WindowWidth / 5,
+              borderRadius: 150,
+              borderWidth: 5,
+              // marginHorizontal: 10,
+              marginRight: 10,
+              marginLeft: 0,
+              overflow: 'hidden',
+              borderColor: COLORS.themeColor,
+            }}>
+            <Image
+              source={
+                AuthState?.picture
+                  ? {
+                      uri: AuthState?.picture,
+                    }
+                  : require('../../../../assets/N_A_logo.png')
+              }
+              resizeMode="contain"
+              style={{
+                aspectRatio: 1,
+                width: AuthState?.picture ? undefined : '0%',
+                height: AuthState?.picture ? '100%' : '0%',
+              }}
+            />
+          </View>
         </View>
         <View
           style={{
@@ -210,14 +240,6 @@ const ProfileCard = ({cardProfileData}) => {
 };
 
 export default ProfileCard;
-{
-  /* <View style={{flexDirection: 'column'}}>
-          <View style={{flexDirection: 'row'}}>
-            <Text>Office Email:</Text>
-            <Text>hameedfaiza354@gmail.com</Text>
-          </View>
-        </View> */
-}
 
 const WindowWidth = Dimensions.get('window').width;
 const WindowHeight = Dimensions.get('window').height;

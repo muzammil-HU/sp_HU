@@ -10,7 +10,6 @@ import Settings from '../../Screen/StackScreens/Settings';
 import BottomBar from './BottomBar';
 import {COLORS} from '../../Constants/COLORS';
 import Academics from '../../Screen/Portal/DrawerScreens/Academics';
-import AcademicsDrawerNav from '../AcademicsDrawerNav';
 
 const TopTab = () => {
   const tabscreens = [

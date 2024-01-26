@@ -17,7 +17,7 @@ import React from 'react';
 // import Cards from "../../Components/reusable/Cards";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Profile from '../BottomTabScreens/Profile';
-import Attendence from '../BottomTabScreens/Attendence';
+import AttendenceInquiry from '../BottomTabScreens/AttendenceInquiry';
 import QrScan from '../BottomTabScreens/QrScan';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';

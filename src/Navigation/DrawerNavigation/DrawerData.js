@@ -1,4 +1,5 @@
 import {
+  Image,
   LayoutAnimation,
   StyleSheet,
   Text,
@@ -14,23 +15,19 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
+import {
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {LogOutUserApi} from '../../Redux/Actions/AuthFunctions';
 import {COLORS} from '../../Constants/COLORS';
-import Icon, {Icons} from '../../components/Icons';
-import {Row} from '../../components/Row';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Octicons from 'react-native-vector-icons/Octicons';
-import Foundation from 'react-native-vector-icons/Foundation';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -38,16 +35,27 @@ if (Platform.OS === 'android') {
 
 const DrawerData = props => {
   const navigation = props.navigation;
-  const options = props.options;
-  const drawerMenu = props.drawerMenu;
+  const dispatch = useDispatch();
+  const Drawerheadings = props.Drawerheadings;
   const [load, setLoad] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
-
+  const [expandedItem, setExpandedItem] = useState(null);
+  const route = useRoute();
+  const currentScreen = getFocusedRouteNameFromRoute(route);
+  const isHome = currentScreen === 'Home';
+  const IsActiveHomeStyle = {
+    backgroundColor: isHome ? COLORS.white : COLORS.themeColor,
+    color: isHome ? COLORS.themeColor : COLORS.white,
+  };
+  const TokenState = useSelector(state => {
+    return state.AuthReducer.TokenId;
+  });
   const handleMenuItemClick = item => {
-    if (item.subMenu) {
-      setOpenDropdown(openDropdown === item.title ? null : item.title);
+    if (item.screens) {
+      setExpandedItem(expandedItem === item.name ? null : item.name);
     } else {
-      navigation.navigate(item.route);
+      // console.log(item, 'ittte,');
+      navigation.navigate(item.name);
     }
   };
 
@@ -62,95 +70,221 @@ const DrawerData = props => {
     };
     LogOutUserApi(data, dispatch, setLoad);
   };
-
-  return (
-    <DrawerContentScrollView {...props}>
-      {drawerMenu.map(item => (
-        <View key={item.title}>
-          <DrawerItem
-            label={item.title}
-            onPress={() => handleMenuItemClick(item)}
-            icon={({size, color}) => (
-              <item.type name={item.icon} size={24} color={color} />
-            )}
-            options={options} // Use options prop
-          />
-          {item.subMenu &&
-            openDropdown === item.title &&
-            item.subMenu.map(subItem => (
-              <DrawerItem
-                key={subItem.title}
-                label={subItem.title}
-                onPress={() => handleSubMenuClick(subItem.route)}
-                icon={({size, color}) => (
-                  <item.type name={item.icon} size={24} color={color} />
-                )}
-                options={subItem.drawerItemOptions}
-                style={{marginLeft: 16}}
+  const renderDrawerSection = (Section, index) => {
+    // console.log(Section, 'sec');
+    const isExpanded = expandedItem === Section.name;
+    return (
+      <View key={index}>
+        {/* Heading */}
+        <DrawerItem
+          onPress={() => handleMenuItemClick(Section)}
+          style={{
+            backgroundColor: isExpanded
+              ? COLORS.DrawerDDActive
+              : COLORS.themeColor,
+            borderRadius: 5,
+          }}
+          label={() => (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                // backgroundColor: 'black',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  width: '90%',
+                  height: '100%',
+                  // backgroundColor: 'red',
+                }}>
+                <View style={{flexDirection: 'row', columnGap: 20}}>
+                  <Section.iconComp
+                    name={Section.iconName}
+                    size={20}
+                    color={COLORS.white}
+                  />
+                  <Text style={{color: COLORS.white, marginRight: 5}}>
+                    {Section.name}
+                  </Text>
+                </View>
+              </View>
+              <FontAwesome6
+                name={isExpanded ? 'angle-up' : 'angle-down'}
+                size={20}
+                color={COLORS.white}
               />
-            ))}
-        </View>
-      ))}
-      <DrawerItem
-        label="LogOut"
-        onPress={() => handleLogout()}
-        icon={({color, size}) => (
-          <SimpleLineIcons name="logout" size={24} color="black" />
-        )}
+            </View>
+          )}
+        />
+        {isExpanded &&
+          Section.screens.map((screen, screenIndex) => {
+            const isActive = currentScreen === screen.name;
+            const IsActiveSubMenuStyles = {
+              backgroundColor: isActive ? COLORS.white : COLORS.themeColor,
+              color: isActive ? COLORS.themeColor : COLORS.white,
+            };
+            return (
+              <DrawerItem
+                key={screenIndex}
+                style={{
+                  backgroundColor: IsActiveSubMenuStyles.backgroundColor,
+                }}
+                onPress={() => handleMenuItemClick(screen)}
+                label={() => (
+                  <View style={{marginLeft: 20}}>
+                    <Text
+                      style={{
+                        color: IsActiveSubMenuStyles.color,
+                      }}>
+                      {screen.name}
+                    </Text>
+                  </View>
+                )}
+              />
+            );
+          })}
+      </View>
+    );
+  };
+  return (
+    <DrawerContentScrollView style={styles.container} {...props}>
+      {/* Top Header */}
+      <View style={styles.headerView}>
+        <Image
+          source={require('../../assets/whitelogo.png')}
+          resizeMode="cover"
+        />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '100%',
+          height: 2,
+          opacity: 0.5,
+          borderRadius: 20,
+          backgroundColor: 'white',
+        }}
       />
+      {/* Home Screen */}
+      <View style={{flex: 1}}>
+        <DrawerItem
+          onPress={() => {
+            setExpandedItem(null);
+            navigation.navigate('Home');
+          }}
+          style={{
+            backgroundColor: IsActiveHomeStyle.backgroundColor,
+          }}
+          label={() => (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                columnGap: 20,
+              }}>
+              <FontAwesome5
+                name="home"
+                size={20}
+                color={IsActiveHomeStyle.color}
+              />
+              <Text style={{color: IsActiveHomeStyle.color}}>Dashboard</Text>
+            </View>
+          )}
+        />
+      </View>
+      {/* sections here */}
+      <View style={{flex: 1}}>
+        {[
+          {
+            name: 'Academics',
+            iconComp: FontAwesome6,
+            iconName: 'graduation-cap',
+            screens: props.AcademicsScreens,
+          },
+        ].map((Section, index) => renderDrawerSection(Section, index))}
+        {[
+          {
+            name: 'Examination',
+            iconComp: Ionicons,
+            iconName: 'book-outline',
+            screens: props.ExaminationScreens,
+          },
+        ].map((Section, index) => renderDrawerSection(Section, index))}
+        {[
+          {
+            name: 'Evaluation',
+            iconComp: MaterialCommunityIcons,
+            iconName: 'google-analytics',
+            screens: props.EvaluationScreens,
+          },
+        ].map((Section, index) => renderDrawerSection(Section, index))}
+        {[
+          {
+            name: 'Accounts',
+            iconComp: MaterialCommunityIcons,
+            iconName: 'google-analytics',
+            screens: props.EvaluationScreens,
+          },
+        ].map((Section, index) => renderDrawerSection(Section, index))}
+        {[
+          {
+            name: 'General',
+            iconComp: MaterialCommunityIcons,
+            iconName: 'google-analytics',
+            screens: props.EvaluationScreens,
+          },
+        ].map((Section, index) => renderDrawerSection(Section, index))}
+        {[
+          {
+            name: 'Transport',
+            iconComp: MaterialCommunityIcons,
+            iconName: 'google-analytics',
+            screens: props.EvaluationScreens,
+          },
+        ].map((Section, index) => renderDrawerSection(Section, index))}
+      </View>
+      {/* LogOut Btn */}
+      <View style={{flex: 1}}>
+        <DrawerItem
+          labelStyle={styles.textsty}
+          label={() => (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                columnGap: 20,
+              }}>
+              <SimpleLineIcons name="logout" size={20} color={COLORS.white} />
+              <Text style={styles.textsty}>LogOut</Text>
+            </View>
+          )}
+          onPress={handleLogout}
+        />
+      </View>
     </DrawerContentScrollView>
   );
 };
 
 export default DrawerData;
 
-// <View style={{flex: 1}}>
-//   {/* <DrawerItemList {...props} /> */}
-//   <View style={styles.spacer} />
-//   {/* Menu */}
-//   {drawerMenu.map((item, index) => {
-//     return (
-//       <TouchableOpacity
-//         activeOpacity={0.8}
-//         key={index}
-//         style={[styles.menu, {backgroundColor: item.bg + '99'}]}
-//         onPress={() => {
-//           // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-//           LayoutAnimation.configureNext(
-//             LayoutAnimation.create(200, 'easeInEaseOut', 'opacity'),
-//           );
-//           setMenuIndex(menuIndex === index ? -1 : index);
-//         }}>
-//         <Row style={styles.item}>
-//           <Icon type={item.type} name={item.icon} size={22} />
-//           <Text
-//             style={[
-//               styles.text,
-//               {
-//                 color: menuIndex === index ? COLORS.black : COLORS.grey,
-//               },
-//             ]}>
-//             {item.title}
-//           </Text>
-//         </Row>
-//         {menuIndex === index && (
-//           <View
-//             style={{
-//               borderRadius: 20,
-//               backgroundColor: item.bg,
-//             }}>
-//             {item.menuList.map((subMenu, index) => (
-//               <TouchableNativeFeedback key={index}>
-//                 <View style={styles.subMenu}>
-//                   <Text>{subMenu.title}</Text>
-//                 </View>
-//               </TouchableNativeFeedback>
-//             ))}
-//           </View>
-//         )}
-//       </TouchableOpacity>
-//     );
-//   })}
-// </View>
-
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.themeColor,
+    flexDirection: 'column',
+    width: '100%',
+  },
+  headerView: {
+    flex: 1,
+    backgroundColor: COLORS.themeColor,
+    alignItems: 'center',
+    width: '100%',
+  },
+  textsty: {
+    color: COLORS.white,
+  },
+});

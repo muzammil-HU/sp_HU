@@ -2,7 +2,7 @@ import {StyleSheet, View, useColorScheme} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Profile from '../../../Screen/Portal/BottomTabScreens/Profile';
-import Attendence from '../../../Screen/Portal/BottomTabScreens/Attendence';
+import AttendenceInquiry from '../../../Screen/Portal/BottomTabScreens/AttendenceInquiry';
 import QrScan from '../../../Screen/Portal/BottomTabScreens/QrScan';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
@@ -69,7 +69,7 @@ const BottomBar = ({state, descriptors, navigation}) => {
       />
       <Tab.Screen
         name="Attendence"
-        component={Attendence}
+        component={AttendenceInquiry}
         options={{
           tabBarIcon: ({focused}) => {
             return (
@@ -96,6 +96,7 @@ const BottomBar = ({state, descriptors, navigation}) => {
         name="QR Scanner"
         component={CameraComp}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({focused}) => {
             return (
               <View

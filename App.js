@@ -8,35 +8,35 @@ import {persistor, store} from './src/Redux/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import FlashMessage from 'react-native-flash-message';
 import {COLORS} from './src/Constants/COLORS';
+import {PaperProvider} from 'react-native-paper';
 export default function App() {
   const [splash, setSplash] = useState(true);
   const statusheight = StatusBar.currentHeight;
   return (
     <Provider store={store}>
-      <PersistGate
-        loading={null}
-        persistor={persistor}
-        // onBeforeLift={() => new Promise(resolve => setTimeout(resolve, 3000))}
-      >
-        <View style={{flex: 1}}>
-          <StatusBar
-            barStyle={'light-content'}
-            backgroundColor={COLORS.themeColor}
-            // style="light" translucent={true}
-          />
-          {/* <MainNavigation /> */}
-          {splash ? (
-            <Splash splash={splash} setSplash={setSplash} />
-          ) : (
-            <MainNavigation />
-          )}
-          <FlashMessage
-            position="center"
-            statusBarHeight={statusheight}
-            style={{borderBottomRightRadius: 10, borderBottomLeftRadius: 10}}
-          />
-        </View>
-      </PersistGate>
+      <PaperProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          {/* onBeforeLift={() => new Promise(resolve => setTimeout(resolve, 3000))} */}
+          <View style={{flex: 1}}>
+            <StatusBar
+              barStyle={'light-content'}
+              backgroundColor={COLORS.themeColor}
+              // style="light" translucent={true}
+            />
+            {/* <MainNavigation /> */}
+            {splash ? (
+              <Splash splash={splash} setSplash={setSplash} />
+            ) : (
+              <MainNavigation />
+            )}
+            <FlashMessage
+              position="center"
+              statusBarHeight={statusheight}
+              style={{borderBottomRightRadius: 10, borderBottomLeftRadius: 10}}
+            />
+          </View>
+        </PersistGate>
+      </PaperProvider>
     </Provider>
   );
 }

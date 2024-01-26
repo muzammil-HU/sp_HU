@@ -21,8 +21,8 @@ export const AuthReducer = createSlice({
     },
     LogOut: (state, action) => {
       (state.LoginUser = false),
-        (state.UserDetail = [null]),
-        (state.TokenId = [null]);
+        (state.TokenId = null),
+        (state.UserDetail = null);
       // state.LogOut = action.payload;
     },
   },

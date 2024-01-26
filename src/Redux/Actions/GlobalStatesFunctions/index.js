@@ -8,6 +8,7 @@ import {COLORS} from '../../../Constants/COLORS';
 import WifiInfo from 'react-native-wifi-reborn';
 import {
   WifiName,
+  dayAttendence,
   isConnected,
 } from '../../Reducers/GlobalStatesReducer/GlobalStatesReducer';
 import NetInfo from '@react-native-community/netinfo';
@@ -56,5 +57,29 @@ const getwifiname = async (dispatch, setLoad) => {
     });
   }
 };
-
-export {getwifiname};
+const getAttendenceData = async (
+  setData,
+  setLoad,
+  setError,
+  dispatch,
+  params,
+) => {
+  try {
+    const res = await clientapi.post(
+      `/student/attendance/inquiry`,
+      // `/test`,
+      params,
+    );
+    if (res?.data?.success === true && res?.data?.data != []) {
+      // setData(res?.data?.data);
+      dispatch(dayAttendence(res?.data?.data));
+      setLoad(false);
+      console.log('data imported');
+    } else {
+      setError('No Data found');
+    }
+  } catch (err) {
+    console.log('getAttendenceData error', err);
+  }
+};
+export {getwifiname, getAttendenceData};

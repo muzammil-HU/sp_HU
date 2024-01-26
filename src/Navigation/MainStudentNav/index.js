@@ -59,7 +59,7 @@ const MainStudentNav = () => {
       /> */}
       <Stack.Screen
         name="Settings"
-        component={QrScan}
+        component={Settings}
         options={{
           title: 'Settings',
           // Add additional screen-specific options here
