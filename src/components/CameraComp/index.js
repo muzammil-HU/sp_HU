@@ -72,13 +72,14 @@ const CameraComp = ({navigation}) => {
     setLoad(true);
     try {
       const res = await clientapi.post('/student/attendance', data);
+      console.log(res.data, 'datatat');
       if (res.data.success === true) {
         console.log(res.data.output.response.messages);
       } else {
         console.log(res.data.output.response.messages);
       }
     } catch (error) {
-      console.log(error.response.data, 'error');
+      console.log(error, 'error');
     }
     setLoad(false);
   };

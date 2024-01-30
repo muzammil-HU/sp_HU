@@ -13,8 +13,10 @@
 
 import axios from 'axios';
 export default axios.create({
-  baseURL: 'http://sp.hamdard.edu.pk/api',
-  // 'https://ums.hamdard.edu.pk/api/',
+  baseURL:
+    // 'https://ums.hamdard.edu.pk/api/',
+    // 'https://sp.hamdard.edu.pk/api',
+    'http://sp.hamdard.edu.pk/api',
   // 'http://172.23.12.98:8000/api',
   // 'http://192.168.137.193:8085/api/v1/',
 
