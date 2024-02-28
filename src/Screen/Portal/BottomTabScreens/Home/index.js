@@ -1,14 +1,4 @@
-import {
-  ActivityIndicator,
-  Button,
-  Dimensions,
-  Modal,
-  PermissionsAndroid,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import TopCard from '../../../../components/reuseable/Cards/TopCards';
 import DashboardCard from '../../../../components/reuseable/Cards/DashboardCard';
@@ -17,20 +7,37 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {COLORS} from '../../../../Constants/COLORS';
 import {useDispatch, useSelector} from 'react-redux';
 import WifiInfo from 'react-native-wifi-reborn';
-import {getwifiname} from '../../../../Redux/Actions/GlobalStatesFunctions';
+import {
+  getregisteredCourses,
+  getwifiname,
+} from '../../../../Redux/Actions/GlobalStatesFunctions';
 import Loader from '../../../../components/reuseable/Modals/LoaderModal';
+import {useNavigation} from '@react-navigation/native';
 
 const BottomHome = () => {
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
+  const navigation = useNavigation();
   const AuthState = useSelector(state => {
     return state?.AuthReducer.UserDetail;
   });
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
+  // console.log(TokenId, 'TokenId');
+  const studentId = useSelector(state => {
+    return state.AuthReducer.UserDetail.student_id;
+  });
 
+  useEffect(() => {
+    const params = {
+      token: TokenState,
+      student_id: studentId,
+    };
+    setLoad(true);
+    getregisteredCourses(setLoad, dispatch, params);
+  }, []);
   const Dashcards1 = [
     {
       cardhead: 'Required Credit Hrs',
@@ -40,7 +47,7 @@ const BottomHome = () => {
       color: COLORS.white,
       fontSize: width / 11,
       onPress: () => {
-        console.log('onpress');
+        // console.log('onpress');
         setLoad(true);
         // return <Loader load={load} setLoad={setLoad} />;
       },
@@ -86,6 +93,7 @@ const BottomHome = () => {
       },
     },
   ];
+
   const cards = [
     {
       head: 'Attendence Mark',
@@ -95,6 +103,7 @@ const BottomHome = () => {
         iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
+      onPress: {},
     },
     {
       head: 'Examination Schedule',
@@ -103,6 +112,9 @@ const BottomHome = () => {
         source: require('../../../../assets/dashicon.png'),
         iconColor: COLORS.themeColor,
         iconSize: width / 15,
+      },
+      onPress: () => {
+        navigation.navigate('Examination-Schedule');
       },
     },
     {
@@ -114,6 +126,9 @@ const BottomHome = () => {
         iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
+      onPress: () => {
+        navigation.navigate('Classes Schedule');
+      },
     },
     {
       head: 'Register New Courses',
@@ -123,6 +138,9 @@ const BottomHome = () => {
         iconName: 'class',
         iconColor: COLORS.themeColor,
         iconSize: width / 15,
+      },
+      onPress: () => {
+        navigation.navigate('Register New Course');
       },
     },
   ];

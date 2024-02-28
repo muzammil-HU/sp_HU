@@ -16,7 +16,7 @@ import {
 import BottomBar from '../TopTab/BottomBar';
 
 import Register from '../../Screen/Auth/Register';
-import {COLORS} from '../../Constants/COLORS';
+import {COLORS, windowHeight, windowWidth} from '../../Constants/COLORS';
 import ProfileTopCard from '../../components/header/ProfileTopCard';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -26,6 +26,34 @@ import {Icons} from '../../components/Icons';
 import AttendenceInquiry from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/AttendenceInquiry';
 import {useDispatch, useSelector} from 'react-redux';
 import {LogOutUserApi} from '../../Redux/Actions/AuthFunctions';
+import ClassesSchedule from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/ClassesSchedule';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import MakeupClasses from '../../components/ClassesSchedule/MakeUpClasses';
+import CourseContent from '../../components/ClassesSchedule/CourseContent';
+import RegisteredCourses from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/RegisteredCourses';
+import UnderConstruction from '../../components/reuseable/ScreenUnderConstruction';
+import FeeLedger from '../../Screen/Portal/DrawerScreens/Accounts/DrawerScreens/FeeLedger';
+import HostelLedger from '../../Screen/Portal/DrawerScreens/Accounts/DrawerScreens/HostelLedger';
+import TransportLedger from '../../Screen/Portal/DrawerScreens/Accounts/DrawerScreens/TransportLedger';
+import GenerateVoucher from '../../Screen/Portal/DrawerScreens/Accounts/DrawerScreens/GenerateVoucher';
+import WifiRegistration from '../../Screen/Portal/DrawerScreens/General/DrawerScreens/WifiRegistration';
+import FeedbackForm from '../../Screen/Portal/DrawerScreens/General/DrawerScreens/FeedbackForm';
+import EnrollmentForm from '../../Screen/Portal/DrawerScreens/General/DrawerScreens/EnrollmentForm';
+import MyComplaintDashboard from '../../Screen/Portal/DrawerScreens/General/DrawerScreens/MyComplaintDashboard';
+import ResetPassword from '../../Screen/Portal/DrawerScreens/General/DrawerScreens/ResetPassword';
+import EmergencyTransportRequest from '../../Screen/Portal/DrawerScreens/Transport/DrawerScreens/EmergencyTransportRequest';
+import CampusesContacts from '../../Screen/Portal/DrawerScreens/General/DrawerScreens/CampusesContacts';
+import CourseEvaluation from '../../Screen/Portal/DrawerScreens/Evaluation/DrawerScreens/CourseEvaluation';
+import TeacherEvaluation from '../../Screen/Portal/DrawerScreens/Evaluation/DrawerScreens/TeacherEvaluation';
+import ExaminationSchedule from '../../Screen/Portal/DrawerScreens/Examination/DrawerScreens/ExaminationSchedule';
+import MarksSheet from '../../Screen/Portal/DrawerScreens/Examination/DrawerScreens/MarksSheet';
+import Curriculum from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/Curriculum';
+import RegisterNewCourses from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/RegisterNewCourses';
+import AlumniForm from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/AlumniForm';
+import GraduatingSurvey from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/GraduatingSurvey';
+import SearchingLibraryBooks from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/SearchingLibraryBooks';
+import Profile from '../../Screen/Portal/DrawerScreens/Profile';
+import ProfileScreen from '../../Screen/Portal/DrawerScreens/Profile';
 
 const DrawerNav = () => {
   const WindowHeight = Dimensions.get('window').height;
@@ -33,6 +61,8 @@ const DrawerNav = () => {
   const Drawer = createDrawerNavigator();
   const [load, setLoad] = useState(false);
   const dispatch = useDispatch();
+  const Tab = createMaterialTopTabNavigator();
+
   const TokenState = useSelector(state => {
     return state.AuthReducer.TokenId;
   });
@@ -44,7 +74,7 @@ const DrawerNav = () => {
     LogOutUserApi(data, dispatch, setLoad);
   };
 
-  const Drawerheadings = ['Academics', 'Examination', 'Evaluation'];
+  // const Drawerheadings = ['Academics', 'Examination', 'Evaluation'];
   const AcademicsScreens = [
     {
       name: 'Attendance Inquiry',
@@ -55,55 +85,121 @@ const DrawerNav = () => {
     },
     {
       name: 'Classes Schedule',
-      component: AttendenceInquiry,
+      component: ClassesSchedule,
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
     {
       name: 'Register New Course',
-      component: Register,
+      component: RegisterNewCourses,
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
     {
       name: 'Registered Courses',
-      component: Register,
+      component: RegisteredCourses,
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
     {
       name: 'Curriculum',
-      component: Register,
+      component: Curriculum,
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
     {
       name: 'Alumni Form',
-      component: Register,
+      component: AlumniForm,
+      iconComp: FontAwesome6,
+      iconName: 'graduation-cap',
+    },
+    {
+      name: 'Graduating Survey',
+      component: GraduatingSurvey,
+      iconComp: FontAwesome6,
+      iconName: 'graduation-cap',
+    },
+    {
+      name: 'Searching Library Books',
+      component: SearchingLibraryBooks,
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
   ];
   const ExaminationScreens = [
     {
-      name: 'Examination Schedule',
-      component: BottomBar,
+      name: 'Examination-Schedule',
+      component: ExaminationSchedule,
       options: {},
     },
     {
       name: 'Marks Sheet',
-      component: AttendenceInquiry,
+      component: MarksSheet,
     },
   ];
   const EvaluationScreens = [
     {
       name: 'Course Evaluation',
-      component: BottomBar,
+      component: CourseEvaluation,
       options: {},
     },
     {
       name: 'Teacher Evaluation',
-      component: AttendenceInquiry,
+      component: TeacherEvaluation,
+    },
+  ];
+  const AccountScreens = [
+    {
+      name: 'Fee Ledger',
+      component: FeeLedger,
+      options: {},
+    },
+    {
+      name: 'Hostel Ledger',
+      component: HostelLedger,
+    },
+    {
+      name: 'Transport Ledger',
+      component: TransportLedger,
+    },
+    {
+      name: 'Generate Account Voucher',
+      component: GenerateVoucher,
+    },
+  ];
+  const GeneralScreens = [
+    {
+      name: 'Wifi Registration',
+      component: WifiRegistration,
+      options: {},
+    },
+    {
+      name: 'Campuses Contacts',
+      component: CampusesContacts,
+      options: {},
+    },
+    {
+      name: 'Feedback Form',
+      component: FeedbackForm,
+    },
+    {
+      name: 'Enrollment Form',
+      component: EnrollmentForm,
+    },
+    {
+      name: 'My Complaint Dashboard',
+      component: MyComplaintDashboard,
+    },
+    {
+      name: 'Change / Reset Password',
+      component: ResetPassword,
+    },
+  ];
+  const TransportScreens = [
+    {
+      name: 'Emergency Transport Request',
+      component: EmergencyTransportRequest,
+      options: {},
     },
   ];
   return (
@@ -112,10 +208,12 @@ const DrawerNav = () => {
       drawerContent={props => (
         <DrawerData
           {...props}
-          Drawerheadings={Drawerheadings}
           AcademicsScreens={AcademicsScreens}
           ExaminationScreens={ExaminationScreens}
           EvaluationScreens={EvaluationScreens}
+          AccountScreens={AccountScreens}
+          GeneralScreens={GeneralScreens}
+          TransportScreens={TransportScreens}
         />
       )}
       screenOptions={{
@@ -126,8 +224,10 @@ const DrawerNav = () => {
         drawerType: 'slide',
         drawerActiveTintColor: COLORS.red,
         drawerInactiveTintColor: COLORS.themeColor,
+        unmountOnBlur: true,
       }}>
       <Drawer.Screen name="Home" component={BottomBar} />
+      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
       {AcademicsScreens.map(As => (
         <Drawer.Screen key={As.name} name={As.name} component={As.component} />
       ))}
@@ -140,6 +240,15 @@ const DrawerNav = () => {
           name={EvaSrc.name}
           component={EvaSrc.component}
         />
+      ))}
+      {AccountScreens.map(As => (
+        <Drawer.Screen key={As.name} name={As.name} component={As.component} />
+      ))}
+      {GeneralScreens.map(Gs => (
+        <Drawer.Screen key={Gs.name} name={Gs.name} component={Gs.component} />
+      ))}
+      {TransportScreens.map(Ts => (
+        <Drawer.Screen key={Ts.name} name={Ts.name} component={Ts.component} />
       ))}
     </Drawer.Navigator>
   );

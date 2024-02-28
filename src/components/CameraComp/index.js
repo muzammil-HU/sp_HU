@@ -13,11 +13,17 @@ import {
   SAFE_AREA_PADDING,
 } from '../../Constants/Constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useIsForeground} from '../hooks/useIsForeground';
 import clientapi from '../../api/clientapi';
 import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../reuseable/Modals/LoaderModal';
+import {showMessage} from 'react-native-flash-message';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {COLORS, windowWidth} from '../../Constants/COLORS';
+// import {COLORS} from '../../../Constants/COLORS';
 
 const showCodeAlert = (
   value,
@@ -45,7 +51,8 @@ const showCodeAlert = (
   Alert.alert('Scanned Code', value, buttons);
 };
 
-const CameraComp = ({navigation}) => {
+const CameraComp = () => {
+  const navigation = useNavigation();
   const device = useCameraDevice('back');
   const isFocused = useIsFocused();
   const isForeground = useIsForeground();
@@ -72,14 +79,80 @@ const CameraComp = ({navigation}) => {
     setLoad(true);
     try {
       const res = await clientapi.post('/student/attendance', data);
-      console.log(res.data, 'datatat');
       if (res.data.success === true) {
-        console.log(res.data.output.response.messages);
+        console.log(res.data.output.response);
+        if (res.data.output.response?.marked === true) {
+          showMessage({
+            message: res?.data?.output?.response?.messages,
+            type: 'warning',
+            duration: 10000,
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.white,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.white}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+        } else {
+          showMessage({
+            message: res?.data?.output?.response?.messages,
+            type: 'success',
+            duration: 10000,
+            position: 'top',
+            backgroundColor: COLORS.themeColor,
+            color: COLORS.white,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="check-circle"
+                size={windowWidth / 16}
+                color={COLORS.white}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+        }
       } else {
-        console.log(res.data.output.response.messages);
+        console.log(res?.data?.output?.response);
+        showMessage({
+          message: res?.data?.output?.response?.messages,
+          type: 'danger',
+          position: 'top',
+          duration: 10000,
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <Entypo
+              name="circle-with-cross"
+              size={windowWidth / 16}
+              color={COLORS.white}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
       }
+      navigation.navigate('BtmHome');
     } catch (error) {
       console.log(error, 'error');
+      showMessage({
+        message: `500 Server Error`,
+        type: 'danger',
+        position: 'top',
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <Entypo
+            name="circle-with-cross"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
     }
     setLoad(false);
   };

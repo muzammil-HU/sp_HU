@@ -94,7 +94,7 @@ const BottomBar = ({state, descriptors, navigation}) => {
       />
       <Tab.Screen
         name="QR Scanner"
-        component={CameraComp}
+        component={QrScan}
         options={{
           unmountOnBlur: true,
           tabBarIcon: ({focused}) => {

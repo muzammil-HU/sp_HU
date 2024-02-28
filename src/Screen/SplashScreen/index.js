@@ -8,7 +8,7 @@ const Splash = ({splash, setSplash}) => {
     // <View style={{flex: 1, alignItems: 'center', margin: 0}}>
     <LottieView
       ref={animationRef}
-      source={require('../../assets/Flow 1.json')}
+      source={require('../../assets/spl.json')}
       loop={false}
       autoPlay={true}
       style={{flex: 1}}
@@ -16,7 +16,6 @@ const Splash = ({splash, setSplash}) => {
         setSplash(false);
       }}
     />
-    // </View>
   );
 };
 

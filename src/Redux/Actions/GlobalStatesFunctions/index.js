@@ -9,7 +9,14 @@ import WifiInfo from 'react-native-wifi-reborn';
 import {
   WifiName,
   dayAttendence,
+  class_schedule,
+  course_content,
+  registered_courses,
+  days,
+  makeup_classes,
+  ipAddress,
   isConnected,
+  ActiveTab,
 } from '../../Reducers/GlobalStatesReducer/GlobalStatesReducer';
 import NetInfo from '@react-native-community/netinfo';
 const windowwidth = Dimensions.get('window').width;
@@ -33,6 +40,7 @@ const getwifiname = async (dispatch, setLoad) => {
       const state = await NetInfo.fetch();
       dispatch(isConnected(state.isConnected));
       dispatch(WifiName(state?.details?.ssid));
+      dispatch(ipAddress(state?.details?.ipAddress));
       setLoad(false);
     } else {
       console.log('denied');
@@ -82,4 +90,58 @@ const getAttendenceData = async (
     console.log('getAttendenceData error', err);
   }
 };
-export {getwifiname, getAttendenceData};
+const getclassSchedule = async (
+  setData,
+  setLoad,
+  setError,
+  dispatch,
+  params,
+) => {
+  try {
+    const res = await clientapi.post(`/student/class/schedule`, params);
+    if (res?.data?.success === true && res?.data?.data != []) {
+      dispatch(class_schedule(res?.data?.class_schedule));
+      dispatch(makeup_classes(res?.data?.upcoming_classes));
+      dispatch(course_content(res?.data?.course_content));
+      dispatch(days(res?.data?.days));
+      setLoad(false);
+    } else {
+      setError('No Data found');
+      setLoad(false);
+    }
+  } catch (err) {
+    console.log('getclassSchedule error', err);
+    setLoad(false);
+  }
+};
+const getregisteredCourses = async (setLoad, dispatch, params) => {
+  try {
+    const res = await clientapi.post(`/student/registered/courses`, params);
+    // console.log(res?.data?.output, 'resdata');
+    if (res?.data?.success === true) {
+      // console.log('if');
+      // console.log(res?.data?.registered_courses, 'registered_courses');
+      dispatch(registered_courses(res?.data?.registered_courses));
+      // console.log(registered_courses, 'registered_courses');
+      setLoad(false);
+    } else {
+      // setError('No Data found');
+      console.log('else');
+      setLoad(false);
+    }
+  } catch (err) {
+    console.log('getregisteredCourses error', err);
+    setLoad(false);
+  }
+};
+const ActivetabChange = (dispatch, data) => {
+  // console.log(data, 'data');
+  dispatch(ActiveTab(data));
+};
+export {
+  getwifiname,
+  getAttendenceData,
+  getclassSchedule,
+  ActivetabChange,
+  getregisteredCourses,
+};

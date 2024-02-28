@@ -3,8 +3,10 @@ import clientapi from '../../../api/clientapi';
 import {
   LogOut,
   LoginUser,
+  student_id,
   TokenId,
   UserDetail,
+  UniqueDeviceId,
 } from '../../Reducers/AuthReducer/AuthReducer';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -12,6 +14,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {Dimensions} from 'react-native';
 import {COLORS} from '../../../Constants/COLORS';
 import Loader from '../../../components/reuseable/Modals/LoaderModal';
+import DeviceInfo from 'react-native-device-info';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {registered_courses} from '../../Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const windowwidth = Dimensions.get('window').width;
 
@@ -19,12 +24,19 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
   setLoad(true);
   try {
     const response = await clientapi.post(`/auth/login`, data);
-    console.log(response.data, 'dcscscscds');
+    // console.log(response.data, 'dcscscscds');
     if (response?.data?.success === true) {
+      dispatch(student_id(response?.data?.userdata.student_id));
       dispatch(TokenId(response?.data?.token));
       dispatch(UserDetail(response?.data?.userdata));
-      dispatch(LoginUser(true));
 
+      if (UniqueDeviceId === '') {
+        await DeviceInfo.getUniqueId().then(uniqueId => {
+          console.log(uniqueId, 'uniqueId');
+          dispatch(UniqueDeviceId(uniqueId));
+        });
+      }
+      dispatch(LoginUser(true));
       showMessage({
         message: response?.data?.output?.response?.messages,
         type: 'success',
@@ -90,6 +102,7 @@ const LogOutUserApi = async (data, dispatch, setLoad) => {
       dispatch(LoginUser(false));
       dispatch(TokenId(null));
       dispatch(UserDetail(null));
+      dispatch(registered_courses(null));
 
       showMessage({
         message: response?.data?.output?.response?.messages,

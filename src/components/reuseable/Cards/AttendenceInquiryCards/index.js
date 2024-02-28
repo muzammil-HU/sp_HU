@@ -12,12 +12,12 @@ import {COLORS, windowWidth} from '../../../../Constants/COLORS';
 import AttendenceModal from '../../Modals/Attendence';
 import {useSelector} from 'react-redux';
 
-const AttendenceInquiryCards = ({cards, data}) => {
+const AttendenceInquiryCards = ({AttendenceState}) => {
   const [visible, setVisible] = useState(false);
   const [selectedCourseName, setSelectedCourseName] = useState();
-  const AttendenceState = useSelector(state => {
-    return state.GlobalStatesReducer.dayAttendence;
-  });
+  // const AttendenceState = useSelector(state => {
+  //   return state.GlobalStatesReducer.dayAttendence;
+  // });
   const renderAttendanceCard = ({item, index}) => (
     <TouchableOpacity
       key={item.course_id}
@@ -210,86 +210,32 @@ const AttendenceInquiryCards = ({cards, data}) => {
     </TouchableOpacity>
   );
   return (
-    // <>
-    //   {cards.map((dc, index) => (
-    //     <TouchableOpacity
-    //       key={dc.offerId}
-    //       //   onPress={dc.onPress}
-    //       style={[
-    //         styles.card,
-    //         {
-    //           backgroundColor:
-    //             index % 2 === 0 ? COLORS.themeColor : COLORS.white,
-    //         },
-    //       ]}>
-    //       <View style={styles.cardcol1}>
-    //         <Text
-    //           style={[
-    //             styles.textsty,
-    //             {
-    //               textAlign: 'center',
-    //               color: index % 2 === 0 ? COLORS.white : COLORS.TextthemeColor,
-    //             },
-    //           ]}>
-    //           {dc.courseName}
-    //         </Text>
-    //         <Text
-    //           style={[
-    //             styles.textsty,
-    //             {
-    //               fontWeight: 400,
-    //               fontSize: windowWidth / 28,
-    //               color: index % 2 === 0 ? COLORS.white : COLORS.TextthemeColor,
-    //             },
-    //           ]}>
-    //           {dc.TeacherName}
-    //         </Text>
-    //       </View>
-    //       <View style={styles.cardcol2}>
-    //         <Text
-    //           style={[
-    //             styles.textsty,
-    //             {
-    //               fontSize: dc.fontSize,
-    //               color: index % 2 === 0 ? COLORS.white : COLORS.TextthemeColor,
-    //             },
-    //           ]}>
-    //           {dc.creditHours}
-    //         </Text>
-    //       </View>
-    //       <View
-    //         style={{
-    //           flexDirection: 'column',
-    //           width: '1%',
-    //           height: '80%',
-    //           backgroundColor:
-    //             index % 2 === 0 ? COLORS.white : COLORS.TextthemeColor,
-    //         }}
-    //       />
-
-    //       <View style={styles.cardcol2}>
-    //         <Text
-    //           style={[
-    //             styles.textsty,
-    //             {
-    //               fontSize: dc.fontSize,
-    //               color: index % 2 === 0 ? COLORS.white : COLORS.TextthemeColor,
-    //             },
-    //           ]}>
-    //           {dc.percentage}
-    //         </Text>
-    //       </View>
-    //     </TouchableOpacity>
-    //   ))}
-    // </>
-    <FlatList
-      bounces={true}
-      alwaysBounceVertical={true}
-      data={AttendenceState}
-      keyExtractor={item => item.offerId}
-      renderItem={renderAttendanceCard}
-      contentContainerStyle={styles.contentContainer}
-    />
+    <View style={{flex: 1}}>
+      <FlatList
+        bounces={true}
+        alwaysBounceVertical={true}
+        data={AttendenceState}
+        keyExtractor={(item, index) => index}
+        renderItem={renderAttendanceCard}
+        contentContainerStyle={styles.contentContainer}
+        ListEmptyComponent={
+          <View
+            style={{
+              height: '100%',
+              width: '100%',
+              // justifyContent: 'center',
+              paddingTop: '10%',
+              alignItems: 'center',
+              // backgroundColor: 'red',
+            }}>
+            <Text
+              style={{color: COLORS.themeColor, fontSize: windowWidth / 22}}>
+              No Data Found
+            </Text>
+          </View>
+        }
+      />
+    </View>
   );
 };
 

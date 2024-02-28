@@ -36,7 +36,8 @@ const ProfileTopCard = () => {
     LogOutUserApi(data, dispatch, setLoad);
   };
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ProfileScreen')}
       style={{
         flexDirection: 'row',
         height: '85%',
@@ -48,6 +49,7 @@ const ProfileTopCard = () => {
         borderTopLeftRadius: 40,
         borderBottomRightRadius: 20,
         borderBottomLeftRadius: 40,
+        // elevation: 24,
       }}>
       {/* <TouchableOpacity
         style={{
@@ -171,7 +173,7 @@ const ProfileTopCard = () => {
           resizeMode="contain"
         />
       </TouchableOpacity> */}
-    </View>
+    </TouchableOpacity>
   );
 };
 

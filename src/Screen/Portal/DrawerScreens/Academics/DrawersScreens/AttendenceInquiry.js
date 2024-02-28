@@ -945,7 +945,7 @@ const AttendenceInquiry = () => {
           detail day wise Absent (A) and Present (P) Status.
         </Text>
       </View>
-      <AttendenceInquiryCards cards={cards} data={data} />
+      <AttendenceInquiryCards AttendenceState={AttendenceState} />
     </View>
   );
 };

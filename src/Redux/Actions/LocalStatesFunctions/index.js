@@ -16,6 +16,26 @@ const getAttendenceData = async (setData, setLoad, setError, params) => {
     console.log('getCategories error', err);
   }
 };
+// const getclassSchedule = async (
+//   setData,
+//   setLoad,
+//   setError,
+//   dispatch,
+//   params,
+// ) => {
+//   try {
+//     const res = await clientapi.post(`/student/class/schedule`, params);
+//     if (res?.data?.success === true && res?.data?.data != []) {
+//       setData(res?.data?.data);
+//       setLoad(false);
+//       console.log('data imported');
+//     } else {
+//       setError('No Data found');
+//     }
+//   } catch (err) {
+//     console.log('getCategories error', err);
+//   }
+// };
 export {getAttendenceData};
 
 const styles = StyleSheet.create({});

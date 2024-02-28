@@ -53,6 +53,9 @@ const TopCard = ({cards, DynaimcCards}) => {
       {cards.map(c => (
         <TouchableOpacity
           key={c.head}
+          onPress={
+            c.onPress && typeof c.onPress === 'function' ? c.onPress : undefined
+          }
           style={{
             flexDirection: 'column',
             marginBottom: 10,

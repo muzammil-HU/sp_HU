@@ -16,12 +16,8 @@ const AttendenceModal = ({
   const [itemsPerPage, onItemsPerPageChange] = useState(
     numberOfItemsPerPageList[0],
   );
-  // const AttendenceState = useSelector(state => {
-  //   return state.GlobalStatesReducer.dayAttendence;
-  // });
 
   const Attendence = selectedCourseName?.attendance;
-  // console.log(Attendence, 'Attendence');
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, Attendence?.length);
   const numberOfPages = Math.ceil(Attendence?.length / itemsPerPage);

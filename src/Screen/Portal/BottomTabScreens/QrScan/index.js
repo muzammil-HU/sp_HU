@@ -28,10 +28,17 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import NetInfo from '@react-native-community/netinfo';
 import {getwifiname} from '../../../../Redux/Actions/GlobalStatesFunctions';
 import CameraComp from '../../../../components/CameraComp';
+import DeviceInfo from 'react-native-device-info';
 
 const QrScan = () => {
   const SSID = useSelector(state => {
     return state?.GlobalStatesReducer.WifiName;
+  });
+  const UID = useSelector(state => {
+    return state?.AuthReducer.UniqueDeviceId;
+  });
+  const ipAddress = useSelector(state => {
+    return state?.GlobalStatesReducer.ipAddress;
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -46,6 +53,8 @@ const QrScan = () => {
   const device = getCameraDevice(devices, 'back', {
     physicalDevices: ['wide-angle-camera'],
   });
+  // var LiveUID;
+  const [liveUID, setLiveUID] = useState();
   const currentAppState = useAppState();
   const IsFocused = useIsFocused();
   const camActive = IsFocused && currentAppState === 'active';
@@ -78,12 +87,19 @@ const QrScan = () => {
 
   useFocusEffect(
     useCallback(() => {
+      DeviceInfo.getUniqueId().then(uniqueId => {
+        console.log(uniqueId, 'uniqueId');
+        setLiveUID(uniqueId);
+        // dispatch(UniqueDeviceId(uniqueId));
+      });
       getwifiname(dispatch, setLoad);
-      // console.log(SSID, 'SSID');
-      if (SSID !== 'HUWifi') {
+      console.log(SSID, 'SSID');
+      console.log(ipAddress, 'ipAddress');
+      console.log(UID, 'UID');
+      if (SSID !== 'HUWIFI') {
         console.log('Not Connected to HUWIFI');
         showMessage({
-          message: '505 Server Error',
+          message: '401 Internet Error',
           type: 'danger',
           // backgroundColor: ,
           color: COLORS.white,
@@ -112,9 +128,9 @@ const QrScan = () => {
     );
   return (
     <View style={styles.container}>
-      {/* {SSID === 'HUWifi' ? ( */}
-      <CameraComp />
-      {/* ) : (
+      {SSID === 'HUWIFI' && liveUID === UID ? (
+        <CameraComp />
+      ) : (
         <View
           style={{
             flex: 1,
@@ -143,11 +159,20 @@ const QrScan = () => {
             }}>
             <Text style={styles.text}>QR Scanner not Accessable</Text>
           </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={styles.text}>
+              Connect to university Wifi to access the Qr Scanner
+            </Text>
+          </View>
         </View>
-      )} */}
+      )}
     </View>
   );
-  // }
 };
 
 export default QrScan;

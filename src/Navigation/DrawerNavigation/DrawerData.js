@@ -41,11 +41,17 @@ const DrawerData = props => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [expandedItem, setExpandedItem] = useState(null);
   const route = useRoute();
+
   const currentScreen = getFocusedRouteNameFromRoute(route);
   const isHome = currentScreen === 'Home';
   const IsActiveHomeStyle = {
     backgroundColor: isHome ? COLORS.white : COLORS.themeColor,
     color: isHome ? COLORS.themeColor : COLORS.white,
+  };
+  const isActiveProfile = currentScreen === 'ProfileScreen';
+  const IsActiveProfileStyle = {
+    backgroundColor: isActiveProfile ? COLORS.white : COLORS.themeColor,
+    color: isActiveProfile ? COLORS.themeColor : COLORS.white,
   };
   const TokenState = useSelector(state => {
     return state.AuthReducer.TokenId;
@@ -58,7 +64,6 @@ const DrawerData = props => {
       navigation.navigate(item.name);
     }
   };
-
   const handleSubMenuClick = route => {
     setOpenDropdown(null);
     navigation.navigate(route);
@@ -157,6 +162,7 @@ const DrawerData = props => {
           resizeMode="cover"
         />
       </View>
+      {/*  */}
       <View
         style={{
           flexDirection: 'row',
@@ -226,7 +232,7 @@ const DrawerData = props => {
             name: 'Accounts',
             iconComp: MaterialCommunityIcons,
             iconName: 'google-analytics',
-            screens: props.EvaluationScreens,
+            screens: props.AccountScreens,
           },
         ].map((Section, index) => renderDrawerSection(Section, index))}
         {[
@@ -234,7 +240,7 @@ const DrawerData = props => {
             name: 'General',
             iconComp: MaterialCommunityIcons,
             iconName: 'google-analytics',
-            screens: props.EvaluationScreens,
+            screens: props.GeneralScreens,
           },
         ].map((Section, index) => renderDrawerSection(Section, index))}
         {[
@@ -242,9 +248,37 @@ const DrawerData = props => {
             name: 'Transport',
             iconComp: MaterialCommunityIcons,
             iconName: 'google-analytics',
-            screens: props.EvaluationScreens,
+            screens: props.TransportScreens,
           },
         ].map((Section, index) => renderDrawerSection(Section, index))}
+      </View>
+      {/* Profile */}
+      <View style={{flex: 1}}>
+        <DrawerItem
+          onPress={() => {
+            setExpandedItem(null);
+            navigation.navigate('ProfileScreen');
+          }}
+          style={{
+            backgroundColor: IsActiveProfileStyle.backgroundColor,
+          }}
+          label={() => (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                columnGap: 22,
+              }}>
+              <FontAwesome5
+                name="user-circle"
+                size={20}
+                color={IsActiveProfileStyle.color}
+              />
+              <Text style={{color: IsActiveProfileStyle.color}}>Profile</Text>
+            </View>
+          )}
+        />
       </View>
       {/* LogOut Btn */}
       <View style={{flex: 1}}>

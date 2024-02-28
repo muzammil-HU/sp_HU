@@ -3,7 +3,9 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   LoginUser: false,
   UserDetail: {},
+  student_id: '',
   TokenId: '',
+  UniqueDeviceId: '',
 };
 
 export const AuthReducer = createSlice({
@@ -16,8 +18,14 @@ export const AuthReducer = createSlice({
     UserDetail: (state, action) => {
       state.UserDetail = action.payload;
     },
+    student_id: (state, action) => {
+      state.UserDetail = action.payload;
+    },
     TokenId: (state, action) => {
       state.TokenId = action.payload;
+    },
+    UniqueDeviceId: (state, action) => {
+      state.UniqueDeviceId = action.payload;
     },
     LogOut: (state, action) => {
       (state.LoginUser = false),
@@ -28,6 +36,12 @@ export const AuthReducer = createSlice({
   },
 });
 
-export const {LoginUser, UserDetail, first, TokenId, LogOut} =
-  AuthReducer.actions;
+export const {
+  LoginUser,
+  UserDetail,
+  student_id,
+  TokenId,
+  LogOut,
+  UniqueDeviceId,
+} = AuthReducer.actions;
 export default AuthReducer.reducer;
