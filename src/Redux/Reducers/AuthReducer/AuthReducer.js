@@ -6,6 +6,7 @@ const initialState = {
   student_id: '',
   TokenId: '',
   UniqueDeviceId: '',
+  UniqueName: '',
 };
 
 export const AuthReducer = createSlice({
@@ -27,6 +28,9 @@ export const AuthReducer = createSlice({
     UniqueDeviceId: (state, action) => {
       state.UniqueDeviceId = action.payload;
     },
+    UniqueName: (state, action) => {
+      state.UniqueName = action.payload;
+    },
     LogOut: (state, action) => {
       (state.LoginUser = false),
         (state.TokenId = null),
@@ -43,5 +47,6 @@ export const {
   TokenId,
   LogOut,
   UniqueDeviceId,
+  UniqueName,
 } = AuthReducer.actions;
 export default AuthReducer.reducer;

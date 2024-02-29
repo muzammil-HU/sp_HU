@@ -42,7 +42,17 @@ const Login = () => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
+  const UID = useSelector(state => {
+    return state?.AuthReducer.UniqueDeviceId;
+  });
+  console.log(UID, 'uniqueId123');
+  const ipAddress = useSelector(state => {
+    return state?.GlobalStatesReducer.ipAddress;
+  });
+  const DN = useSelector(state => {
+    return state?.AuthReducer.DeviceName;
+  });
+  console.log(DN, 'DN');
   useEffect(() => {}, []);
   const handleStuIdChange = text => {
     // console.log(text, 'text');
@@ -65,6 +75,9 @@ const Login = () => {
         let data = {
           student_id: studentId,
           password,
+          device_id: UID,
+          device_name: '',
+          ip: ipAddress,
         };
         LoginUserApi(data, dispatch, setLoad);
       } else {

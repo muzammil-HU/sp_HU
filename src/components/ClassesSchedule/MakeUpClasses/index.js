@@ -56,7 +56,10 @@ const MakeupClasses = () => {
         <Text style={styles.mainheading}>MakeUp Classes</Text>
         {makeup_classes.length === 0 ? (
           <View style={{paddingTop: '8%'}}>
-            <Text style={{fontSize: windowWidth / 23}}>No Record found</Text>
+            <Text
+              style={{fontSize: windowWidth / 23, color: COLORS.themeColor}}>
+              No Record found
+            </Text>
           </View>
         ) : (
           <ScrollView

@@ -55,17 +55,11 @@ const CurrentScheduleCards = ({load, setLoad}) => {
       <View style={{alignItems: 'center'}}>
         <Text style={styles.mainheading}>Current Schedule</Text>
       </View>
-      {/* <FlatList
-        bounces={true}
-        alwaysBounceVertical={true}
-        data={AttendenceState}
-        keyExtractor={(item, index) => index}
-        renderItem={renderAttendanceCard}
-        contentContainerStyle={styles.contentContainer}
-      /> */}
       {Schedule.length === 0 ? (
         <View style={{flex: 1, alignItems: 'center', paddingTop: '8%'}}>
-          <Text style={{fontSize: windowWidth / 23}}>No Data to show</Text>
+          <Text style={{fontSize: windowWidth / 23, color: COLORS.themeColor}}>
+            No Data to show
+          </Text>
         </View>
       ) : (
         <ScrollView

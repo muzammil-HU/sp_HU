@@ -51,7 +51,7 @@ const Curriculum = () => {
           batches may have same or different batch plan
         </Text>
       </View>
-      <AttendenceInquiryCards AttendenceState={AttendenceState} />
+      {/* <AttendenceInquiryCards AttendenceState={AttendenceState} /> */}
     </View>
   );
 };

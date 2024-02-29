@@ -1,7 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
-import CurrentSchedule from '../../../../../components/ClassesSchedule/CurrentSchedule';
 import {useDispatch, useSelector} from 'react-redux';
 import {getclassSchedule} from '../../../../../Redux/Actions/GlobalStatesFunctions';
 import CurrentScheduleCards from '../../../../../components/reuseable/Cards/CurrentScheduleCards';
@@ -73,21 +72,6 @@ const ClassesSchedule = () => {
             // );
             // }}
           >
-            {/* {Object.keys(courses)
-              .filter(
-                key => key !== 'total_all_c' && key !== 'total_all_amount',
-              )
-              .reverse()
-              .map((offerType, index) => {
-                return (
-                  <Tab.Screen
-                    key={index}
-                    name={courses[offerType].offer_type}
-                    component={CommonCard}
-                    initialParams={{courses: courses[offerType].courses}}
-                  />
-                );
-              })} */}
             <Tab.Screen name="Current Schedule">
               {props => (
                 <CurrentScheduleCards

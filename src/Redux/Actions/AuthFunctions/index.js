@@ -30,12 +30,12 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
       dispatch(TokenId(response?.data?.token));
       dispatch(UserDetail(response?.data?.userdata));
 
-      if (UniqueDeviceId === '') {
-        await DeviceInfo.getUniqueId().then(uniqueId => {
-          console.log(uniqueId, 'uniqueId');
-          dispatch(UniqueDeviceId(uniqueId));
-        });
-      }
+      // if (UniqueDeviceId === '') {
+      //   await DeviceInfo.getUniqueId().then(uniqueId => {
+      //     console.log(uniqueId, 'uniqueId');
+      //     dispatch(UniqueDeviceId(uniqueId));
+      //   });
+      // }
       dispatch(LoginUser(true));
       showMessage({
         message: response?.data?.output?.response?.messages,

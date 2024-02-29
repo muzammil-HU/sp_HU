@@ -11,7 +11,9 @@ const CourseContentCards = ({load}) => {
   if (course_content.length === 0) {
     return (
       <View style={{flex: 1, alignItems: 'center', paddingTop: '8%'}}>
-        <Text style={{fontSize: windowWidth / 23}}>No Data to show</Text>
+        <Text style={{fontSize: windowWidth / 23, color: COLORS.themeColor}}>
+          No Data to show
+        </Text>
       </View>
     );
   }

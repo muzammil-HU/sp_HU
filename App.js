@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import {StyleSheet, StatusBar, Text, View} from 'react-native';
 import MainNavigation from './src/Navigation';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import Splash from './src/Screen/SplashScreen';
 import {Provider} from 'react-redux';
 import {persistor, store} from './src/Redux/store';
@@ -12,6 +12,7 @@ import {PaperProvider} from 'react-native-paper';
 export default function App() {
   const [splash, setSplash] = useState(true);
   const statusheight = StatusBar.currentHeight;
+
   return (
     <Provider store={store}>
       <PaperProvider>

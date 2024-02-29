@@ -44,7 +44,7 @@ const RegisteredCourses = () => {
           }}>
           <Text style={styles.text}>Registered Courses</Text>
         </View>
-        {!courses || Object.keys(courses).length === 0 ? (
+        {courses || Object.keys(courses).length === 0 ? (
           <View style={{flex: 1, alignItems: 'center', paddingTop: '8%'}}>
             <View
               style={{
@@ -53,7 +53,9 @@ const RegisteredCourses = () => {
                 height: '100%',
                 alignItems: 'center',
               }}>
-              <Text style={{textAlign: 'center'}}>No Data Found</Text>
+              <Text style={{textAlign: 'center', color: COLORS.themeColor}}>
+                No Data Found
+              </Text>
             </View>
           </View>
         ) : (
