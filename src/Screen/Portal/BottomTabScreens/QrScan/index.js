@@ -38,7 +38,7 @@ const QrScan = () => {
     return state?.AuthReducer.UniqueDeviceId;
   });
   const ipAddress = useSelector(state => {
-    return state?.GlobalStatesReducer.ipAddress;
+    return state?.AuthReducer.ipAddress;
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -128,9 +128,9 @@ const QrScan = () => {
     );
   return (
     <View style={styles.container}>
-      {SSID === 'HUWIFI' && liveUID === UID ? (
+      {/* {SSID === 'HUWIFI' && liveUID === UID ? ( */}
         <CameraComp />
-      ) : (
+      {/* ) : (
         <View
           style={{
             flex: 1,
@@ -170,7 +170,7 @@ const QrScan = () => {
             </Text>
           </View>
         </View>
-      )}
+      )} */}
     </View>
   );
 };

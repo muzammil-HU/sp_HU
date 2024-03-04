@@ -40,7 +40,7 @@ const getwifiname = async (dispatch, setLoad) => {
       const state = await NetInfo.fetch();
       dispatch(isConnected(state.isConnected));
       dispatch(WifiName(state?.details?.ssid));
-      dispatch(ipAddress(state?.details?.ipAddress));
+      // dispatch(ipAddress(state?.details?.ipAddress));
       setLoad(false);
     } else {
       console.log('denied');

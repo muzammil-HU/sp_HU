@@ -2,7 +2,6 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   WifiName: '',
-  ipAddress: '',
   isConnected: false,
   dayAttendence: [],
   class_schedule: [],
@@ -40,10 +39,7 @@ export const GlobalStatesReducer = createSlice({
     },
     days: (state, action) => {
       state.days = action.payload;
-    },
-    ipAddress: (state, action) => {
-      state.ipAddress = action.payload;
-    },
+    },    
     ActiveTab: (state, action) => {
       state.ActiveTab = action.payload;
     },

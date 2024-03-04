@@ -25,7 +25,6 @@ const BottomHome = () => {
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
-  // console.log(TokenId, 'TokenId');
   const studentId = useSelector(state => {
     return state.AuthReducer.UserDetail.student_id;
   });

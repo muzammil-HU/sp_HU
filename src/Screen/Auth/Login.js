@@ -45,12 +45,13 @@ const Login = () => {
   const UID = useSelector(state => {
     return state?.AuthReducer.UniqueDeviceId;
   });
-  console.log(UID, 'uniqueId123');
+  console.log(UID, 'UID');
   const ipAddress = useSelector(state => {
-    return state?.GlobalStatesReducer.ipAddress;
+    return state?.AuthReducer.ipAddress;
   });
+  console.log(ipAddress,'ip')
   const DN = useSelector(state => {
-    return state?.AuthReducer.DeviceName;
+    return state?.AuthReducer.UniqueName;
   });
   console.log(DN, 'DN');
   useEffect(() => {}, []);
@@ -76,7 +77,7 @@ const Login = () => {
           student_id: studentId,
           password,
           device_id: UID,
-          device_name: '',
+          device_name: DN,
           ip: ipAddress,
         };
         LoginUserApi(data, dispatch, setLoad);

@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, PermissionsAndroid} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import StudentNav from './StudentNav';
@@ -10,8 +10,11 @@ import AuthNavigation from './AuthNavigation';
 import {
   UniqueDeviceId,
   UniqueName,
+  ipAddress,
 } from '../Redux/Reducers/AuthReducer/AuthReducer';
 import DeviceInfo from 'react-native-device-info';
+import NetInfo from '@react-native-community/netinfo';
+import { WifiName, isConnected } from '../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const MainNavigation = () => {
   // var localStorage;
@@ -22,20 +25,56 @@ const MainNavigation = () => {
   //   auth();
   // }, [localStorage]);
   const dispatch = useDispatch();
+  // const [load,setLoad] = useState();
   useEffect(() => {
-    const UID = async () => {
-      const uniqueid = await DeviceInfo.getUniqueId().then(uniqueId => {
+    const fetchUID = async () => {
+      try {
+        const uniqueId = await DeviceInfo.getUniqueId();
         dispatch(UniqueDeviceId(uniqueId));
-      });
-      // constb;
-    };
-    const DeviceName = async () => {
-      const uniquename = await DeviceInfo.getDeviceName().then(uniqueName => {
+  
+        const uniqueName = await DeviceInfo.getDeviceName();
         dispatch(UniqueName(uniqueName));
-      });
+  
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location permission is required for WiFi connections',
+            message: 'This app needs location permission as this is required',
+            buttonNegative: 'DENY',
+            buttonPositive: 'ALLOW',
+          },
+        );
+  
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          const state = await NetInfo.fetch();
+          dispatch(isConnected(state.isConnected));
+          dispatch(WifiName(state?.details?.ssid));
+          dispatch(ipAddress(state.details.ipAddress))          
+        } else {
+          console.log('denied');
+
+        }
+      } catch (error) {
+        console.log(error, 'error');
+        showMessage({
+          message: '500 Server Error',
+          type: 'danger',
+          color: COLORS.white,
+          style: { justifyContent: 'center', alignItems: 'center' },
+          icon: () => (
+            <MaterialIcons
+              name="error-outline"
+              size={windowwidth / 16}
+              color={COLORS.white}
+              style={{ paddingRight: 20 }}
+            />
+          ),
+        });
+      }
     };
-    UID();
-    DeviceName();
+  
+    // Invoke the function
+    fetchUID();
   }, []);
   const AuthState = useSelector(state => {
     return state?.AuthReducer.LoginUser;

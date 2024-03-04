@@ -7,6 +7,7 @@ import {
   TokenId,
   UserDetail,
   UniqueDeviceId,
+  UniqueName,
 } from '../../Reducers/AuthReducer/AuthReducer';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -29,13 +30,6 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
       dispatch(student_id(response?.data?.userdata.student_id));
       dispatch(TokenId(response?.data?.token));
       dispatch(UserDetail(response?.data?.userdata));
-
-      // if (UniqueDeviceId === '') {
-      //   await DeviceInfo.getUniqueId().then(uniqueId => {
-      //     console.log(uniqueId, 'uniqueId');
-      //     dispatch(UniqueDeviceId(uniqueId));
-      //   });
-      // }
       dispatch(LoginUser(true));
       showMessage({
         message: response?.data?.output?.response?.messages,
