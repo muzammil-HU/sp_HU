@@ -10,7 +10,7 @@ import {
   ImageBackground,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,6 +29,7 @@ import {COLORS} from '../../Constants/COLORS';
 import Loader from '../../components/reuseable/Modals/LoaderModal';
 
 const Login = () => {
+  const passwordInputRef = useRef(null);
   const [studentId, setStudentId] = useState();
   const [password, setPassword] = useState();
   const [isStuIdFocused, setIsStuIdFocused] = useState(false);
@@ -45,15 +46,17 @@ const Login = () => {
   const UID = useSelector(state => {
     return state?.AuthReducer.UniqueDeviceId;
   });
-  console.log(UID, 'UID');
+  const T = useSelector(state => {
+    return state?.AuthReducer.TokenId;
+  });
   const ipAddress = useSelector(state => {
     return state?.AuthReducer.ipAddress;
   });
-  console.log(ipAddress,'ip')
+  // console.log(ipAddress, 'ip');
   const DN = useSelector(state => {
     return state?.AuthReducer.UniqueName;
   });
-  console.log(DN, 'DN');
+  // console.log(DN, 'DN');
   useEffect(() => {}, []);
   const handleStuIdChange = text => {
     // console.log(text, 'text');
@@ -119,178 +122,186 @@ const Login = () => {
   const onPressForgotPassword = () => {
     navigation.navigate('ForgotPassword');
   };
-  const onPressSignUp = () => {
-    // navigation.navigate("Register");
-  };
+
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-      }}
-      style={styles.container}>
-      <View style={{height: '100%', width: '100%'}}>
-        <View
-          style={{
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            backgroundColor: COLORS.themeColor,
-            paddingTop: '18%',
-            height: '40%',
-            width: '100%',
-            borderBottomEndRadius: 50,
-            borderBottomStartRadius: 50,
-            paddingBottom: '4%',
-          }}>
-          <Image
-            source={require('../../assets/whitelogo.png')}
-            resizeMode="contain"
-            style={{}}
-          />
-          <Text
-            style={[
-              styles.title,
-              {fontSize: windowwidth / 13, color: COLORS.white},
-            ]}>
-            Student Portal
-          </Text>
-          <Text
-            style={[
-              styles.title,
-              {
-                fontSize: windowwidth / 18,
-                color: COLORS.white,
-                fontWeight: 400,
-              },
-            ]}>
-            Welcome
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'column',
-            // backgroundColor: 'red',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            height: '50%',
-            width: '100%',
-          }}>
+    <>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+        style={styles.container}>
+        <View style={{flex: 1}}>
           <View
             style={{
-              flexDirection: 'row',
-              width: '90%',
+              justifyContent: 'space-evenly',
               alignItems: 'center',
-              borderBottomWidth: isStuIdFocused ? 3 : 1,
-              borderBottomColor: COLORS.black,
+              backgroundColor: COLORS.themeColor,
+              paddingTop: '18%',
+              height: '40%',
+              width: '100%',
+              borderBottomEndRadius: 50,
+              borderBottomStartRadius: 50,
+              paddingBottom: '4%',
             }}>
-            <FontAwesome6
-              name={'circle-user'}
-              size={windowwidth / 16}
-              color={COLORS.black}
+            <Image
+              source={require('../../assets/whitelogo.png')}
+              resizeMode="contain"
               style={{}}
             />
-            <InputText
-              placeholder="Student ID"
-              placeholderTextColor={COLORS.black}
-              value={studentId}
-              maxLength={15}
-              TextStyle={[
-                styles.inputText,
+            <Text
+              style={[
+                styles.title,
+                {fontSize: windowwidth / 13, color: COLORS.white},
+              ]}>
+              Student Portal
+            </Text>
+            <Text
+              style={[
+                styles.title,
                 {
-                  width: '100%',
-                  fontSize: windowwidth / 25,
-                  paddingLeft: 10,
-                  color: 'black',
+                  fontSize: windowwidth / 18,
+                  color: COLORS.white,
+                  fontWeight: 400,
                 },
-              ]}
-              inputMode="numeric"
-              onFocus={() => {
-                setIsStuIdFocused(true);
-              }}
-              onBlur={() => {
-                setIsStuIdFocused(false);
-              }}
-              onChangeText={handleStuIdChange}
-            />
+              ]}>
+              Welcome
+            </Text>
           </View>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
+              // backgroundColor: 'red',
+              justifyContent: 'space-evenly',
               alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '90%',
-              borderBottomWidth: isPasswordFocused ? 3 : 1,
-              borderBottomColor: COLORS.black,
+              height: '50%',
+              width: '100%',
             }}>
-            <MaterialIcons
-              name="password"
-              size={windowwidth / 16}
-              color={COLORS.black}
-            />
             <View
-              style={{flexDirection: 'column', width: '85%', flexWrap: 'wrap'}}>
-              <InputText
-                placeholder="Enter Password"
-                placeholderTextColor={COLORS.black}
-                secureTextEntry={!showPassword}
-                value={password}
-                maxLength={30}
-                onChangeText={setPassword}
-                TextStyle={[
-                  styles.inputText,
-                  {
-                    fontSize: windowwidth / 25,
-                    width: '100%',
-                    paddingLeft: 10,
-                  },
-                ]}
-                onFocus={() => {
-                  setIsPasswordFocused(true);
-                }}
-                onBlur={() => {
-                  setIsPasswordFocused(false);
-                }}
-              />
-            </View>
-            <View style={{flexDirection: 'column', width: '10%'}}>
-              <MaterialCommunityIcons
-                name={showPassword ? 'eye-off' : 'eye'}
+              style={{
+                flexDirection: 'row',
+                width: '90%',
+                alignItems: 'center',
+                borderBottomWidth: isStuIdFocused ? 3 : 1,
+                borderBottomColor: COLORS.black,
+              }}>
+              <FontAwesome6
+                name={'circle-user'}
                 size={windowwidth / 16}
                 color={COLORS.black}
                 style={{}}
-                onPress={toggleShowPassword}
+              />
+              <InputText
+                placeholder="Student ID"
+                placeholderTextColor={COLORS.black}
+                value={studentId}
+                maxLength={15}
+                TextStyle={[
+                  styles.inputText,
+                  {
+                    width: '100%',
+                    fontSize: windowwidth / 25,
+                    paddingLeft: 10,
+                    color: 'black',
+                  },
+                ]}
+                inputMode="numeric"
+                onSubmitEditing={() => {
+                  passwordInputRef.current.focus();
+                }}
+                onFocus={() => {
+                  setIsStuIdFocused(true);
+                }}
+                onBlur={() => {
+                  setIsStuIdFocused(false);
+                }}
+                onChangeText={handleStuIdChange}
               />
             </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '90%',
+                borderBottomWidth: isPasswordFocused ? 3 : 1,
+                borderBottomColor: COLORS.black,
+              }}>
+              <MaterialIcons
+                name="password"
+                size={windowwidth / 16}
+                color={COLORS.black}
+              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  width: '85%',
+                  flexWrap: 'wrap',
+                }}>
+                <InputText
+                  ref={passwordInputRef}
+                  placeholder="Enter Password"
+                  placeholderTextColor={COLORS.black}
+                  secureTextEntry={!showPassword}
+                  value={password}
+                  maxLength={30}
+                  onChangeText={setPassword}
+                  TextStyle={[
+                    styles.inputText,
+                    {
+                      fontSize: windowwidth / 25,
+                      width: '100%',
+                      paddingLeft: 10,
+                    },
+                  ]}
+                  onFocus={() => {
+                    setIsPasswordFocused(true);
+                  }}
+                  onBlur={() => {
+                    setIsPasswordFocused(false);
+                  }}
+                />
+              </View>
+              <View style={{flexDirection: 'column', width: '10%'}}>
+                <MaterialCommunityIcons
+                  name={showPassword ? 'eye-off' : 'eye'}
+                  size={windowwidth / 16}
+                  color={COLORS.black}
+                  style={{}}
+                  onPress={toggleShowPassword}
+                />
+              </View>
+            </View>
+            {/* <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginLeft: '60%',
+                width: '40%',
+              }}
+              onPress={() => onPressForgotPassword()}>
+              <Text
+                style={{color: COLORS.themeColor, fontSize: windowwidth / 28}}>
+                ForgotPassword
+              </Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity style={styles.button} onPress={onPressLogin}>
+              <Text
+                style={[
+                  styles.text,
+                  {
+                    fontSize: windowwidth / 20,
+                    fontStyle: 'normal',
+                    color: COLORS.white,
+                  },
+                ]}>
+                Login
+              </Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginLeft: '60%',
-              width: '40%',
-            }}
-            onPress={() => onPressForgotPassword()}>
-            <Text
-              style={{color: COLORS.themeColor, fontSize: windowwidth / 28}}>
-              ForgotPassword
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={onPressLogin}>
-            <Text
-              style={[
-                styles.text,
-                {
-                  fontSize: windowwidth / 20,
-                  fontStyle: 'normal',
-                  color: COLORS.white,
-                },
-              ]}>
-              Login
-            </Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
       <Loader load={load} setLoad={setLoad} />
-    </ScrollView>
+    </>
   );
 };
 

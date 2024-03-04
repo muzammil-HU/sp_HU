@@ -8,6 +8,7 @@ import {
   UserDetail,
   UniqueDeviceId,
   UniqueName,
+  CurrentUniqueDeviceId,
 } from '../../Reducers/AuthReducer/AuthReducer';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -29,6 +30,7 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
     if (response?.data?.success === true) {
       dispatch(student_id(response?.data?.userdata.student_id));
       dispatch(TokenId(response?.data?.token));
+      dispatch(CurrentUniqueDeviceId(response?.data?.device_id));
       dispatch(UserDetail(response?.data?.userdata));
       dispatch(LoginUser(true));
       showMessage({
@@ -89,9 +91,9 @@ const LogOutUserApi = async (data, dispatch, setLoad) => {
   setLoad(true);
   try {
     const response = await clientapi.post(`/auth/logout`, data);
-    console.log(response.data?.success, 'response');
+    // console.log(response.data?.success, 'response');
     if (response?.data?.success === true) {
-      console.log('if');
+      // console.log('if');
       // dispatch(LogOut());
       dispatch(LoginUser(false));
       dispatch(TokenId(null));
@@ -115,7 +117,7 @@ const LogOutUserApi = async (data, dispatch, setLoad) => {
         ),
       });
     } else {
-      console.log('else');
+      // console.log('else');
       console.log(response?.data?.output?.response?.messages, 'else');
       dispatch(LoginUser(false));
       dispatch(TokenId(null));
@@ -139,7 +141,7 @@ const LogOutUserApi = async (data, dispatch, setLoad) => {
     }
     setLoad(false);
   } catch (error) {
-    console.log('Logout error', error, error.response);
+    // console.log('Logout error', error, error.response);
     dispatch(LoginUser(false));
     dispatch(TokenId(null));
     dispatch(UserDetail(null));

@@ -20,7 +20,7 @@ import {useNavigation} from '@react-navigation/native';
 import {showMessage} from 'react-native-flash-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import WifiInfo from 'react-native-wifi-reborn';
-import {COLORS} from '../../../../Constants/COLORS';
+import {COLORS, windowWidth} from '../../../../Constants/COLORS';
 import {useDispatch, useSelector} from 'react-redux';
 import {useAppState} from '@react-native-community/hooks';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
@@ -37,6 +37,11 @@ const QrScan = () => {
   const UID = useSelector(state => {
     return state?.AuthReducer.UniqueDeviceId;
   });
+  console.log(UID, 'uid');
+  const CurrentUID = useSelector(state => {
+    return state?.AuthReducer?.CurrentUniqueDeviceId;
+  });
+  console.log(CurrentUID, 'CurrentUID');
   const ipAddress = useSelector(state => {
     return state?.AuthReducer.ipAddress;
   });
@@ -54,7 +59,7 @@ const QrScan = () => {
     physicalDevices: ['wide-angle-camera'],
   });
   // var LiveUID;
-  const [liveUID, setLiveUID] = useState();
+  const [WifiName, setWifiName] = useState('HUWIFI');
   const currentAppState = useAppState();
   const IsFocused = useIsFocused();
   const camActive = IsFocused && currentAppState === 'active';
@@ -87,33 +92,33 @@ const QrScan = () => {
 
   useFocusEffect(
     useCallback(() => {
-      DeviceInfo.getUniqueId().then(uniqueId => {
-        console.log(uniqueId, 'uniqueId');
-        setLiveUID(uniqueId);
-        // dispatch(UniqueDeviceId(uniqueId));
-      });
+      // DeviceInfo.getUniqueId().then(uniqueId => {
+      //   // console.log(uniqueId, 'uniqueId');
+      //   setLiveUID(uniqueId);
+      //   // dispatch(UniqueDeviceId(uniqueId));
+      // });
       getwifiname(dispatch, setLoad);
-      console.log(SSID, 'SSID');
-      console.log(ipAddress, 'ipAddress');
-      console.log(UID, 'UID');
-      if (SSID !== 'HUWIFI') {
-        console.log('Not Connected to HUWIFI');
-        showMessage({
-          message: '401 Internet Error',
-          type: 'danger',
-          // backgroundColor: ,
-          color: COLORS.white,
-          style: {justifyContent: 'center', alignItems: 'center'},
-          icon: () => (
-            <MaterialIcons
-              name="error-outline"
-              size={windowwidth / 16}
-              color={COLORS.white}
-              style={{paddingRight: 20}}
-            />
-          ),
-        });
-      }
+      // console.log(SSID, 'SSID');
+      // console.log(ipAddress, 'ipAddress');
+      // console.log(UID, 'UID');
+      // if (SSID !== WifiName) {
+      //   console.log('Not Connected to HUWIFI');
+      //   showMessage({
+      //     message: '401 Internet Error',
+      //     type: 'danger',
+      //     // backgroundColor: ,
+      //     color: COLORS.white,
+      //     style: {justifyContent: 'center', alignItems: 'center'},
+      //     icon: () => (
+      //       <MaterialIcons
+      //         name="error-outline"
+      //         size={windowwidth / 16}
+      //         color={COLORS.white}
+      //         style={{paddingRight: 20}}
+      //       />
+      //     ),
+      //   });
+      // }
     }, []),
   );
   useEffect(() => {
@@ -128,9 +133,10 @@ const QrScan = () => {
     );
   return (
     <View style={styles.container}>
-      {/* {SSID === 'HUWIFI' && liveUID === UID ? ( */}
+      {/* {SSID === WifiName && CurrentUID === UID ? ( */}
+      {CurrentUID === UID ? (
         <CameraComp />
-      {/* ) : (
+      ) : (
         <View
           style={{
             flex: 1,
@@ -153,13 +159,23 @@ const QrScan = () => {
           </View>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
             <Text style={styles.text}>QR Scanner not Accessable</Text>
+            {SSID !== WifiName && (
+              <Text style={styles.text}>
+                Connect to university Wifi to access the Qr Scanner
+              </Text>
+            )}
+            {CurrentUID !== UID && (
+              <Text style={styles.text}>
+                Login with Your Registered Device to mark your attendence
+              </Text>
+            )}
           </View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               justifyContent: 'center',
@@ -168,9 +184,9 @@ const QrScan = () => {
             <Text style={styles.text}>
               Connect to university Wifi to access the Qr Scanner
             </Text>
-          </View>
+          </View> */}
         </View>
-      )} */}
+      )}
     </View>
   );
 };
@@ -183,6 +199,8 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   text: {
-    color: COLORS.black,
+    color: COLORS.red,
+    fontSize: windowWidth / 24,
+    textAlign: 'center',
   },
 });

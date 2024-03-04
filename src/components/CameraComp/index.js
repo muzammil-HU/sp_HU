@@ -73,11 +73,15 @@ const CameraComp = () => {
   const UID = useSelector(state => {
     return state?.AuthReducer.UniqueDeviceId;
   });
+  const ipAddress = useSelector(state => {
+    return state?.AuthReducer.ipAddress;
+  });
   const MarkAttendence = async (value, dispatch) => {
     data = {
       token: TokenState,
       qr_code: value,
-      device_id:UID
+      device_id: UID,
+      ip: ipAddress,
     };
 
     setLoad(true);
@@ -165,7 +169,7 @@ const CameraComp = () => {
     if (shouldScan) {
       console.log(`Scanned ${codes.length} codes:`, codes);
       const value = codes[0]?.value;
-      console.log(value,"valu")
+      console.log(value, 'valu');
       if (value == null) return;
       if (isShowingAlert.current) return;
       showCodeAlert(

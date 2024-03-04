@@ -21,6 +21,7 @@ import wifiReborn, {getCurrentWifiSSID} from 'react-native-wifi-reborn';
 import {showMessage} from 'react-native-flash-message';
 import {COLORS} from '../../../Constants/COLORS';
 import CameraComp from '../../../components/CameraComp';
+import UnderConstruction from '../../../components/reuseable/ScreenUnderConstruction';
 const BottomBar = ({state, descriptors, navigation}) => {
   const theme = useColorScheme();
   const Tab = createBottomTabNavigator();
@@ -69,7 +70,7 @@ const BottomBar = ({state, descriptors, navigation}) => {
       />
       <Tab.Screen
         name="Attendence"
-        component={AttendenceInquiry}
+        component={UnderConstruction}
         options={{
           tabBarIcon: ({focused}) => {
             return (
@@ -148,7 +149,7 @@ const BottomBar = ({state, descriptors, navigation}) => {
       />
       <Tab.Screen
         name="test"
-        component={Settings}
+        component={UnderConstruction}
         options={{
           tabBarIcon: ({focused}) => {
             return (

@@ -28,7 +28,7 @@ const BottomHome = () => {
   const studentId = useSelector(state => {
     return state.AuthReducer.UserDetail.student_id;
   });
-
+  // console.log(TokenState, 'TokenState');
   useEffect(() => {
     const params = {
       token: TokenState,
@@ -45,11 +45,11 @@ const BottomHome = () => {
       backgroundColor: COLORS.themeColor,
       color: COLORS.white,
       fontSize: width / 11,
-      onPress: () => {
-        // console.log('onpress');
-        setLoad(true);
-        // return <Loader load={load} setLoad={setLoad} />;
-      },
+      // onPress: () => {
+      //   // console.log('onpress');
+      //   setLoad(true);
+      //   // return <Loader load={load} setLoad={setLoad} />;
+      // },
     },
     {
       cardhead: 'Passed Credit Hrs',
