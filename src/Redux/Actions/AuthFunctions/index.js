@@ -26,7 +26,6 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
   setLoad(true);
   try {
     const response = await clientapi.post(`/auth/login`, data);
-    // console.log(response.data, 'dcscscscds');
     if (response?.data?.success === true) {
       dispatch(student_id(response?.data?.userdata.student_id));
       dispatch(TokenId(response?.data?.token));
@@ -67,7 +66,7 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
       setLoad(false);
     }
   } catch (error) {
-    console.log('LoginUser error', error);
+    console.log('LoginUser error', error.response);
     showMessage({
       message: `500 Server Error`,
       type: 'danger',

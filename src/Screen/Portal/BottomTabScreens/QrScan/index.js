@@ -37,58 +37,52 @@ const QrScan = () => {
   const UID = useSelector(state => {
     return state?.AuthReducer.UniqueDeviceId;
   });
-  console.log(UID, 'uid');
   const CurrentUID = useSelector(state => {
     return state?.AuthReducer?.CurrentUniqueDeviceId;
   });
-  console.log(CurrentUID, 'CurrentUID');
   const ipAddress = useSelector(state => {
     return state?.AuthReducer.ipAddress;
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [load, setLoad] = useState(true);
-  const cameraRef = React.useRef(null);
-  // const [deviceId, setDeviceId] = useState();
+  // const cameraRef = React.useRef(null);
   const [isCameraInitialized, setIsCameraInitialized] = useState(false);
-  const windowHeight = Dimensions.get('window').height;
-  const windowwidth = Dimensions.get('window').width;
   const {hasPermission, requestPermission} = useCameraPermission();
   const devices = Camera.getAvailableCameraDevices();
   const device = getCameraDevice(devices, 'back', {
     physicalDevices: ['wide-angle-camera'],
   });
-  // var LiveUID;
   const [WifiName, setWifiName] = useState('HUWIFI');
   const currentAppState = useAppState();
   const IsFocused = useIsFocused();
   const camActive = IsFocused && currentAppState === 'active';
-  const codeScanner = useCodeScanner({
-    codeTypes: ['qr', 'ean-13'],
-    onCodeScanned: codes => {
-      console.log(`Scanned ${codes[0].value} codes!`);
-      if (codes[0].value !== '') {
-        Alert.alert('Scanned..!');
-      }
-      // ToastAndroid.show(codes[0].value, ToastAndroid.LONG);
-      navigation.navigate('Attendence');
-      showMessage({
-        message: 'My message title',
-        description: 'My message description',
-        type: 'default',
-        backgroundColor: 'purple',
-        color: '#606060',
-      });
-      // console.log(first)
-    },
-  });
-  const onError = useCallback(error => {
-    console.error(error);
-  }, []);
-  const onInitialized = useCallback(async () => {
-    console.log('Camera initialized!');
-    setIsCameraInitialized(true);
-  }, []);
+  // const codeScanner = useCodeScanner({
+  //   codeTypes: ['qr', 'ean-13'],
+  //   onCodeScanned: codes => {
+  //     console.log(`Scanned ${codes[0].value} codes!`);
+  //     if (codes[0].value !== '') {
+  //       Alert.alert('Scanned..!');
+  //     }
+  //     // ToastAndroid.show(codes[0].value, ToastAndroid.LONG);
+  //     navigation.navigate('Attendence');
+  //     showMessage({
+  //       message: 'My message title',
+  //       description: 'My message description',
+  //       type: 'default',
+  //       backgroundColor: 'purple',
+  //       color: '#606060',
+  //     });
+  //     // console.log(first)
+  //   },
+  // });
+  // const onError = useCallback(error => {
+  //   console.error(error);
+  // }, []);
+  // const onInitialized = useCallback(async () => {
+  //   console.log('Camera initialized!');
+  //   setIsCameraInitialized(true);
+  // }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -152,7 +146,7 @@ const QrScan = () => {
             }}>
             <MaterialIcons
               name="error-outline"
-              size={windowwidth / 16}
+              size={windowWidth / 16}
               color="red"
               style={{paddingRight: 20}}
             />
@@ -175,16 +169,6 @@ const QrScan = () => {
               </Text>
             )}
           </View>
-          {/* <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={styles.text}>
-              Connect to university Wifi to access the Qr Scanner
-            </Text>
-          </View> */}
         </View>
       )}
     </View>
@@ -204,3 +188,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+{
+  /* <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={styles.text}>
+              Connect to university Wifi to access the Qr Scanner
+            </Text>
+          </View> */
+}

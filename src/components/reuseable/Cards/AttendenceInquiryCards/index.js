@@ -141,7 +141,7 @@ const AttendenceInquiryCards = ({AttendenceState}) => {
               styles.textsty,
               {
                 paddingTop: windowWidth / 23,
-                fontSize: windowWidth / 11,
+                fontSize: windowWidth / 13,
                 color: index % 2 === 0 ? COLORS.white : COLORS.TextthemeColor,
               },
             ]}>
@@ -176,7 +176,7 @@ const AttendenceInquiryCards = ({AttendenceState}) => {
               styles.textsty,
               {
                 paddingTop: windowWidth / 20,
-                fontSize: windowWidth / 11,
+                fontSize: windowWidth / 13,
                 color: index % 2 === 0 ? COLORS.white : COLORS.TextthemeColor,
               },
             ]}>
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   },
   ids: {
     flexDirection: 'row',
-    width: '65%',
+    width: '75%',
     justifyContent: 'center',
     alignItems: 'center',
   },

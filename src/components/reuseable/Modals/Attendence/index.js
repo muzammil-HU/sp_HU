@@ -12,7 +12,7 @@ const AttendenceModal = ({
   setSelectedCourseName,
 }) => {
   const [page, setPage] = useState(0);
-  const numberOfItemsPerPageList = [4, 3, 2];
+  const numberOfItemsPerPageList = [4];
   const [itemsPerPage, onItemsPerPageChange] = useState(
     numberOfItemsPerPageList[0],
   );
@@ -62,12 +62,6 @@ const AttendenceModal = ({
                   color: COLORS.red,
                   width: '100%',
                 }}>
-                {/* <DataTable.Title textStyle={{color: COLORS.TextthemeColor}}>
-                  Attend Date
-                </DataTable.Title>
-                <DataTable.Title textStyle={{color: COLORS.TextthemeColor}}>
-                  Day
-                </DataTable.Title> */}
                 <DataTable.Title textStyle={{color: COLORS.TextthemeColor}}>
                   Status
                 </DataTable.Title>
@@ -213,10 +207,10 @@ const AttendenceModal = ({
                 onPageChange={page => setPage(page)}
                 label={`${from + 1}-${to} of ${Attendence?.length}`}
                 numberOfItemsPerPageList={numberOfItemsPerPageList}
-                numberOfItemsPerPage={itemsPerPage}
+                // numberOfItemsPerPage={itemsPerPage}
                 onItemsPerPageChange={onItemsPerPageChange}
                 showFastPaginationControls={true}
-                selectPageDropdownLabel={'Rows per page'}
+                // selectPageDropdownLabel={'Rows per page'}
               />
             </DataTable>
           </View>

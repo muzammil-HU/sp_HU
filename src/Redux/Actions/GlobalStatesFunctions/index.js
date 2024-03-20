@@ -117,16 +117,10 @@ const getclassSchedule = async (
 const getregisteredCourses = async (setLoad, dispatch, params) => {
   try {
     const res = await clientapi.post(`/student/registered/courses`, params);
-    // console.log(res?.data?.output, 'resdata');
     if (res?.data?.success === true) {
-      // console.log('if');
-      // console.log(res?.data?.registered_courses, 'registered_courses');
       dispatch(registered_courses(res?.data?.registered_courses));
-      // console.log(registered_courses, 'registered_courses');
       setLoad(false);
     } else {
-      // setError('No Data found');
-      console.log('else');
       setLoad(false);
     }
   } catch (err) {

@@ -6,23 +6,478 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS, windowWidth, windowHeight} from '../../../../Constants/COLORS';
 import {Divider} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 
 const CommonCard = ({route}) => {
-  const courses = route.params.courses;
+  const courses = route?.params?.courses;
+  const sem = route?.name;
+  const sem_total_crHrs = route?.params?.sem_total_crHrs;
+  const sem_total_amount = route?.params?.sem_total_amount;
+  const [total, setTotal] = useState([]);
+
+  const All_courses = useSelector(state => {
+    return state?.GlobalStatesReducer?.registered_courses;
+  });
+
+  useEffect(() => {
+    if (route.name === 'Total') {
+      const extractedData = Object.keys(All_courses)
+        .filter(key => key !== 'total_all_c' && key !== 'total_all_amount')
+        .map(key => {
+          const {offer_type, total_cr, total_amount} = All_courses[key];
+          return {offer_type, total_cr, total_amount};
+        });
+      setTotal(extractedData);
+      // console.log(total, 'total');
+    }
+  }, []);
   const renderAttendanceCard = ({item, index}) => {
     return (
+      <>
+        {route.name === 'Total' ? (
+          <View
+            key={item.offer_type}
+            style={[
+              styles.card,
+              {
+                borderColor: COLORS.themeColor,
+                borderWidth: 1,
+                // backgroundColor:
+                //   index % 2 === 0 ? COLORS.themeColor : COLORS.white,
+              },
+            ]}>
+            {/* Heading */}
+            <View
+              style={{
+                flexDirection: 'row',
+                backgroundColor: COLORS.white,
+                width: '100%',
+                justifyContent: 'space-between',
+                paddingVertical: '8%',
+                // height: '50%',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  backgroundColor: COLORS.white,
+                  width: '64%',
+                  paddingLeft: '2%',
+                }}>
+                <Text
+                  style={{
+                    color: COLORS.themeColor,
+                    fontWeight: 'bold',
+                    fontSize: windowHeight / 45,
+                  }}>
+                  {item.offer_type}
+                </Text>
+                <Text style={{color: COLORS.themeColor}}>
+                  Total Credit Hours & Amount
+                </Text>
+                {/* <Text style={{color: COLORS.themeColor}}>{item.total_cr}</Text> */}
+              </View>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  backgroundColor: COLORS.white,
+                  width: '17.5%',
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                }}>
+                <Text style={{color: COLORS.themeColor, fontWeight: 'bold'}}>
+                  Cr Hrs
+                </Text>
+                {/* <Text
+                  style={{
+                    color: COLORS.black,
+                    fontWeight: 'bold',
+                    // paddingVertical: '18%',
+                    // backgroundColor: COLORS.blue,
+                    // textAlignVertical: 'center',
+                  }}>
+                  {item.crhrs}
+                </Text> */}
+                <Text style={{color: COLORS.black, fontWeight: 'bold'}}>
+                  {item.total_cr}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  width: '1%',
+                  backgroundColor: COLORS.themeColor,
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  backgroundColor: COLORS.white,
+                  width: '17.5%',
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                }}>
+                <Text style={{color: COLORS.themeColor, fontWeight: 'bold'}}>
+                  Amount
+                </Text>
+                <Text
+                  style={{
+                    color: COLORS.black,
+                    fontWeight: 'bold',
+                    // paddingVertical: '18%',
+                    // backgroundColor: COLORS.blue,
+                    // textAlignVertical: 'center',
+                  }}>
+                  {item.total_amount}
+                </Text>
+              </View>
+            </View>
+          </View>
+        ) : (
+          <View
+            key={item.offer_type}
+            style={[
+              styles.card,
+              {
+                backgroundColor: COLORS.white,
+                //   index % 2 === 0 ? COLORS.themeColor : COLORS.greenshade,
+                borderWidth: 1,
+                borderColor: COLORS.themeColor,
+              },
+            ]}>
+            {/* Heading */}
+            <View
+              style={{
+                flexDirection: 'row',
+                backgroundColor: COLORS.themeColor,
+                width: '100%',
+                justifyContent: 'space-between',
+                borderRadius: 5,
+                paddingHorizontal: '2%',
+                paddingVertical: '2%',
+                // height: '5%',
+              }}>
+              <Text style={{color: COLORS.white}}>
+                Offer Type:{item.offer_type}
+              </Text>
+              <Text style={{color: COLORS.white}}>
+                Offer ID:{item.offer_id}
+              </Text>
+              <Text style={{color: COLORS.white}}>
+                Course ID:{item.course_id}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                // backgroundColor: COLORS.white,
+                width: '100%',
+                justifyContent: 'space-between',
+                paddingVertical: '2%', //trying
+                backgroundColor:
+                  index % 2 === 0 ? COLORS.white : COLORS.greyshade,
+                // borderRadius: 5,
+                // paddingHorizontal: '2%',
+                // paddingVertical: '2%',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  // backgroundColor: COLORS.white,
+                  width: '64%',
+                  paddingLeft: '2%',
+                }}>
+                <Text style={{color: COLORS.black}}>Course Title</Text>
+                <Text style={{color: COLORS.themeColor}}>
+                  {item.course_title}
+                </Text>
+                <Text style={{color: COLORS.themeColor}}>{item.lecturer}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  // backgroundColor: COLORS.white,
+                  width: '17.5%',
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                }}>
+                <Text style={{color: COLORS.themeColor, fontWeight: 'bold'}}>
+                  Cr Hrs
+                </Text>
+                <Text
+                  style={{
+                    color: COLORS.black,
+                    fontWeight: 'bold',
+                    // paddingVertical: '18%',
+                    // backgroundColor: COLORS.blue,
+                    // textAlignVertical: 'center',
+                  }}>
+                  {item.crhrs}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  width: '1%',
+                  backgroundColor: COLORS.themeColor,
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  // backgroundColor: COLORS.white,
+                  width: '17.5%',
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                }}>
+                <Text style={{color: COLORS.themeColor, fontWeight: 'bold'}}>
+                  Amount
+                </Text>
+                <Text
+                  style={{
+                    color: COLORS.black,
+                    fontWeight: 'bold',
+                    // paddingVertical: '18%',
+                    // backgroundColor: COLORS.blue,
+                    // textAlignVertical: 'center',
+                  }}>
+                  {item.amount}
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
+      </>
+    );
+  };
+  const renderListFooter = () => {
+    return (
       <View
-        key={item.course_id}
-        style={[
-          styles.card,
-          {
-            backgroundColor: index % 2 === 0 ? COLORS.themeColor : COLORS.white,
-          },
-        ]}>
-        <View style={styles.cardcol1}>
+        style={{
+          flexDirection: 'row',
+          backgroundColor: COLORS.themeColor,
+          width: '96%',
+          height: windowHeight / 10,
+          borderRadius: 5,
+          marginBottom: '2%',
+          paddingHorizontal: '2%',
+          justifyContent: 'space-between',
+        }}>
+        <View
+          style={{
+            flexDirection: 'column',
+            height: '100%',
+            width: '49%',
+            justifyContent: 'space-evenly',
+          }}>
+          <Text style={{fontSize: windowWidth / 23, color: COLORS.white}}>
+            {sem}
+          </Text>
+          <Text style={{color: COLORS.white}}>
+            Total Credit Hours and Amount
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            height: '100%',
+            width: '25%',
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+          }}>
+          <Text style={{fontSize: windowWidth / 30, color: COLORS.white}}>
+            Total Cr Hrs
+          </Text>
+          <Text
+            style={{
+              fontSize: windowWidth / 25,
+              color: COLORS.white,
+              textAlign: 'center',
+            }}>
+            {sem_total_crHrs}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            width: '1%',
+            marginVertical: '1%',
+            backgroundColor: COLORS.white,
+          }}
+        />
+        <View
+          style={{
+            flexDirection: 'column',
+            height: '100%',
+            width: '25%',
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+          }}>
+          <Text
+            style={{
+              fontSize: windowWidth / 30,
+              color: COLORS.white,
+              textAlign: 'center',
+            }}>
+            Total Amount
+          </Text>
+          <Text
+            style={{
+              color: COLORS.white,
+              textAlign: 'center',
+              fontSize: windowWidth / 25,
+            }}>
+            {sem_total_amount}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+  return (
+    <View style={{flex: 1, backgroundColor: COLORS.white}}>
+      <FlatList
+        bounces={true}
+        alwaysBounceVertical={true}
+        showsVerticalScrollIndicator={false}
+        data={route.name === 'Total' ? total : courses}
+        keyExtractor={(item, index) => index}
+        fadingEdgeLength={50}
+        renderItem={renderAttendanceCard}
+        contentContainerStyle={styles.contentContainer}
+        ListFooterComponent={renderListFooter}
+        ListEmptyComponent={() => {
+          <View style={{backgroundColor: COLORS.white}}>
+            <Text style={{color: COLORS.TextthemeColor}}>
+              No Courses registered
+            </Text>
+          </View>;
+        }}
+        ListFooterComponentStyle={{
+          flexDirection: 'row',
+        }}
+        style={{backgroundColor: COLORS.white}}
+      />
+    </View>
+  );
+};
+
+export default CommonCard;
+
+const styles = StyleSheet.create({
+  offerContainer: {
+    flex: 1,
+    marginVertical: 10,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 10,
+  },
+  offerType: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  courseContainer: {
+    marginVertical: 5,
+  },
+  courseTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '100%',
+  },
+  card: {
+    flexDirection: 'column',
+    borderRadius: 10,
+    elevation: 24,
+    // backgroundColor: 'blue',
+    width: '95%',
+    overflow: 'hidden',
+    marginVertical: windowWidth / 60,
+  },
+  cardcol1: {
+    flexDirection: 'column',
+    width: '45%',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    // paddingLeft: '8%',
+  },
+  cardcol2: {
+    flexDirection: 'column',
+    width: '45%',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    // backgroundColor: 'red',
+  },
+  textsty: {
+    fontSize: windowWidth / 20,
+    fontWeight: '700',
+    flexWrap: 'wrap',
+    // textAlignVertical: 'center',
+    // textAlign: 'center',
+  },
+  ids: {
+    flexDirection: 'row',
+    width: '65%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+  modalView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+    height: '12%',
+    backgroundColor: COLORS.white,
+    // borderBottomLeftRadius: 10,
+    // borderBottomRightRadius: 10,
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    columnGap: 20,
+  },
+});
+
+{
+  /* <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: COLORS.themeColor,
+            width: '100%',
+            justifyContent: 'space-between',
+            borderRadius: 5,
+            paddingHorizontal: '2%',
+            paddingVertical: '2%',
+            // height: '5%',
+          }}>
+          <Text style={{color: COLORS.white}}>
+            Offer Type:{item.offer_type}
+          </Text>
+          <Text style={{color: COLORS.white}}>Offer ID:{item.offer_id}</Text>
+          <Text style={{color: COLORS.white}}>Course ID:{item.course_id}</Text>
+        </View> */
+}
+{
+  /* <View style={styles.cardcol1}>
           <View
             style={[
               styles.ids,
@@ -176,146 +631,5 @@ const CommonCard = ({route}) => {
             </Text>
             <Text></Text>
           </View>
-        </View>
-      </View>
-    );
-  };
-  const renderListFooter = () => (
-    <View
-      style={{
-        flexDirection: 'row',
-        backgroundColor: COLORS.greyish,
-        // justifyContent: 'center',
-        width: '100%',
-        // height: '2%',
-      }}>
-      <Text style={{color: COLORS.white}}>Hello</Text>
-    </View>
-  );
-  return (
-    <View style={{flex: 1, backgroundColor: COLORS.white}}>
-      <FlatList
-        bounces={true}
-        alwaysBounceVertical={true}
-        showsVerticalScrollIndicator={false}
-        data={courses}
-        keyExtractor={(item, index) => index}
-        fadingEdgeLength={50}
-        renderItem={renderAttendanceCard}
-        contentContainerStyle={styles.contentContainer}
-        ListFooterComponent={renderListFooter}
-        ListEmptyComponent={() => {
-          <View style={{}}>
-            <Text style={{color: COLORS.TextthemeColor}}>
-              No Courses registered
-            </Text>
-          </View>;
-        }}
-        ListFooterComponentStyle={{
-          flexDirection: 'row',
-        }}
-      />
-    </View>
-  );
-};
-
-export default CommonCard;
-
-const styles = StyleSheet.create({
-  offerContainer: {
-    flex: 1,
-    marginVertical: 10,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-  },
-  offerType: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  courseContainer: {
-    marginVertical: 5,
-  },
-  courseTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  contentContainer: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    // backgroundColor: 'red',
-    width: '100%',
-  },
-  card: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    elevation: 24,
-    width: '95%',
-    // height: '30%',
-    overflow: 'hidden',
-    paddingVertical: windowWidth / 25,
-    marginVertical: windowWidth / 60,
-    // marginBottom: '1%',
-    // paddingHorizontal: 25,
-  },
-  cardcol1: {
-    flexDirection: 'column',
-    width: '45%',
-    // backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    flexWrap: 'wrap',
-    // paddingLeft: '8%',
-  },
-  cardcol2: {
-    flexDirection: 'column',
-    width: '45%',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    // backgroundColor: 'red',
-  },
-  textsty: {
-    fontSize: windowWidth / 20,
-    fontWeight: '700',
-    flexWrap: 'wrap',
-    // textAlignVertical: 'center',
-    // textAlign: 'center',
-  },
-  ids: {
-    flexDirection: 'row',
-    width: '65%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-  },
-  modalView: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '80%',
-    height: '12%',
-    backgroundColor: 'white',
-    // borderBottomLeftRadius: 10,
-    // borderBottomRightRadius: 10,
-    borderRadius: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    columnGap: 20,
-  },
-});
+        </View> */
+}

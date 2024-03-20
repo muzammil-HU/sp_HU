@@ -4,6 +4,7 @@ export const COLORS = {
   themeColor: '#00742C',
   greyshade: '#DDDDDD',
   subheading: '#A1A1A1',
+  greenshade: 'E7FFF4',
   TextthemeColor: '#007E40',
   activeDrawerItem: '#053316',
   DrawerDDActive: '#02451a',

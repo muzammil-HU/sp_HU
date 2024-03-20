@@ -13,6 +13,7 @@ const DashboardCard = ({Dashcards}) => {
     <View style={styles.container}>
       {Dashcards.map(dc => (
         <TouchableOpacity
+          disabled={true}
           key={dc.cardhead}
           onPress={dc.onPress}
           style={[styles.card, {backgroundColor: dc.backgroundColor}]}>

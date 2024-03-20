@@ -1,12 +1,24 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
 import AttendenceInquiryCards from '../../../../../components/reuseable/Cards/AttendenceInquiryCards';
+import CurriculumCard from '../../../../../components/reuseable/Cards/Curriculum';
+import clientapi from '../../../../../api/clientapi';
+import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
 
 const Curriculum = () => {
+  const [courses, setCourses] = useState();
+  const [load, setLoad] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const AttendenceState = useSelector(state => {
     return state.GlobalStatesReducer.dayAttendence;
+  });
+  const TokenState = useSelector(state => {
+    return state.AuthReducer.TokenId;
+  });
+  const studentId = useSelector(state => {
+    return state.AuthReducer.UserDetail.student_id;
   });
   // const data = [
   //   {
@@ -38,6 +50,28 @@ const Curriculum = () => {
   //   //   offer_type: 'Spring-2024',
   //   // },
   // ];
+  useEffect(() => {
+    data = {
+      token: TokenState,
+      student_id: studentId,
+    };
+    const CurriculumData = async data => {
+      setLoad(true);
+      setRefresh(true);
+      try {
+        const api = await clientapi.post(`/student/course/curriculum`, data);
+        console.log(api?.data?.curriculum, 'api.data');
+        setCourses(api?.data?.curriculum);
+        setLoad(false);
+      } catch (error) {
+        // setLoad(true);
+        console.log(error, 'api error');
+        setLoad(false);
+      }
+    };
+    CurriculumData(data);
+    // console.log(courses, 'courses7899');
+  }, [refresh === true]);
   return (
     <View
       style={{
@@ -51,7 +85,8 @@ const Curriculum = () => {
           batches may have same or different batch plan
         </Text>
       </View>
-      {/* <AttendenceInquiryCards AttendenceState={AttendenceState} /> */}
+      <CurriculumCard sem_courses={courses} setCourses={setCourses} />
+      {load && <Loader load={load} setLoad={setLoad} />}
     </View>
   );
 };

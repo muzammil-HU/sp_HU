@@ -49,7 +49,7 @@ const MakeupClasses = () => {
   const Schedule = useSelector(state => {
     return state?.GlobalStatesReducer.class_schedule;
   });
-  // console.log(typeof makeup_classes, 'makeup_classes');
+  // console.log(typeof Schedule, 'Schedule');
   return (
     <View style={{flex: 1}}>
       <View style={{flexDirection: 'column', alignItems: 'center'}}>
