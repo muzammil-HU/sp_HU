@@ -34,6 +34,8 @@ const CurriculumCard = ({sem_courses}) => {
           contentContainerStyle={{
             flexGrow: 1,
             paddingHorizontal: '1%',
+            // justifyContent: 'center',
+            alignItems: 'center',
           }}>
           {Object?.keys(sem_courses)
             ?.filter(
@@ -52,6 +54,7 @@ const CurriculumCard = ({sem_courses}) => {
                       alignItems: 'center',
                       backgroundColor: COLORS.themeColor,
                       marginVertical: '1%',
+                      // paddingVertical: '3%',
                       borderRadius: 5,
                     }}>
                     <Text style={{width: '8%'}}></Text>
@@ -68,7 +71,7 @@ const CurriculumCard = ({sem_courses}) => {
                     />
                   </TouchableOpacity>
                   {expandedcourses.includes(key) && (
-                    <>
+                    <View>
                       {/* {Object?.keys(semester) */}
                       {semester.courses.map((scheduleItem, scheduleIndex) => {
                         return (
@@ -259,8 +262,8 @@ const CurriculumCard = ({sem_courses}) => {
                           justifyContent: 'space-evenly',
                           backgroundColor: COLORS.white,
                           alignItems: 'center',
-                          // paddingVertical: '10%',
-                          height: '6%',
+                          paddingVertical: '10%',
+                          // height: '6%',
                         }}>
                         {/* <View style={{flexDirection: 'column', width: '50%'}}> */}
                         <Text
@@ -290,7 +293,7 @@ const CurriculumCard = ({sem_courses}) => {
                         </Text>
                         {/* </View> */}
                       </View>
-                    </>
+                    </View>
                   )}
                 </View>
               );

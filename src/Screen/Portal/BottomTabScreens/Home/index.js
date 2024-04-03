@@ -8,6 +8,7 @@ import {COLORS} from '../../../../Constants/COLORS';
 import {useDispatch, useSelector} from 'react-redux';
 import WifiInfo from 'react-native-wifi-reborn';
 import {
+  curriculumData,
   getregisteredCourses,
   getwifiname,
 } from '../../../../Redux/Actions/GlobalStatesFunctions';
@@ -35,6 +36,11 @@ const BottomHome = () => {
     };
     setLoad(true);
     getregisteredCourses(setLoad, dispatch, params);
+    // data = {
+    //   token: TokenState,
+    //   student_id: studentId,
+    // };
+    curriculumData(setLoad, dispatch, params);
   }, []);
   const Dashcards1 = [
     {

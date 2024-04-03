@@ -1,16 +1,17 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
 import AttendenceInquiryCards from '../../../../../components/reuseable/Cards/AttendenceInquiryCards';
 import CurriculumCard from '../../../../../components/reuseable/Cards/Curriculum';
 import clientapi from '../../../../../api/clientapi';
 import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
+import {curriculumData} from '../../../../../Redux/Actions/GlobalStatesFunctions';
 
 const Curriculum = () => {
-  const [courses, setCourses] = useState();
   const [load, setLoad] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const dispatch = useDispatch();
   const AttendenceState = useSelector(state => {
     return state.GlobalStatesReducer.dayAttendence;
   });
@@ -20,6 +21,10 @@ const Curriculum = () => {
   const studentId = useSelector(state => {
     return state.AuthReducer.UserDetail.student_id;
   });
+  const courses = useSelector(state => {
+    return state.GlobalStatesReducer.curriculum;
+  });
+  // console.log(grading_criteria, 'grading_criteria');
   // const data = [
   //   {
   //     "0",
@@ -51,27 +56,28 @@ const Curriculum = () => {
   //   // },
   // ];
   useEffect(() => {
-    data = {
-      token: TokenState,
-      student_id: studentId,
-    };
-    const CurriculumData = async data => {
-      setLoad(true);
-      setRefresh(true);
-      try {
-        const api = await clientapi.post(`/student/course/curriculum`, data);
-        console.log(api?.data?.curriculum, 'api.data');
-        setCourses(api?.data?.curriculum);
-        setLoad(false);
-      } catch (error) {
-        // setLoad(true);
-        console.log(error, 'api error');
-        setLoad(false);
-      }
-    };
-    CurriculumData(data);
+    // data = {
+    //   token: TokenState,
+    //   student_id: studentId,
+    // };
+    // curriculumData(setLoad, dispatch, data);
+    // const CurriculumData1 = async data => {
+    //   setLoad(true);
+    //   setRefresh(true);
+    //   try {
+    //     const api = await clientapi.post(`/student/course/curriculum`, data);
+    //     // console.log(api?.data?.curriculum, 'api.data');
+    //     setCourses(api?.data?.curriculum);
+    //     setLoad(false);
+    //   } catch (error) {
+    //     // setLoad(true);
+    //     console.log(error, 'api error');
+    //     setLoad(false);
+    //   }
+    // };
+    // CurriculumData1(data);
     // console.log(courses, 'courses7899');
-  }, [refresh === true]);
+  }, []);
   return (
     <View
       style={{
@@ -85,7 +91,7 @@ const Curriculum = () => {
           batches may have same or different batch plan
         </Text>
       </View>
-      <CurriculumCard sem_courses={courses} setCourses={setCourses} />
+      <CurriculumCard sem_courses={courses} />
       {load && <Loader load={load} setLoad={setLoad} />}
     </View>
   );

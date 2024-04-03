@@ -8,6 +8,8 @@ const initialState = {
   makeup_classes: [],
   course_content: [],
   registered_courses: {},
+  curriculum: {},
+  grading_criteria: [],
   days: [],
   ActiveTab: 'CurrentScheduleCards',
 };
@@ -37,9 +39,15 @@ export const GlobalStatesReducer = createSlice({
     registered_courses: (state, action) => {
       state.registered_courses = action.payload;
     },
+    curriculum: (state, action) => {
+      state.curriculum = action.payload;
+    },
+    grading_criteria: (state, action) => {
+      state.grading_criteria = action.payload;
+    },
     days: (state, action) => {
       state.days = action.payload;
-    },    
+    },
     ActiveTab: (state, action) => {
       state.ActiveTab = action.payload;
     },
@@ -55,6 +63,8 @@ export const {
   makeup_classes,
   course_content,
   registered_courses,
+  curriculum,
+  grading_criteria,
   days,
   ActiveTab,
 } = GlobalStatesReducer.actions;

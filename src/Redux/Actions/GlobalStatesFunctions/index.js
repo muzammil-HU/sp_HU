@@ -17,6 +17,8 @@ import {
   ipAddress,
   isConnected,
   ActiveTab,
+  curriculum,
+  grading_criteria,
 } from '../../Reducers/GlobalStatesReducer/GlobalStatesReducer';
 import NetInfo from '@react-native-community/netinfo';
 const windowwidth = Dimensions.get('window').width;
@@ -132,10 +134,26 @@ const ActivetabChange = (dispatch, data) => {
   // console.log(data, 'data');
   dispatch(ActiveTab(data));
 };
+const curriculumData = async (setLoad, dispatch, data) => {
+  setLoad(true);
+  try {
+    const api = await clientapi.post(`/student/course/curriculum`, data);
+    // console.log(api?.data?.curriculum, 'api.data');
+    dispatch(curriculum(api?.data?.curriculum));
+    dispatch(grading_criteria(api?.data?.grading_criteria));
+    // setCourses(api?.data?.curriculum);
+    setLoad(false);
+  } catch (error) {
+    // setLoad(true);
+    console.log(error, 'api error');
+    setLoad(false);
+  }
+};
 export {
   getwifiname,
   getAttendenceData,
   getclassSchedule,
   ActivetabChange,
   getregisteredCourses,
+  curriculumData,
 };

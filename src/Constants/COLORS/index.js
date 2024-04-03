@@ -2,6 +2,7 @@ import {Dimensions} from 'react-native';
 
 export const COLORS = {
   themeColor: '#00742C',
+  headbg: '#f0f0f0',
   greyshade: '#DDDDDD',
   subheading: '#A1A1A1',
   greenshade: 'E7FFF4',

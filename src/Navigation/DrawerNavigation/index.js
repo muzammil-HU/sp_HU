@@ -54,6 +54,7 @@ import GraduatingSurvey from '../../Screen/Portal/DrawerScreens/Academics/Drawer
 import SearchingLibraryBooks from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/SearchingLibraryBooks';
 import Profile from '../../Screen/Portal/DrawerScreens/Profile';
 import ProfileScreen from '../../Screen/Portal/DrawerScreens/Profile';
+import GradingCriteria from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/GradingCriteria';
 
 const DrawerNav = () => {
   const WindowHeight = Dimensions.get('window').height;
@@ -104,6 +105,12 @@ const DrawerNav = () => {
     {
       name: 'Curriculum',
       component: Curriculum,
+      iconComp: FontAwesome6,
+      iconName: 'graduation-cap',
+    },
+    {
+      name: 'Grading Criteria',
+      component: GradingCriteria,
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
