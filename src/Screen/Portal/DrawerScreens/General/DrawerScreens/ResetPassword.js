@@ -47,7 +47,7 @@ const ResetPassword = () => {
             value={text}
             // disabled={true}
             onChangeText={text => setText(text)}
-            style={{width: '100%', backgroundColor: 'transparent'}}
+            style={{width: '100%', backgroundColor: COLORS.white}}
             activeOutlineColor={COLORS.themeColor}
             // inputMode="numeric"
           />
@@ -68,7 +68,7 @@ const ResetPassword = () => {
             value={text}
             // disabled={true}
             onChangeText={text => setText(text)}
-            style={{width: '100%', backgroundColor: 'transparent'}}
+            style={{width: '100%', backgroundColor: COLORS.white}}
             activeOutlineColor={COLORS.themeColor}
             // inputMode="numeric"
           />
@@ -89,7 +89,7 @@ const ResetPassword = () => {
             value={text}
             // disabled={true}
             onChangeText={text => setText(text)}
-            style={{width: '100%', backgroundColor: 'transparent'}}
+            style={{width: '100%', backgroundColor: COLORS.white}}
             activeOutlineColor={COLORS.themeColor}
             // inputMode="numeric"
           />

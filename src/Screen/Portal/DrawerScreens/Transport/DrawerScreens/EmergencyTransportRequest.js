@@ -36,7 +36,7 @@ const EmergencyTransportRequest = () => {
   const [request_type_valueicon, setRequest_Type_ValueIcon] = useState(null);
   const [request_type_isFocus, setRequest_type_IsFocus] = useState(false);
 
-  const [sharing, setSharingValue] = useState(null);
+  const [sharingValue, setSharingValue] = useState(null);
   // const [request_type_valueicon, setRequest_Type_ValueIcon] = useState(null);
   const [sharing_isFocus, setsharing_IsFocus] = useState(false);
 
@@ -235,8 +235,9 @@ const EmergencyTransportRequest = () => {
             mode="outlined"
             value={text}
             disabled={true}
+            outlineColor={COLORS.themeColor}
             onChangeText={text => setText(text)}
-            style={{width: '100%', backgroundColor: 'transparent'}}
+            style={{width: '100%', backgroundColor: COLORS.white}}
             activeOutlineColor={COLORS.themeColor}
             inputMode="numeric"
           />
@@ -250,14 +251,19 @@ const EmergencyTransportRequest = () => {
             justifyContent: 'center',
             marginHorizontal: '5%',
             marginTop: '5%',
+            marginBottom: '5%',
           }}>
           <TextInput
             disabled={true}
             label="Total Ammount"
             mode="outlined"
+            outlineColor={COLORS.themeColor}
             value={text}
             onChangeText={text => setText(text)}
-            style={{width: '100%', backgroundColor: 'transparent'}}
+            style={{
+              width: '100%',
+              backgroundColor: COLORS.white,
+            }}
             activeOutlineColor={COLORS.themeColor}
             inputMode="numeric"
           />
@@ -273,8 +279,8 @@ const EmergencyTransportRequest = () => {
             marginHorizontal: '5%',
           }}>
           <DropdownComponent
-            value={request_type_value}
-            setValue={setRequest_Type_Value}
+            value={sharingValue}
+            setValue={setSharingValue}
             isFocus={sharing_isFocus}
             setIsFocus={setsharing_IsFocus}
             label={'Single/Sharing'}

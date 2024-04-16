@@ -7,9 +7,9 @@ import DropdownComponent from '../../../../../components/reuseable/Dropdown';
 
 const data = [
   {label: 'Laptop', value: '1', icon: 'laptop'},
-  {label: 'Desktop PC', value: '2', icon: 'iconfontdesktop'},
-  {label: 'Tablet PC', value: '3', icon: 'tablet1'},
-  {label: 'Smart Phone', value: '4', icon: 'mobile1'},
+  {label: 'Desktop PC', value: '2', icon: 'desktop'},
+  {label: 'Tablet PC', value: '3', icon: 'tablet'},
+  {label: 'Smart Phone', value: '4', icon: 'mobile'},
 ];
 
 const macData = [
