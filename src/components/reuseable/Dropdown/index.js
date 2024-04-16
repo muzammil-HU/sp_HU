@@ -3,6 +3,7 @@ import React from 'react';
 // import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {COLORS, windowWidth} from '../../../Constants/COLORS';
 
 const DropdownComponent = ({
@@ -16,20 +17,21 @@ const DropdownComponent = ({
   label,
 }) => {
   const renderLabel = () => {
-    if (value || isFocus) {
-      return <Text style={[styles.label]}>{label}</Text>;
-    }
-    return null;
+    return <Text style={[styles.label]}>{label}</Text>;
   };
 
   return (
     <View style={styles.ddcontainer}>
       {renderLabel()}
       <Dropdown
-        style={[styles.dropdown, isFocus && {borderColor: COLORS.themeColor}]}
+        style={[styles.dropdown]}
         placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={styles.iconStyle}
+        selectedTextStyle={{
+          fontSize: windowWidth / 25,
+          color: COLORS.themeColor,
+        }}
+        // iconStyle={styles.iconStyle}
+        itemTextStyle={{color: COLORS.themeColor, fontSize: windowWidth / 28}}
         iconColor={COLORS.themeColor}
         data={data}
         labelField="label"
@@ -40,14 +42,16 @@ const DropdownComponent = ({
         onBlur={() => setIsFocus(false)}
         onChange={item => {
           setValue(item.value);
-          setValueIcon(item.icon);
+          if (setValueIcon) {
+            setValueIcon(item.icon);
+          }
           setIsFocus(false);
         }}
         renderLeftIcon={() => (
-          <AntDesign
+          <FontAwesome5
             style={styles.icon}
-            color={isFocus ? COLORS.themeColor : COLORS.black}
-            name={valueIcon === null ? 'Safety' : valueIcon}
+            color={COLORS.themeColor}
+            name={valueIcon === null ? 'search-location' : valueIcon}
             size={windowWidth / 20}
           />
         )}
@@ -55,7 +59,6 @@ const DropdownComponent = ({
     </View>
   );
 };
-export default DropdownComponent;
 
 const styles = StyleSheet.create({
   ddcontainer: {
@@ -86,12 +89,14 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    color: COLORS.themeColor,
   },
   selectedTextStyle: {
     fontSize: 16,
-    color: COLORS.themeColor,
   },
   iconStyle: {
-    color: COLORS.themeColor,
+    // color: COLORS.themeColor,
   },
 });
+
+export default DropdownComponent;

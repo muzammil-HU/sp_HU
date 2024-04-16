@@ -102,6 +102,7 @@ const WifiForm = () => {
             setValueIcon={setValueIcon}
             isFocus={isFocus}
             setIsFocus={setIsFocus}
+            label={'Device'}
             data={data}
           />
         </View>

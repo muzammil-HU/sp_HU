@@ -20,19 +20,25 @@ import {Dropdown} from 'react-native-element-dropdown';
 
 const EmergencyTransportRequest = () => {
   const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(new Date());
   const [datemode, setDateMode] = useState('date');
   const [timemode, setTimeMode] = useState('time');
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [time, setTime] = useState(new Date());
-  const [text, setText] = useState(new Date());
+
+  const [text, setText] = useState();
 
   const [value, setValue] = useState(null);
   const [valueIcon, setValueIcon] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
-  const [request_type_value, setRequest_Type_Value] = useState();
-  const [request_type_valueicon, setRequest_Type_ValueIcon] = useState();
+  const [request_type_value, setRequest_Type_Value] = useState(null);
+  const [request_type_valueicon, setRequest_Type_ValueIcon] = useState(null);
+  const [request_type_isFocus, setRequest_type_IsFocus] = useState(false);
+
+  const [sharing, setSharingValue] = useState(null);
+  // const [request_type_valueicon, setRequest_Type_ValueIcon] = useState(null);
+  const [sharing_isFocus, setsharing_IsFocus] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -49,15 +55,21 @@ const EmergencyTransportRequest = () => {
     // setDateMode(currentMode);
   };
   const data = [
-    {label: 'lappy', value: '1', icon: 'laptop'},
-    {label: 'Deskt', value: '2', icon: 'iconfontdesktop'},
-    {label: 'Tabl', value: '3', icon: 'tablet1'},
-    {label: 'Smar', value: '4', icon: 'mobile1'},
+    {label: 'Laptop', value: 'laptop', icon: 'laptop'},
+    {label: 'Desktop', value: 'desktop', icon: 'desktop'},
+    {label: 'Tablet', value: 'tablet', icon: 'tablet'},
+    {label: 'Mobile', value: 'mobile', icon: 'mobile'},
   ];
+
   const Request_Type = [
-    {label: 'Departure', value: 'Departure', icon: 'laptop'},
-    {label: 'PickUp', value: 'PickUp', icon: 'laptop'},
+    {label: 'Departure', value: 'Departure', icon: 'plane-departure'},
+    {label: 'PickUp', value: 'PickUp', icon: 'plane-arrival'},
     {label: 'Both', value: 'Both', icon: 'laptop'},
+  ];
+
+  const Sharing_single = [
+    {label: 'Single', value: 'Single'},
+    {label: 'Sharing', value: 'Sharing'},
   ];
   const showDatepicker = () => {
     showMode('date');
@@ -73,6 +85,7 @@ const EmergencyTransportRequest = () => {
         <View style={styles.heading}>
           <Text style={styles.headtext}>Transport Request Form</Text>
         </View>
+        {/* showDatePicker */}
         <View style={[styles.container, {justifyContent: 'center'}]}>
           {showDatePicker ? (
             <DateTimePicker
@@ -115,6 +128,7 @@ const EmergencyTransportRequest = () => {
             </TouchableOpacity>
           )}
         </View>
+        {/* showTimePicker */}
         <View style={[styles.container, {justifyContent: 'center'}]}>
           {showTimePicker ? (
             <DateTimePicker
@@ -178,8 +192,8 @@ const EmergencyTransportRequest = () => {
             setValue={setRequest_Type_Value}
             valueIcon={request_type_valueicon}
             setValueIcon={setRequest_Type_ValueIcon}
-            isFocus={isFocus}
-            setIsFocus={setIsFocus}
+            isFocus={request_type_isFocus}
+            setIsFocus={setRequest_type_IsFocus}
             label={'Request Type'}
             data={Request_Type}
           />
@@ -209,6 +223,67 @@ const EmergencyTransportRequest = () => {
         <View
           style={{
             flexDirection: 'row',
+            width: '90%',
+            height: '8%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: '5%',
+            marginTop: '5%',
+          }}>
+          <TextInput
+            label="Ammount"
+            mode="outlined"
+            value={text}
+            disabled={true}
+            onChangeText={text => setText(text)}
+            style={{width: '100%', backgroundColor: 'transparent'}}
+            activeOutlineColor={COLORS.themeColor}
+            inputMode="numeric"
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '90%',
+            height: '8%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: '5%',
+            marginTop: '5%',
+          }}>
+          <TextInput
+            disabled={true}
+            label="Total Ammount"
+            mode="outlined"
+            value={text}
+            onChangeText={text => setText(text)}
+            style={{width: '100%', backgroundColor: 'transparent'}}
+            activeOutlineColor={COLORS.themeColor}
+            inputMode="numeric"
+          />
+        </View>
+        {/*Sharing DropDown */}
+        <View
+          style={{
+            flexDirection: 'row',
+            // width: '90%',
+            height: '8%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: '5%',
+          }}>
+          <DropdownComponent
+            value={request_type_value}
+            setValue={setRequest_Type_Value}
+            isFocus={sharing_isFocus}
+            setIsFocus={setsharing_IsFocus}
+            label={'Single/Sharing'}
+            data={Sharing_single}
+          />
+        </View>
+        {/* <View
+          style={{
+            flexDirection: 'row',
             // width: '90%',
             height: '8%',
             alignItems: 'center',
@@ -216,29 +291,17 @@ const EmergencyTransportRequest = () => {
             marginHorizontal: '5%',
             marginTop: '5%',
           }}>
-          <InputText
-            placeholder="Enter Password"
-            placeholderTextColor={COLORS.black}
-            // secureTextEntry={!showPassword}
-            // value={password}
-            maxLength={30}
-            // onChangeText={setPassword}
-            TextStyle={[
-              styles.inputText,
-              {
-                fontSize: windowWidth / 25,
-                width: '100%',
-                paddingLeft: 10,
-              },
-            ]}
-            onFocus={() => {
-              setIsPasswordFocused(true);
-            }}
-            onBlur={() => {
-              setIsPasswordFocused(false);
-            }}
+          <DropdownComponent
+            value={value}
+            setValue={setValue}
+            valueIcon={valueIcon}
+            setValueIcon={setValueIcon}
+            isFocus={isFocus}
+            setIsFocus={setIsFocus}
+            label={'Single/Sharing'}
+            data={data}
           />
-        </View>
+        </View> */}
       </View>
     </ScrollView>
   );
@@ -276,10 +339,8 @@ const styles = StyleSheet.create({
   ddcontainer: {
     width: '100%',
     height: '100%',
-    // marginHorizontal: '3%',
   },
   dropdown: {
-    // height: '20%',
     paddingVertical: '4%',
     borderColor: COLORS.themeColor,
     borderWidth: 1,
