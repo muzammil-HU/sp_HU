@@ -109,13 +109,14 @@ const ResetPassword = () => {
               flexDirection: 'column',
               backgroundColor: COLORS.themeColor,
               width: '100%',
-              height: '70%',
+              height: '80%',
               alignItems: 'center',
               justifyContent: 'center',
+              borderRadius: 5,
             }}>
             <FontAwesome5
               style={styles.icon}
-              // color={isFocus ? COLORS.themeColor : COLORS.black}
+              color={COLORS.white}
               name={'key'}
               size={windowWidth / 20}
             />

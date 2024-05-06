@@ -12,16 +12,37 @@
 // export default apiInstance;
 
 import axios from 'axios';
-export default axios.create({
+// export default axios.create({
+//   baseURL:
+//     // 'bsjabj'
+//     // 'https://sp.hamdard.edu.pk/api',
+//     'http://sp.hamdard.edu.pk/api',
+//   // 'http://172.23.12.98:8000/api',
+//   // 'http://192.168.137.193:8085/api/v1/',
+
+//   headers: {
+//     'Content-type': 'application/json',
+//     Accept: 'application/json',
+//   },
+// });
+
+const clientapi = axios.create({
   baseURL:
-    // 'bsjabj'
-    // 'https://sp.hamdard.edu.pk/api',
-    'http://sp.hamdard.edu.pk/api',
-  // 'http://172.23.12.98:8000/api',
-  // 'http://192.168.137.193:8085/api/v1/',
+    // hjh
+    'http://172.23.12.71:80/api',
+  // 'http://sp.hamdard.edu.pk/api',
+  // 'https://172.23.12.71:443/api',
 
   headers: {
-    'Content-type': 'application/json',
+    'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 });
+
+// clientapi.interceptors.request.use(function (config) {
+//   return new Promise(resolve =>
+//     setTimeout(() => resolve(config), 5000, console.log('first')),
+//   );
+// });
+
+export default clientapi;
