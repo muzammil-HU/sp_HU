@@ -29,9 +29,17 @@ import axios from 'axios';
 const clientapi = axios.create({
   baseURL:
     // hjh
-    'http://172.23.12.71:80/api',
-  // 'http://sp.hamdard.edu.pk/api',
+    // remote local
+    // 'http://172.23.12.71:80/api',
+    // 'http://sp.hamdard.edu.pk/api',
+    'https://snologies.com/sp_backend_lara/public/api',
+  // 'https://sp.hamdard.edu.pk/api',
   // 'https://172.23.12.71:443/api',
+  // local
+  // 'http://172.23.12.98:8000/api',
+  // 'http://192.168.137.155:8000/api',
+  // 'http://192.168.137.75:8000/api',
+  // 'http://localhost:8000/api',
 
   headers: {
     'Content-Type': 'application/json',

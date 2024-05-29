@@ -82,10 +82,8 @@ const AttendenceModal = ({
                 </DataTable.Title>
               </DataTable.Header>
 
-              {Attendence?.slice(from, to).map(item => {
+              {Attendence?.slice(from, to).map((item, index) => {
                 const originalDate = new Date(item.attendance_date);
-
-                // Format the date as "DD-Mon-YYYY"
                 const formattedDate = `${originalDate.getDate()}-${getMonthAbbreviation(
                   originalDate.getMonth(),
                 )}-${originalDate.getFullYear()}`;
@@ -107,19 +105,9 @@ const AttendenceModal = ({
                   ];
                   return months[monthIndex];
                 }
+
                 return (
-                  <DataTable.Row key={item.attendance_date}>
-                    {/* <DataTable.Cell
-                      style={{
-                        justifyContent: 'center',
-                        // backgroundColor: COLORS.DrawerDDActive,
-                      }}
-                      textStyle={{color: item.the_color}}>
-                      {item?.attendance_date
-                        ? `${formattedDate}, ${item.day}`
-                        : 'N/A'}
-                      <View style={{ flexDirection:'row' }}></View>
-                    </DataTable.Cell> */}
+                  <DataTable.Row key={`${item.attendance_date}-${index}`}>
                     <View
                       style={{
                         width: '100%',
@@ -150,8 +138,6 @@ const AttendenceModal = ({
                         }}>
                         <DataTable.Cell
                           style={{
-                            // borderBottomLeftRadius: 10,
-                            // borderColor: item.the_color,
                             borderWidth: 1,
                             justifyContent: 'center',
                           }}
@@ -182,7 +168,27 @@ const AttendenceModal = ({
                         </DataTable.Cell>
                       </View>
                     </View>
-                    {/* <DataTable.Cell textStyle={{color: item.the_color}}>
+                  </DataTable.Row>
+                );
+              })}
+              <DataTable.Pagination
+                page={page}
+                numberOfPages={numberOfPages}
+                onPageChange={page => setPage(page)}
+                label={`${from + 1}-${to} of ${Attendence?.length}`}
+                numberOfItemsPerPageList={numberOfItemsPerPageList}
+                onItemsPerPageChange={onItemsPerPageChange}
+                showFastPaginationControls={true}
+              />
+            </DataTable>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
+{
+  /* <DataTable.Cell textStyle={{color: item.the_color}}>
                     {item?.day ? item?.day : '-'}
                   </DataTable.Cell>
                   <DataTable.Cell numeric textStyle={{color: item.the_color}}>
@@ -196,30 +202,8 @@ const AttendenceModal = ({
                   </DataTable.Cell>
                   <DataTable.Cell numeric textStyle={{color: item.the_color}}>
                     {item?.total_hrs ? item?.total_hrs : '-'}
-                  </DataTable.Cell> */}
-                  </DataTable.Row>
-                );
-              })}
-
-              <DataTable.Pagination
-                page={page}
-                numberOfPages={numberOfPages}
-                onPageChange={page => setPage(page)}
-                label={`${from + 1}-${to} of ${Attendence?.length}`}
-                numberOfItemsPerPageList={numberOfItemsPerPageList}
-                // numberOfItemsPerPage={itemsPerPage}
-                onItemsPerPageChange={onItemsPerPageChange}
-                showFastPaginationControls={true}
-                // selectPageDropdownLabel={'Rows per page'}
-              />
-            </DataTable>
-          </View>
-        </View>
-      </Modal>
-    </View>
-  );
-};
-
+                  </DataTable.Cell> */
+}
 export default AttendenceModal;
 
 const styles = StyleSheet.create({

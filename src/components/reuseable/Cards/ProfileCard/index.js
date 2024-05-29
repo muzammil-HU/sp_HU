@@ -1,11 +1,23 @@
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  Dimensions,
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import {COLORS} from '../../../../Constants/COLORS';
 import {useSelector} from 'react-redux';
 
 const ProfileCard = ({cardProfileData}) => {
   const WindowWidth = Dimensions.get('window').width;
   const WindowHeight = Dimensions.get('window').height;
+  const [isModalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   const AuthState = useSelector(state => {
     return state?.AuthReducer.UserDetail;
   });
@@ -22,37 +34,62 @@ const ProfileCard = ({cardProfileData}) => {
             justifyContent: 'center',
             alignItems: 'flex-start',
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              // justifyContent: 'flex-start',
-              // alignItems: 'flex-start',
-              width: WindowWidth / 5,
-              height: WindowWidth / 5,
-              borderRadius: 150,
-              borderWidth: 5,
-              // marginHorizontal: 10,
-              marginRight: 10,
-              marginLeft: 0,
-              overflow: 'hidden',
-              borderColor: COLORS.themeColor,
-            }}>
-            <Image
-              source={
-                AuthState?.picture
-                  ? {
-                      uri: AuthState?.picture,
-                    }
-                  : require('../../../../assets/N_A_logo.png')
-              }
-              resizeMode="contain"
+          <TouchableOpacity style={{}} onPress={toggleModal}>
+            <View
               style={{
-                aspectRatio: 1,
-                width: AuthState?.picture ? undefined : '0%',
-                height: AuthState?.picture ? '100%' : '0%',
-              }}
-            />
-          </View>
+                flexDirection: 'row',
+                // justifyContent: 'flex-start',
+                // alignItems: 'flex-start',
+                width: WindowWidth / 5,
+                height: WindowWidth / 5,
+                borderRadius: 150,
+                borderWidth: 5,
+                // marginHorizontal: 10,
+                marginRight: 10,
+                marginLeft: 0,
+                overflow: 'hidden',
+                borderColor: COLORS.themeColor,
+              }}>
+              <Image
+                source={
+                  AuthState?.picture
+                    ? {
+                        uri: AuthState?.picture,
+                      }
+                    : require('../../../../assets/N_A_logo.png')
+                }
+                resizeMode="contain"
+                style={{
+                  aspectRatio: 1,
+                  width: AuthState?.picture ? undefined : '0%',
+                  height: AuthState?.picture ? '100%' : '0%',
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+          <Modal
+            visible={isModalVisible}
+            transparent={true}
+            onRequestClose={toggleModal}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity onPress={toggleModal}>
+                <Image
+                  source={{uri: AuthState?.picture}}
+                  style={{
+                    width: WindowWidth,
+                    height: WindowHeight,
+                    resizeMode: 'contain',
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </Modal>
         </View>
         <View
           style={{

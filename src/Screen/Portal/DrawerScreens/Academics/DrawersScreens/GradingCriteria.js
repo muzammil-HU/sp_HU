@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {
@@ -6,11 +6,16 @@ import {
   windowHeight,
   windowWidth,
 } from '../../../../../Constants/COLORS';
+import {useRoute} from '@react-navigation/native';
+import ScreenHead from '../../../../../components/reuseable/ScreenHead';
+import Grading_Table from '../../../../../components/reuseable/Grading_Table';
 
 const GradingCriteria = () => {
   const grading_criteria = useSelector(state => {
     return state.GlobalStatesReducer.grading_criteria;
   });
+  const route = useRoute();
+
   const dataheads = {
     min_grade: 'Minimum Marks',
     max_grade: 'Maximum Marks',
@@ -20,7 +25,7 @@ const GradingCriteria = () => {
 
   return (
     <View style={styles.container}>
-      <View
+      {/* <View
         style={{
           flexDirection: 'row',
           width: '100%',
@@ -30,29 +35,31 @@ const GradingCriteria = () => {
           backgroundColor: COLORS.white,
         }}>
         <Text style={styles.headingtext}>Grading Criteria</Text>
-      </View>
+      </View> */}
+      <ScreenHead heading={'Grading Criteria'} NoteVisibility={false} />
       {grading_criteria.length === 0 ? (
         <View style={styles.center}>
           <Text>Grading Criteria Not Found</Text>
         </View>
       ) : (
-        <View style={styles.table}>
-          <View style={[styles.tableRow, styles.headerRow]}>
-            {Object.values(dataheads).map((heading, index) => (
-              <Text key={index} style={styles.headerCell}>
-                {heading.toUpperCase()}
-              </Text>
-            ))}
-          </View>
-          {grading_criteria.map((gc, index) => (
-            <View key={index} style={styles.tableRow}>
-              <Text style={styles.cell}>{gc.min_grade}</Text>
-              <Text style={styles.cell}>{gc.max_grade}</Text>
-              <Text style={styles.cell}>{gc.grade}</Text>
-              <Text style={styles.cell}>{gc.gpa}</Text>
-            </View>
-          ))}
-        </View>
+        <Grading_Table />
+        // <ScrollView style={styles.table}>
+        //   <View style={[styles.tableRow, styles.headerRow]}>
+        //     {Object.values(dataheads).map((heading, index) => (
+        //       <Text key={index} style={styles.headerCell}>
+        //         {heading.toUpperCase()}
+        //       </Text>
+        //     ))}
+        //   </View>
+        //   {grading_criteria.map((gc, index) => (
+        //     <View key={index} style={styles.tableRow}>
+        //       <Text style={styles.cell}>{gc.min_grade}</Text>
+        //       <Text style={styles.cell}>{gc.max_grade}</Text>
+        //       <Text style={styles.cell}>{gc.grade}</Text>
+        //       <Text style={styles.cell}>{gc.gpa}</Text>
+        //     </View>
+        //   ))}
+        // </ScrollView>
       )}
     </View>
   );

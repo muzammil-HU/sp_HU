@@ -35,6 +35,14 @@ const UnderConstruction = ({load, setLoad}) => {
             }}>
             This Screen is Under Development
           </Text>
+          <Text
+            style={{
+              fontWeight: '400',
+              color: COLORS.black,
+              fontSize: windowWidth / 25,
+            }}>
+            Coming Soon
+          </Text>
         </View>
       )}
     </>

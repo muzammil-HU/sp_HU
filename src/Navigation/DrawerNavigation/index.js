@@ -14,7 +14,6 @@ import {
   createDrawerNavigator,
 } from '@react-navigation/drawer';
 import BottomBar from '../TopTab/BottomBar';
-
 import Register from '../../Screen/Auth/Register';
 import {COLORS, windowHeight, windowWidth} from '../../Constants/COLORS';
 import ProfileTopCard from '../../components/header/ProfileTopCard';
@@ -57,8 +56,6 @@ import ProfileScreen from '../../Screen/Portal/DrawerScreens/Profile';
 import GradingCriteria from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/GradingCriteria';
 
 const DrawerNav = () => {
-  const WindowHeight = Dimensions.get('window').height;
-  const WindowWidth = Dimensions.get('window').width;
   const Drawer = createDrawerNavigator();
   const [load, setLoad] = useState(false);
   const dispatch = useDispatch();
@@ -92,7 +89,7 @@ const DrawerNav = () => {
     },
     {
       name: 'Register New Course',
-      component: RegisterNewCourses,
+      component: UnderConstruction,
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
@@ -114,21 +111,21 @@ const DrawerNav = () => {
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
-    {
-      name: 'Alumni Form',
-      component: AlumniForm,
-      iconComp: FontAwesome6,
-      iconName: 'graduation-cap',
-    },
-    {
-      name: 'Graduating Survey',
-      component: GraduatingSurvey,
-      iconComp: FontAwesome6,
-      iconName: 'graduation-cap',
-    },
+    // {
+    //   name: 'Alumni Form',
+    //   component: AlumniForm,
+    //   iconComp: FontAwesome6,
+    //   iconName: 'graduation-cap',
+    // },
+    // {
+    //   name: 'Graduating Survey',
+    //   component: GraduatingSurvey,
+    //   iconComp: FontAwesome6,
+    //   iconName: 'graduation-cap',
+    // },
     {
       name: 'Searching Library Books',
-      component: SearchingLibraryBooks,
+      component: UnderConstruction,
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
@@ -147,12 +144,12 @@ const DrawerNav = () => {
   const EvaluationScreens = [
     {
       name: 'Course Evaluation',
-      component: CourseEvaluation,
+      component: UnderConstruction,
       options: {},
     },
     {
       name: 'Teacher Evaluation',
-      component: TeacherEvaluation,
+      component: UnderConstruction,
     },
   ];
   const AccountScreens = [
@@ -163,21 +160,21 @@ const DrawerNav = () => {
     },
     {
       name: 'Hostel Ledger',
-      component: HostelLedger,
+      component: UnderConstruction,
     },
     {
       name: 'Transport Ledger',
-      component: TransportLedger,
+      component: UnderConstruction,
     },
     {
       name: 'Generate Account Voucher',
-      component: GenerateVoucher,
+      component: UnderConstruction,
     },
   ];
   const GeneralScreens = [
     {
       name: 'Wifi Registration',
-      component: WifiRegistration,
+      component: UnderConstruction,
       options: {},
     },
     {
@@ -187,25 +184,25 @@ const DrawerNav = () => {
     },
     {
       name: 'Feedback Form',
-      component: FeedbackForm,
+      component: UnderConstruction,
     },
     {
       name: 'Enrollment Form',
-      component: EnrollmentForm,
+      component: UnderConstruction,
     },
     {
       name: 'My Complaint Dashboard',
-      component: MyComplaintDashboard,
+      component: UnderConstruction,
     },
     {
       name: 'Change / Reset Password',
-      component: ResetPassword,
+      component: UnderConstruction,
     },
   ];
   const TransportScreens = [
     {
       name: 'Emergency Transport Request',
-      component: EmergencyTransportRequest,
+      component: UnderConstruction,
       options: {},
     },
   ];
@@ -232,9 +229,11 @@ const DrawerNav = () => {
         drawerActiveTintColor: COLORS.red,
         drawerInactiveTintColor: COLORS.themeColor,
         unmountOnBlur: true,
+        swipeEdgeWidth: 50,
+        drawerStyle: {width: windowHeight / 3, elevation: 24},
       }}>
       <Drawer.Screen name="Home" component={BottomBar} />
-      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Drawer.Screen name="ProfileScreen" component={UnderConstruction} />
       {AcademicsScreens.map(As => (
         <Drawer.Screen key={As.name} name={As.name} component={As.component} />
       ))}

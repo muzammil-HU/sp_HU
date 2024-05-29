@@ -17,12 +17,10 @@ export default function App() {
     <Provider store={store}>
       <PaperProvider>
         <PersistGate loading={null} persistor={persistor}>
-          {/* onBeforeLift={() => new Promise(resolve => setTimeout(resolve, 3000))} */}
           <View style={{flex: 1}}>
             <StatusBar
               barStyle={'light-content'}
               backgroundColor={COLORS.themeColor}
-              // style="light" translucent={true}
             />
             {/* <MainNavigation /> */}
             {splash ? (

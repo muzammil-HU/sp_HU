@@ -5,13 +5,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS, windowWidth} from '../../../../Constants/COLORS';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {Divider} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 
 const CurriculumCard = ({sem_courses}) => {
   const [expandedcourses, setExpandedCourses] = useState([]);
+  const [currentSemester, setCurrentSemester] = useState([]);
+  const currentSem = useSelector(state => {
+    return state?.AuthReducer?.UserDetail?.semester;
+  });
+
   const toggleSem = key => {
     setExpandedCourses(prevExpandedDays => {
       if (prevExpandedDays.includes(key)) {
@@ -21,6 +27,15 @@ const CurriculumCard = ({sem_courses}) => {
       }
     });
   };
+  useEffect(() => {
+    setExpandedCourses([currentSem]);
+  }, [currentSem]);
+  // useEffect(() => {
+  //   //    // Automatically expand the current day when the screen is loaded
+  //   //    if (currentSem) {
+  //   //      setExpandedDays([currentSem]);
+  //   //    }
+  // }, [currentSem]);
   return (
     <>
       {sem_courses === 0 || sem_courses === undefined ? (

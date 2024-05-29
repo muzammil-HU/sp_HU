@@ -81,10 +81,8 @@ const getAttendenceData = async (
       params,
     );
     if (res?.data?.success === true && res?.data?.data != []) {
-      // setData(res?.data?.data);
       dispatch(dayAttendence(res?.data?.data));
       setLoad(false);
-      console.log('data imported');
     } else {
       setError('No Data found');
     }

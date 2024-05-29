@@ -11,6 +11,7 @@ import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
 import {useSelector} from 'react-redux';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {Divider} from 'react-native-paper';
+import clientapi from '../../../../../api/clientapi';
 
 const ExaminationSchedule = () => {
   const [load, setLoad] = useState(false);
@@ -18,63 +19,57 @@ const ExaminationSchedule = () => {
   const [selectedCourseName, setSelectedCourseName] = useState();
   const [expandedDays, setExpandedDays] = useState([]);
   const [currentDay, setCurrentDay] = useState(null);
-  const ff = {
-    1: 'Mid Term Examinations',
-    2: 'Final Term Examination',
-  };
-
-  const dd = useSelector(state => {
-    return state?.GlobalStatesReducer?.days;
-  });
-  const data = [
-    {
-      base_offer_id: '1869',
-      course_id: '7907',
-      course_title: 'Therapeutic Exercises & Techniques (Theory)',
-      date: '2024-04-25',
-      day: 'Monday',
-      exam_type: 'Mid Term Examinations',
-      lecturer: 'Unzila Sadaq',
-      offer_id: '1869',
-      offer_no: '53503',
-      room: '--',
-      time: '08:30 - 09:30',
-    },
-    {
-      base_offer_id: '7785',
-      course_id: '5888',
-      course_title: 'Therapeutic Exercises & Techniques (Theory)',
-      date: '2024-04-25',
-      day: 'Monday',
-      exam_type: 'Mid Term Examinations',
-      lecturer: 'Unzila Sadaq',
-      offer_id: '1867',
-      offer_no: '53547',
-      room: '--',
-      time: '08:30 - 09:30',
-    },
-    {
-      base_offer_id: '1455',
-      course_id: '5566',
-      course_title: 'Therapeutic Exercises & Techniques (Theory)',
-      date: '26/05/2024',
-      day: 'Monday',
-      exam_type: 'Final Term Examination',
-      lecturer: 'Unzila Sadaq',
-      offer_id: '1845',
-      offer_no: '53515',
-      room: '--',
-      time: '08:30 - 09:30',
-    },
+  const [exam_Type, setExam_type] = useState();
+  const [exam_Data, setExam_Data] = useState([]);
+  var months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
-  console.log(dd);
-  const Schedule = useSelector(state => {
-    return state?.GlobalStatesReducer.class_schedule;
-  });
-  console.log(Schedule);
+  const convertDate = date => {
+    var inputDate = new Date(date);
+    var formattedDate =
+      inputDate.getDate() +
+      '-' +
+      months[inputDate.getMonth()] +
+      '-' +
+      inputDate.getFullYear();
+    return formattedDate;
+  };
   useEffect(() => {
     const today = new Date().toLocaleDateString('en-US', {weekday: 'long'});
     setCurrentDay(today);
+    const params = {
+      token: TokenState,
+      student_id: studentId,
+    };
+    (async () => {
+      const ExaminationScheduleData = async params => {
+        // setLoad(true);
+        try {
+          const api = await clientapi.post(
+            `/student/examination/schedule`,
+            params,
+          );
+          // console.log(api?.data, '789czcaca');
+          setExam_Data(api?.data.examination_schedule);
+          setExam_type(api?.data.exam_sch);
+        } catch (error) {
+          console.log(error, 'api error');
+          // setLoad(false);
+        }
+      };
+      await ExaminationScheduleData(params);
+    })();
   }, []);
 
   useEffect(() => {
@@ -82,6 +77,18 @@ const ExaminationSchedule = () => {
       setExpandedDays([currentDay]);
     }
   }, [currentDay]);
+  const ff = {
+    1: 'Mid Term Examinations',
+    2: 'Final Term Examination',
+  };
+
+  const TokenState = useSelector(state => {
+    return state?.AuthReducer.TokenId;
+  });
+  const studentId = useSelector(state => {
+    return state.AuthReducer.UserDetail.student_id;
+  });
+
   const toggleDay = day => {
     setExpandedDays(prevExpandedDays => {
       if (prevExpandedDays.includes(day)) {
@@ -108,7 +115,7 @@ const ExaminationSchedule = () => {
           <View style={{alignItems: 'center'}}>
             <Text style={styles.mainheading}>Examination Schedule</Text>
           </View>
-          {data.length === 0 ? (
+          {exam_Data.length === 0 ? (
             <View style={{flex: 1, alignItems: 'center', paddingTop: '8%'}}>
               <Text
                 style={{fontSize: windowWidth / 23, color: COLORS.themeColor}}>
@@ -123,8 +130,8 @@ const ExaminationSchedule = () => {
               }}>
               {Object.keys(ff).map(key => {
                 const exam_type = ff[key];
-                console.log(exam_type);
-                const daySchedule = data.filter(
+                // console.log(exam_type);
+                const daySchedule = exam_Data.filter(
                   item => item.exam_type === exam_type,
                 );
 
@@ -156,10 +163,9 @@ const ExaminationSchedule = () => {
                       </TouchableOpacity>
                       {expandedDays.includes(exam_type) && (
                         <>
-                          {data
+                          {exam_Data
                             .filter(item => item.exam_type === exam_type)
                             .map((scheduleItem, scheduleIndex) => {
-                              console.log(scheduleItem, 'dsda');
                               return (
                                 <View
                                   key={scheduleIndex}
@@ -189,7 +195,10 @@ const ExaminationSchedule = () => {
                                           color: COLORS.TextthemeColor,
                                         },
                                       ]}>
-                                      Offer No:{scheduleItem.offer_no}
+                                      {/* {scheduleItem.exam_date} */}
+                                      {scheduleItem.exam_date === null
+                                        ? '-'
+                                        : convertDate(scheduleItem.exam_date)}
                                     </Text>
                                     <Text
                                       style={[
@@ -200,7 +209,30 @@ const ExaminationSchedule = () => {
                                           color: COLORS.TextthemeColor,
                                         },
                                       ]}>
-                                      Exam day : {scheduleItem.day}
+                                      {scheduleItem.exam_day === null
+                                        ? '-'
+                                        : scheduleItem.exam_day}
+                                    </Text>
+                                  </View>
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      width: '100%',
+                                      justifyContent: 'space-between',
+                                      paddingHorizontal: '5%',
+                                    }}>
+                                    <Text
+                                      style={[
+                                        styles.textsty,
+                                        {
+                                          fontSize: windowWidth / 26,
+                                          textAlign: 'center',
+                                          color: COLORS.TextthemeColor,
+                                        },
+                                      ]}>
+                                      {scheduleItem.offer_no
+                                        ? '-'
+                                        : scheduleItem.offer_no}
                                     </Text>
                                     <Text
                                       style={[
@@ -211,7 +243,9 @@ const ExaminationSchedule = () => {
                                           color: COLORS.TextthemeColor,
                                         },
                                       ]}>
-                                      Room:{scheduleItem.room}
+                                      {scheduleItem.exam_room === null
+                                        ? '-'
+                                        : scheduleItem.exam_room}
                                     </Text>
                                   </View>
                                   <Divider
@@ -282,7 +316,9 @@ const ExaminationSchedule = () => {
                                             color: COLORS.TextthemeColor,
                                           },
                                         ]}>
-                                        {scheduleItem.time}
+                                        {scheduleItem.exam_time === null
+                                          ? '-'
+                                          : scheduleItem.exam_time}
                                       </Text>
                                     </View>
                                   </View>

@@ -13,100 +13,97 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../Constants/COLORS';
 import DrawerNav from '../DrawerNavigation';
 import QrScan from '../../Screen/Portal/BottomTabScreens/QrScan';
+import PrivacyPolicy from '../../Screen/StackScreens/PrivacyPolicy';
+import {useRoute} from '@react-navigation/native';
 
 const MainStudentNav = () => {
   const Stack = createNativeStackNavigator();
+  // const route = useRoute();
 
   const CustomHeader = ({navigation, options}) => {
-    const WindowHeight = Dimensions.get('window').height;
-    const WindowWidth = Dimensions.get('window').width;
     return (
       <View style={styles.customHeader}>
-        <View style={{flexDirection: 'column', width: '38%'}}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            {/* <Text style={styles.backButton}>back</Text> */}
+        <View
+          style={{
+            flexDirection: 'column',
+            width: '24%',
+            justifyContent: 'center',
+            // backgroundColor: COLORS.red,
+            height: '100%',
+          }}>
+          <TouchableOpacity
+            style={{
+              // backgroundColor: COLORS.red,
+              width: '50%',
+              height: '50%',
+              justifyContent: 'center',
+            }}
+            onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back-circle" size={30} color="white" />
           </TouchableOpacity>
         </View>
         <View
           style={{
             flexDirection: 'column',
-            // backgroundColor: 'red',
-            justifyContent: 'flex-start',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '56%',
+            // backgroundColor: COLORS.black,
           }}>
           <Text style={styles.headerText}>{options.title}</Text>
         </View>
-        {/* <Text></Text> */}
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            width: '20%',
+          }}>
+          <Text style={styles.headerText}></Text>
+        </View>
+        {/* <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back-circle" size={30} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>{options.title}</Text>
+          <Text style={{color: COLORS.themeColor}}></Text>
+        </View> */}
       </View>
     );
   };
   return (
     <Stack.Navigator
       initialRouteName="Drawer"
-      style={{}}
+      // style={{}}
       screenOptions={{
-        header: props => <CustomHeader {...props} />,
+        header: props => {
+          return <CustomHeader {...props} />;
+        },
       }}>
       <Stack.Screen
         name="Drawer"
         component={DrawerNav}
         options={{headerShown: false}}
       />
-      {/* <Stack.Screen
-        name="TabNav"
-        component={TopTab}
-        options={{headerShown: false}}
-      /> */}
       <Stack.Screen
         name="Settings"
         component={Settings}
         options={{
           title: 'Settings',
-          // Add additional screen-specific options here
         }}
-        // options={{
-        //   header: () => {
-        //     <View
-        //       style={{
-        //         height: '30%',
-        //         width: '100%',
-        //         elevation: 25,
-        //         borderBottomStartRadius: 20,
-        //         borderBottomEndRadius: 20,
-        //         backgroundColor: COLORS.themeColor,
-        //         flexDirection: 'column',
-        //         justifyContent: 'space-between',
-        //       }}>
-        //       <Text>Hello</Text>
-        //     </View>;
-        //   },
-        // }}
       />
-      {/* <Stack.Screen
-        name="Attend"
-        component={AttendenceInquiry}
+      <Stack.Screen
+        name="PrivacyPolicy"
+        component={PrivacyPolicy}
         options={{
-          title: 'Settings',
-          // Add additional screen-specific options here
+          title: 'Privacy Policy',
         }}
-        // options={{
-        //   header: () => {
-        //     <View
-        //       style={{
-        //         height: '30%',
-        //         width: '100%',
-        //         elevation: 25,
-        //         borderBottomStartRadius: 20,
-        //         borderBottomEndRadius: 20,
-        //         backgroundColor: COLORS.themeColor,
-        //         flexDirection: 'column',
-        //         justifyContent: 'space-between',
-        //       }}>
-        //       <Text>Hello</Text>
-        //     </View>;
-        //   },
-        // }}
-      /> */}
+      />
     </Stack.Navigator>
   );
 };

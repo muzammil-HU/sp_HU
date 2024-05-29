@@ -4,7 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import TopCard from '../../../../components/reuseable/Cards/TopCards';
 import {COLORS} from '../../../../Constants/COLORS';
 
-const AttendenceInquiry = () => {
+const AttendenceInquiry1 = () => {
   return (
     <View
       style={{
@@ -20,7 +20,7 @@ const AttendenceInquiry = () => {
   );
 };
 
-export default AttendenceInquiry;
+export default AttendenceInquiry1;
 
 const styles = StyleSheet.create({
   text: {

@@ -57,32 +57,6 @@ const QrScan = () => {
   const currentAppState = useAppState();
   const IsFocused = useIsFocused();
   const camActive = IsFocused && currentAppState === 'active';
-  // const codeScanner = useCodeScanner({
-  //   codeTypes: ['qr', 'ean-13'],
-  //   onCodeScanned: codes => {
-  //     console.log(`Scanned ${codes[0].value} codes!`);
-  //     if (codes[0].value !== '') {
-  //       Alert.alert('Scanned..!');
-  //     }
-  //     // ToastAndroid.show(codes[0].value, ToastAndroid.LONG);
-  //     navigation.navigate('Attendence');
-  //     showMessage({
-  //       message: 'My message title',
-  //       description: 'My message description',
-  //       type: 'default',
-  //       backgroundColor: 'purple',
-  //       color: '#606060',
-  //     });
-  //     // console.log(first)
-  //   },
-  // });
-  // const onError = useCallback(error => {
-  //   console.error(error);
-  // }, []);
-  // const onInitialized = useCallback(async () => {
-  //   console.log('Camera initialized!');
-  //   setIsCameraInitialized(true);
-  // }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -127,8 +101,8 @@ const QrScan = () => {
     );
   return (
     <View style={styles.container}>
-      {/* {SSID === WifiName && CurrentUID === UID ? ( */}
-      {CurrentUID === UID ? (
+      {/* {CurrentUID === UID ? ( */}
+      {SSID === WifiName && CurrentUID === UID ? (
         <CameraComp />
       ) : (
         <View

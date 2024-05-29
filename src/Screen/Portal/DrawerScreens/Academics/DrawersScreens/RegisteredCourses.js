@@ -39,7 +39,7 @@ const RegisteredCourses = () => {
   const courses = useSelector(state => {
     return state?.GlobalStatesReducer?.registered_courses;
   });
-
+  // console.log(courses, 'courses');
   return (
     <>
       <View style={{flex: 1, backgroundColor: COLORS.white}}>

@@ -64,14 +64,7 @@ const ClassesSchedule = () => {
               ) : (
                 <CustomTabBar {...props} />
               )
-            }
-            // route.name !== 'Register New Course' || 'Classes Schedule' ? (
-
-            // ) : (
-            //   <TabBar {...props} />
-            // );
-            // }}
-          >
+            }>
             <Tab.Screen name="Current Schedule">
               {props => (
                 <CurrentScheduleCards

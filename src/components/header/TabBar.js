@@ -9,11 +9,12 @@ const TabBar = ({state, descriptors, navigation}) => {
   return (
     <View
       style={{
-        height: windowHeight / 10,
+        height: windowHeight / 9,
         width: '100%',
         elevation: 25,
         backgroundColor: COLORS.white,
         flexDirection: 'column',
+        justifyContent: 'space-between',
       }}>
       <View
         scrollEnabled={false}
@@ -28,9 +29,10 @@ const TabBar = ({state, descriptors, navigation}) => {
           paddingHorizontal: '3%',
           // height: '100%',
           columnGap: 10,
+          // justifyContent: 'space-between',
         }}
         contentContainerStyle={{
-          justifyContent: 'flex-start',
+          justifyContent: 'space-between',
           alignItems: 'center',
           paddingHorizontal: '3%',
           height: '100%',
@@ -71,7 +73,8 @@ const TabBar = ({state, descriptors, navigation}) => {
                 styles.tabsty,
                 {
                   backgroundColor: tabColor,
-                  width: '30%',
+                  // width: '30%',
+                  paddingHorizontal: '1%',
                   height: '60%',
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -84,7 +87,7 @@ const TabBar = ({state, descriptors, navigation}) => {
               ]}>
               <Text
                 style={{
-                  fontSize: windowWidth / 25,
+                  fontSize: windowWidth / 27,
                   fontWeight: '500',
                   color: textColor,
                   textAlign: 'center',

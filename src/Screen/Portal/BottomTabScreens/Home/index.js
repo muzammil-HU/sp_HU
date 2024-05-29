@@ -14,6 +14,7 @@ import {
 } from '../../../../Redux/Actions/GlobalStatesFunctions';
 import Loader from '../../../../components/reuseable/Modals/LoaderModal';
 import {useNavigation} from '@react-navigation/native';
+import clientapi from '../../../../api/clientapi';
 
 const BottomHome = () => {
   const width = Dimensions.get('window').width;
@@ -107,7 +108,9 @@ const BottomHome = () => {
         iconColor: COLORS.themeColor,
         iconSize: width / 15,
       },
-      onPress: {},
+      onPress: () => {
+        navigation.navigate('Attendance Inquiry');
+      },
     },
     {
       head: 'Examination Schedule',

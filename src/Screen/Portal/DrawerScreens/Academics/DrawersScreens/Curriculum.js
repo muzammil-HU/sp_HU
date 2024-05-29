@@ -11,6 +11,10 @@ import {curriculumData} from '../../../../../Redux/Actions/GlobalStatesFunctions
 const Curriculum = () => {
   const [load, setLoad] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [currentDay, setCurrentDay] = useState(null);
+  const currentSem = useSelector(state => {
+    return state?.AuthReducer?.UserDetail;
+  });
   const dispatch = useDispatch();
   const AttendenceState = useSelector(state => {
     return state.GlobalStatesReducer.dayAttendence;
@@ -24,60 +28,8 @@ const Curriculum = () => {
   const courses = useSelector(state => {
     return state.GlobalStatesReducer.curriculum;
   });
-  // console.log(grading_criteria, 'grading_criteria');
-  // const data = [
-  //   {
-  //     "0",
-  //     [
-  //       {attend_percentage: null,
-  //     attendance: [],
-  //     course_id: '7911',
-  //     course_title: 'Behavioral Science (Psychology & Ethics)',
-  //     credit_hrs: '2',
-  //     emp_id: null,
-  //     lecturer: null,
-  //     offer_id: '1869',
-  //     offer_no: '53506',
-  //         offer_type: 'Spring-2024',
-  //       }
-  //     ]
-  //   },
-  //   // {
-  //   //   attend_percentage: null,
-  //   //   attendance: [],
-  //   //   course_id: '7909',
-  //   //   course_title: 'Biostatistics-I',
-  //   //   credit_hrs: '3',
-  //   //   emp_id: '1001711',
-  //   //   lecturer: 'Sadia Ali',
-  //   //   offer_id: '1869',
-  //   //   offer_no: '53505',
-  //   //   offer_type: 'Spring-2024',
-  //   // },
-  // ];
-  useEffect(() => {
-    // data = {
-    //   token: TokenState,
-    //   student_id: studentId,
-    // };
-    // curriculumData(setLoad, dispatch, data);
-    // const CurriculumData1 = async data => {
-    //   setLoad(true);
-    //   setRefresh(true);
-    //   try {
-    //     const api = await clientapi.post(`/student/course/curriculum`, data);
-    //     // console.log(api?.data?.curriculum, 'api.data');
-    //     setCourses(api?.data?.curriculum);
-    //     setLoad(false);
-    //   } catch (error) {
-    //     // setLoad(true);
-    //     console.log(error, 'api error');
-    //     setLoad(false);
-    //   }
-    // };
-    // CurriculumData1(data);
-    // console.log(courses, 'courses7899');
-  }, []);
+  console.log(currentSem, 'currentSem');
+  useEffect(() => {}, []);
   return (
     <View
       style={{

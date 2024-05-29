@@ -37,6 +37,7 @@ const ProfileTopCard = () => {
   };
   return (
     <TouchableOpacity
+      disabled={true}
       onPress={() => navigation.navigate('ProfileScreen')}
       style={{
         flexDirection: 'row',
@@ -93,8 +94,8 @@ const ProfileTopCard = () => {
               flexDirection: 'row',
               // justifyContent: 'flex-start',
               // alignItems: 'flex-start',
-              width: windowwidth / 6.5,
-              height: windowwidth / 6.5,
+              width: windowwidth / 7,
+              height: windowwidth / 7,
               borderRadius: 150,
               borderWidth: 5,
               // marginHorizontal: 10,

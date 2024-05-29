@@ -21,13 +21,14 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import {LogOutUserApi} from '../../Redux/Actions/AuthFunctions';
-import {COLORS} from '../../Constants/COLORS';
+import {COLORS, windowHeight} from '../../Constants/COLORS';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -49,6 +50,8 @@ const DrawerData = props => {
     color: isHome ? COLORS.themeColor : COLORS.white,
   };
   const isActiveProfile = currentScreen === 'ProfileScreen';
+  const isActiveSettings = currentScreen === 'Settings';
+  const isActivePrivacyPolicy = currentScreen === 'PrivacyPolicy';
   const IsActiveProfileStyle = {
     backgroundColor: isActiveProfile ? COLORS.white : COLORS.themeColor,
     color: isActiveProfile ? COLORS.themeColor : COLORS.white,
@@ -107,17 +110,21 @@ const DrawerData = props => {
                 <View style={{flexDirection: 'row', columnGap: 20}}>
                   <Section.iconComp
                     name={Section.iconName}
-                    size={20}
+                    size={windowHeight / 50}
                     color={COLORS.white}
                   />
-                  <Text style={{color: COLORS.white, marginRight: 5}}>
+                  <Text
+                    style={[
+                      styles.font,
+                      {color: COLORS.white, marginRight: 5},
+                    ]}>
                     {Section.name}
                   </Text>
                 </View>
               </View>
               <FontAwesome6
                 name={isExpanded ? 'angle-up' : 'angle-down'}
-                size={20}
+                size={windowHeight / 55}
                 color={COLORS.white}
               />
             </View>
@@ -140,9 +147,13 @@ const DrawerData = props => {
                 label={() => (
                   <View style={{marginLeft: 20}}>
                     <Text
-                      style={{
-                        color: IsActiveSubMenuStyles.color,
-                      }}>
+                      style={[
+                        // styles.font,
+                        {
+                          color: IsActiveSubMenuStyles.color,
+                          fontSize: windowHeight / 65,
+                        },
+                      ]}>
                       {screen.name}
                     </Text>
                   </View>
@@ -196,7 +207,9 @@ const DrawerData = props => {
                 size={20}
                 color={IsActiveHomeStyle.color}
               />
-              <Text style={{color: IsActiveHomeStyle.color}}>Dashboard</Text>
+              <Text style={[styles.font, {color: IsActiveHomeStyle.color}]}>
+                Dashboard
+              </Text>
             </View>
           )}
         />
@@ -272,10 +285,50 @@ const DrawerData = props => {
               }}>
               <FontAwesome5
                 name="user-circle"
-                size={20}
+                size={windowHeight / 50}
                 color={IsActiveProfileStyle.color}
               />
-              <Text style={{color: IsActiveProfileStyle.color}}>Profile</Text>
+              <Text style={[styles.font, {color: IsActiveProfileStyle.color}]}>
+                Profile
+              </Text>
+            </View>
+          )}
+        />
+      </View>
+      {/* Settings */}
+      <View style={{flex: 1}}>
+        <DrawerItem
+          onPress={() => {
+            setExpandedItem(null);
+            navigation.navigate('Settings');
+          }}
+          style={{
+            backgroundColor: isActiveSettings
+              ? COLORS.white
+              : COLORS.themeColor,
+          }}
+          label={() => (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                columnGap: 22,
+              }}>
+              <AntDesign
+                name="setting"
+                size={windowHeight / 50}
+                color={isActiveSettings ? COLORS.themeColor : COLORS.white}
+              />
+              <Text
+                style={[
+                  styles.font,
+                  {
+                    color: isActiveSettings ? COLORS.themeColor : COLORS.white,
+                  },
+                ]}>
+                Settings
+              </Text>
             </View>
           )}
         />
@@ -292,13 +345,57 @@ const DrawerData = props => {
                 alignItems: 'center',
                 columnGap: 20,
               }}>
-              <SimpleLineIcons name="logout" size={20} color={COLORS.white} />
-              <Text style={styles.textsty}>LogOut</Text>
+              <SimpleLineIcons
+                name="logout"
+                size={windowHeight / 55}
+                color={COLORS.white}
+              />
+              <Text style={[styles.textsty, styles.font]}>LogOut</Text>
             </View>
           )}
           onPress={handleLogout}
         />
       </View>
+      {/* Privacy Policy */}
+      {/* <View style={{flex: 1}}>
+        <DrawerItem
+          onPress={() => {
+            setExpandedItem(null);
+            navigation.navigate('PrivacyPolicy');
+          }}
+          style={{
+            backgroundColor: isActivePrivacyPolicy
+              ? COLORS.white
+              : COLORS.themeColor,
+          }}
+          label={() => (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                columnGap: 22,
+              }}>
+              <FontAwesome5
+                name="user-circle"
+                size={windowHeight / 55}
+                color={isActivePrivacyPolicy ? COLORS.themeColor : COLORS.white}
+              />
+              <Text
+                style={[
+                  styles.font,
+                  {
+                    color: isActivePrivacyPolicy
+                      ? COLORS.themeColor
+                      : COLORS.white,
+                  },
+                ]}>
+                Privacy Policy
+              </Text>
+            </View>
+          )}
+        />
+      </View> */}
     </DrawerContentScrollView>
   );
 };
@@ -320,5 +417,8 @@ const styles = StyleSheet.create({
   },
   textsty: {
     color: COLORS.white,
+  },
+  font: {
+    fontSize: windowHeight / 55,
   },
 });

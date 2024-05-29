@@ -43,7 +43,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
           justifyContent: 'flex-start',
           alignItems: 'center',
           paddingHorizontal: '3%',
-          height: '100%',
+          // height: '100%',
           columnGap: 10,
         }}>
         {state.routes.map((route, index) => {
@@ -82,7 +82,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
                 {
                   backgroundColor: tabColor,
                   width: windowWidth / 3,
-                  height: '60%',
+                  height: '90%',
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: 7,
