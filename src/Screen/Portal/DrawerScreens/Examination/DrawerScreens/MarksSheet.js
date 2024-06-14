@@ -12,6 +12,7 @@ import MarksheetCards from '../../../../../components/reuseable/Cards/MarksheetC
 import UnderConstruction from '../../../../../components/reuseable/ScreenUnderConstruction';
 import GradingCriteria from '../../Academics/DrawersScreens/GradingCriteria';
 import Grading_Table from '../../../../../components/reuseable/Grading_Table';
+import ScreenHead from '../../../../../components/reuseable/ScreenHead';
 
 const MarksSheet = () => {
   const [load, setLoad] = useState(false);
@@ -67,16 +68,7 @@ const MarksSheet = () => {
         <Loader load={load} setLoad={setLoad} />
       ) : (
         <View style={{flex: 1, backgroundColor: COLORS.white}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '10%',
-              backgroundColor: COLORS.white,
-            }}>
-            <Text style={styles.text}>MarksSheet</Text>
-          </View>
+          <ScreenHead heading={'MarksSheet'} NoteVisibility={false} />
           {!data ? (
             <View style={{flex: 1, alignItems: 'center', paddingTop: '8%'}}>
               <View
@@ -100,7 +92,6 @@ const MarksSheet = () => {
                 height: '90%',
               }}>
               <Tab.Navigator
-                // initialRouteName={}
                 screenOptions={{
                   activeBackgroundColor: COLORS.themeColor,
                   inactiveBackgroundColor: COLORS.white,

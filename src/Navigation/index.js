@@ -14,7 +14,11 @@ import {
 } from '../Redux/Reducers/AuthReducer/AuthReducer';
 import DeviceInfo from 'react-native-device-info';
 import NetInfo from '@react-native-community/netinfo';
-import { WifiName, isConnected } from '../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
+import {
+  WifiName,
+  isConnected,
+} from '../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
+import {NetworkInfo} from 'react-native-network-info';
 
 const MainNavigation = () => {
   // var localStorage;
@@ -31,10 +35,10 @@ const MainNavigation = () => {
       try {
         const uniqueId = await DeviceInfo.getUniqueId();
         dispatch(UniqueDeviceId(uniqueId));
-  
+
         const uniqueName = await DeviceInfo.getDeviceName();
         dispatch(UniqueName(uniqueName));
-  
+
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
@@ -44,15 +48,19 @@ const MainNavigation = () => {
             buttonPositive: 'ALLOW',
           },
         );
-  
+
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          const netip = await NetworkInfo.getIPV4Address();
+          // console.log(netip, 'nnnnn');
+          // NetworkInfo.getGatewayIPAddress().then(defaultGateway => {
+          //   console.log(defaultGateway, 'jjkjkjk');
+          // });
           const state = await NetInfo.fetch();
           dispatch(isConnected(state.isConnected));
           dispatch(WifiName(state?.details?.ssid));
-          dispatch(ipAddress(state.details.ipAddress))          
+          dispatch(ipAddress(netip));
         } else {
           console.log('denied');
-
         }
       } catch (error) {
         console.log(error, 'error');
@@ -60,19 +68,19 @@ const MainNavigation = () => {
           message: '500 Server Error',
           type: 'danger',
           color: COLORS.white,
-          style: { justifyContent: 'center', alignItems: 'center' },
+          style: {justifyContent: 'center', alignItems: 'center'},
           icon: () => (
             <MaterialIcons
               name="error-outline"
               size={windowwidth / 16}
               color={COLORS.white}
-              style={{ paddingRight: 20 }}
+              style={{paddingRight: 20}}
             />
           ),
         });
       }
     };
-  
+
     // Invoke the function
     fetchUID();
   }, []);

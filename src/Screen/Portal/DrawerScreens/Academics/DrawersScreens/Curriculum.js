@@ -28,7 +28,6 @@ const Curriculum = () => {
   const courses = useSelector(state => {
     return state.GlobalStatesReducer.curriculum;
   });
-  console.log(currentSem, 'currentSem');
   useEffect(() => {}, []);
   return (
     <View

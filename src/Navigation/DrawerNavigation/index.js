@@ -144,7 +144,7 @@ const DrawerNav = () => {
   const EvaluationScreens = [
     {
       name: 'Course Evaluation',
-      component: UnderConstruction,
+      component: CourseEvaluation,
       options: {},
     },
     {
@@ -160,15 +160,15 @@ const DrawerNav = () => {
     },
     {
       name: 'Hostel Ledger',
-      component: UnderConstruction,
+      component: HostelLedger,
     },
     {
       name: 'Transport Ledger',
-      component: UnderConstruction,
+      component: TransportLedger,
     },
     {
       name: 'Generate Account Voucher',
-      component: UnderConstruction,
+      component: GenerateVoucher,
     },
   ];
   const GeneralScreens = [

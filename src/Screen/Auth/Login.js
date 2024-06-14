@@ -52,18 +52,12 @@ const Login = () => {
   const ipAddress = useSelector(state => {
     return state?.AuthReducer.ipAddress;
   });
-  // console.log(ipAddress, 'ip');
   const DN = useSelector(state => {
     return state?.AuthReducer.UniqueName;
   });
-  // console.log(DN, 'DN');
-  useEffect(() => {}, []);
   const handleStuIdChange = text => {
-    // console.log(text, 'text');
     const numericValue = text.replace(/[^0-9-]/g, '');
-    // console.log(numericValue, 'after');
     const truncatedText = numericValue.substring(0, 20);
-
     setStudentId(truncatedText);
   };
   const handleFocus = () => {
