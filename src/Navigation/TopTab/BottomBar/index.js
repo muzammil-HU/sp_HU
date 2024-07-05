@@ -22,6 +22,7 @@ import {showMessage} from 'react-native-flash-message';
 import {COLORS, windowHeight, windowWidth} from '../../../Constants/COLORS';
 import CameraComp from '../../../components/CameraComp';
 import UnderConstruction from '../../../components/reuseable/ScreenUnderConstruction';
+import AttendenceInquiry from '../../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/AttendenceInquiry';
 const BottomBar = ({state, descriptors, navigation}) => {
   const theme = useColorScheme();
   const Tab = createBottomTabNavigator();
@@ -73,7 +74,7 @@ const BottomBar = ({state, descriptors, navigation}) => {
       />
       <Tab.Screen
         name="Attendence"
-        component={UnderConstruction}
+        component={AttendenceInquiry}
         options={{
           tabBarIcon: ({focused}) => {
             return (

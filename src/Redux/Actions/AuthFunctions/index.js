@@ -66,7 +66,7 @@ const LoginUserApi = async (data, dispatch, setLoad) => {
       setLoad(false);
     }
   } catch (error) {
-    console.log('LoginUser error', error);
+    // console.log('LoginUser error', error);
     showMessage({
       message: `500 Server Error`,
       type: 'danger',
@@ -117,7 +117,7 @@ const LogOutUserApi = async (data, dispatch, setLoad) => {
       });
     } else {
       // console.log('else');
-      console.log(response?.data?.output?.response?.messages, 'else');
+      // console.log(response?.data?.output?.response?.messages, 'else');
       dispatch(LoginUser(false));
       dispatch(TokenId(null));
       dispatch(UserDetail(null));

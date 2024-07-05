@@ -43,9 +43,8 @@ import ResetPassword from '../../Screen/Portal/DrawerScreens/General/DrawerScree
 import EmergencyTransportRequest from '../../Screen/Portal/DrawerScreens/Transport/DrawerScreens/EmergencyTransportRequest';
 import CampusesContacts from '../../Screen/Portal/DrawerScreens/General/DrawerScreens/CampusesContacts';
 import CourseEvaluation from '../../Screen/Portal/DrawerScreens/Evaluation/DrawerScreens/CourseEvaluation';
-import TeacherEvaluation from '../../Screen/Portal/DrawerScreens/Evaluation/DrawerScreens/TeacherEvaluation';
 import ExaminationSchedule from '../../Screen/Portal/DrawerScreens/Examination/DrawerScreens/ExaminationSchedule';
-import MarksSheet from '../../Screen/Portal/DrawerScreens/Examination/DrawerScreens/MarksSheet';
+import MarksSheet from '../../Screen/Portal/DrawerScreens/Examination/DrawerScreens/MarksSheet/MarksSheet';
 import Curriculum from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/Curriculum';
 import RegisterNewCourses from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/RegisterNewCourses';
 import AlumniForm from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/AlumniForm';
@@ -54,6 +53,8 @@ import SearchingLibraryBooks from '../../Screen/Portal/DrawerScreens/Academics/D
 import Profile from '../../Screen/Portal/DrawerScreens/Profile';
 import ProfileScreen from '../../Screen/Portal/DrawerScreens/Profile';
 import GradingCriteria from '../../Screen/Portal/DrawerScreens/Academics/DrawersScreens/GradingCriteria';
+import CourseEva from '../../Screen/Portal/DrawerScreens/Evaluation/DrawerScreens/CourseEvaluation/CourseEva';
+import TeacherEvaluation from '../../Screen/Portal/DrawerScreens/Evaluation/DrawerScreens/TeacherEvaluation';
 
 const DrawerNav = () => {
   const Drawer = createDrawerNavigator();
@@ -87,12 +88,12 @@ const DrawerNav = () => {
       iconComp: FontAwesome6,
       iconName: 'graduation-cap',
     },
-    {
-      name: 'Register New Course',
-      component: UnderConstruction,
-      iconComp: FontAwesome6,
-      iconName: 'graduation-cap',
-    },
+    // {
+    //   name: 'Register New Course',
+    //   component: UnderConstruction,
+    //   iconComp: FontAwesome6,
+    //   iconName: 'graduation-cap',
+    // },
     {
       name: 'Registered Courses',
       component: RegisteredCourses,
@@ -123,12 +124,12 @@ const DrawerNav = () => {
     //   iconComp: FontAwesome6,
     //   iconName: 'graduation-cap',
     // },
-    {
-      name: 'Searching Library Books',
-      component: UnderConstruction,
-      iconComp: FontAwesome6,
-      iconName: 'graduation-cap',
-    },
+    // {
+    //   name: 'Searching Library Books',
+    //   component: UnderConstruction,
+    //   iconComp: FontAwesome6,
+    //   iconName: 'graduation-cap',
+    // },
   ];
   const ExaminationScreens = [
     {
@@ -149,7 +150,7 @@ const DrawerNav = () => {
     },
     {
       name: 'Teacher Evaluation',
-      component: UnderConstruction,
+      component: TeacherEvaluation,
     },
   ];
   const AccountScreens = [
@@ -166,15 +167,15 @@ const DrawerNav = () => {
       name: 'Transport Ledger',
       component: TransportLedger,
     },
-    {
-      name: 'Generate Account Voucher',
-      component: GenerateVoucher,
-    },
+    // {
+    //   name: 'Generate Account Voucher',
+    //   component: GenerateVoucher,
+    // },
   ];
   const GeneralScreens = [
     {
       name: 'Wifi Registration',
-      component: UnderConstruction,
+      component: WifiRegistration,
       options: {},
     },
     {
@@ -182,27 +183,27 @@ const DrawerNav = () => {
       component: CampusesContacts,
       options: {},
     },
-    {
-      name: 'Feedback Form',
-      component: UnderConstruction,
-    },
-    {
-      name: 'Enrollment Form',
-      component: UnderConstruction,
-    },
-    {
-      name: 'My Complaint Dashboard',
-      component: UnderConstruction,
-    },
-    {
-      name: 'Change / Reset Password',
-      component: UnderConstruction,
-    },
+    // {
+    //   name: 'Feedback Form',
+    //   component: UnderConstruction,
+    // },
+    // {
+    //   name: 'Enrollment Form',
+    //   component: UnderConstruction,
+    // },
+    // {
+    //   name: 'My Complaint Dashboard',
+    //   component: UnderConstruction,
+    // },
+    // {
+    //   name: 'Change / Reset Password',
+    //   component: UnderConstruction,
+    // },
   ];
   const TransportScreens = [
     {
       name: 'Emergency Transport Request',
-      component: UnderConstruction,
+      component: EmergencyTransportRequest,
       options: {},
     },
   ];

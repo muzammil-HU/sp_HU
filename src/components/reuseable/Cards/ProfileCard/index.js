@@ -22,6 +22,7 @@ const ProfileCard = ({cardProfileData}) => {
     return state?.AuthReducer.UserDetail;
   });
   const ImageUri = AuthState?.picture;
+  // console.log(AuthState?.picture, 'AuthState?.picture');
   return (
     <View style={styles.container}>
       <View
@@ -50,21 +51,34 @@ const ProfileCard = ({cardProfileData}) => {
                 overflow: 'hidden',
                 borderColor: COLORS.themeColor,
               }}>
-              <Image
-                source={
-                  AuthState?.picture
-                    ? {
-                        uri: AuthState?.picture,
-                      }
-                    : require('../../../../assets/N_A_logo.png')
-                }
-                resizeMode="contain"
-                style={{
-                  aspectRatio: 1,
-                  width: AuthState?.picture ? undefined : '0%',
-                  height: AuthState?.picture ? '100%' : '0%',
-                }}
-              />
+              {AuthState?.picture ? (
+                <Image
+                  source={{
+                    uri:
+                      AuthState?.picture === '' ||
+                      AuthState?.picture === null ||
+                      AuthState?.picture
+                        ? AuthState.picture
+                        : require('../../../../assets/Chevron.png'),
+                  }}
+                  resizeMode="contain"
+                  style={{
+                    aspectRatio: 1,
+                    width: AuthState?.picture ? undefined : '0%',
+                    height: AuthState?.picture ? '100%' : '0%',
+                  }}
+                />
+              ) : (
+                <Image
+                  source={require('../../../../assets/N_A_logo.png')}
+                  resizeMode="contain"
+                  style={{
+                    aspectRatio: 1,
+                    width: AuthState?.picture ? undefined : '0%',
+                    height: AuthState?.picture ? '100%' : '0%',
+                  }}
+                />
+              )}
             </View>
           </TouchableOpacity>
           <Modal

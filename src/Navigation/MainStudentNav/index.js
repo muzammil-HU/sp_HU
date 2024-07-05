@@ -15,6 +15,8 @@ import DrawerNav from '../DrawerNavigation';
 import QrScan from '../../Screen/Portal/BottomTabScreens/QrScan';
 import PrivacyPolicy from '../../Screen/StackScreens/PrivacyPolicy';
 import {useRoute} from '@react-navigation/native';
+import CourseEva from '../../Screen/Portal/DrawerScreens/Evaluation/DrawerScreens/CourseEvaluation/CourseEva';
+import TeacherEva from '../../Screen/Portal/DrawerScreens/Evaluation/DrawerScreens/TeacherEvaluation/TeacherEva';
 
 const MainStudentNav = () => {
   const Stack = createNativeStackNavigator();
@@ -102,6 +104,20 @@ const MainStudentNav = () => {
         component={PrivacyPolicy}
         options={{
           title: 'Privacy Policy',
+        }}
+      />
+      <Stack.Screen
+        name="Course Eva"
+        component={CourseEva}
+        options={{
+          title: 'Course Evaluation',
+        }}
+      />
+      <Stack.Screen
+        name="Teacher Eva"
+        component={TeacherEva}
+        options={{
+          title: 'Teacher Evaluation',
         }}
       />
     </Stack.Navigator>

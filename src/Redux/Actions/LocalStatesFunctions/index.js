@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import clientapi from '../../../api/clientapi';
+import {windowWidth} from '../../../Constants/COLORS';
 
 const getAttendenceData = async (setData, setLoad, setError, params) => {
   try {
@@ -13,7 +14,20 @@ const getAttendenceData = async (setData, setLoad, setError, params) => {
       setError('No Data found');
     }
   } catch (err) {
-    console.log('getCategories error', err);
+    showMessage({
+      message: `500 Server Error`,
+      type: 'danger',
+      position: 'top',
+      style: {justifyContent: 'center', alignItems: 'center'},
+      icon: () => (
+        <Entypo
+          name="circle-with-cross"
+          size={windowWidth / 16}
+          color={COLORS.white}
+          style={{paddingRight: 20}}
+        />
+      ),
+    });
   }
 };
 // const getclassSchedule = async (

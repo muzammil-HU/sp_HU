@@ -23,7 +23,7 @@ const CHeader = () => {
   const AuthState = useSelector(state => {
     return state?.AuthReducer.UserDetail;
   });
-  console.log(AuthState, 'UserDetail');
+  // console.log(AuthState, 'UserDetail');
   return (
     <View
       style={{

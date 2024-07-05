@@ -6,37 +6,58 @@ import {
   StyleSheet,
   Text,
   View,
+  Animated,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {COLORS} from '../../../../Constants/COLORS';
 
 const Loader = ({load, setLoad}) => {
-  // useEffect(() => {
-  //   // if (load) {
-  //   //   setTimeout(() => {
-  //   //     setLoad(false);
-  //   //   }, 5000);
-  //   //   console.log(load, 'load');
-  //   // }
-  // }, [load]);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const fadeInOut = () => {
+      Animated.sequence([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ]).start(() => fadeInOut());
+    };
+
+    if (load) {
+      fadeInOut();
+      const timer = setTimeout(() => {
+        setLoad(false);
+      }, 4000);
+      return () => clearTimeout(timer);
+    } else {
+      fadeAnim.setValue(0);
+    }
+  }, [load, fadeAnim, setLoad]);
 
   return (
-    <View style={{}} onTouchEnd={() => setLoad(false)}>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={load}
-        onRequestClose={() => {
-          setLoad(!load);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={[styles.modalView]}>
-            <ActivityIndicator size="large" color={COLORS.themeColor} />
-            <Text style={{color: COLORS.themeColor}}>Loading...</Text>
-          </View>
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={load}
+      onRequestClose={() => {
+        setLoad(!load);
+      }}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <ActivityIndicator size="large" color={COLORS.themeColor} />
+          <Animated.Text style={[styles.loadingText, {opacity: fadeAnim}]}>
+            Loading...
+          </Animated.Text>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 
@@ -66,6 +87,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     columnGap: 20,
+  },
+  loadingText: {
+    color: COLORS.themeColor,
   },
 });
 

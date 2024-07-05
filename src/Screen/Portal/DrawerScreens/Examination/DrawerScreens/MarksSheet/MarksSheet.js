@@ -1,35 +1,42 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
+import {COLORS, windowWidth} from '../../../../../../Constants/COLORS';
 import {useSelector} from 'react-redux';
-import clientapi from '../../../../../api/clientapi';
-import {useRoute} from '@react-navigation/native';
+import clientapi from '../../../../../../api/clientapi';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import CommonCard from '../../../../../components/reuseable/Cards/CommonCard';
-import CustomTabBar from '../../../../../components/header/CustomTabBar';
-import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
-import MarksheetCards from '../../../../../components/reuseable/Cards/MarksheetCards';
-import UnderConstruction from '../../../../../components/reuseable/ScreenUnderConstruction';
-import GradingCriteria from '../../Academics/DrawersScreens/GradingCriteria';
-import Grading_Table from '../../../../../components/reuseable/Grading_Table';
-import ScreenHead from '../../../../../components/reuseable/ScreenHead';
+import CommonCard from '../../../../../../components/reuseable/Cards/CommonCard';
+import CustomTabBar from '../../../../../../components/header/CustomTabBar';
+import Loader from '../../../../../../components/reuseable/Modals/LoaderModal';
+import MarksheetCards from '../../../../../../components/reuseable/Cards/MarksheetCards';
+import UnderConstruction from '../../../../../../components/reuseable/ScreenUnderConstruction';
+import GradingCriteria from '../../../Academics/DrawersScreens/GradingCriteria';
+import Grading_Table from '../../../../../../components/reuseable/Grading_Table';
+import ScreenHead from '../../../../../../components/reuseable/ScreenHead';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {showMessage} from 'react-native-flash-message';
+import DegreeCompStatus from './DegreeCompStatus';
 
 const MarksSheet = () => {
   const [load, setLoad] = useState(false);
   const [data, setData] = useState();
   const route = useRoute();
+  const nav = useNavigation();
   const Tab = createMaterialTopTabNavigator();
 
   const Tabsheads = [
     {head: 'Unofficial DMC', comp: MarksheetCards},
-    {head: 'Semester GPA', comp: UnderConstruction},
-    {head: 'Assessment Detail', comp: UnderConstruction},
-    {head: 'Assessment Break Up', comp: UnderConstruction},
-    {head: 'Assessment GPA', comp: UnderConstruction},
+    // {head: 'Semester GPA', comp: UnderConstruction},
+    // {head: 'Assessment Detail', comp: UnderConstruction},
+    // {head: 'Assessment Break Up', comp: UnderConstruction},
+    // {head: 'Assessment GPA', comp: UnderConstruction},
     {head: 'Grading Criteria', comp: Grading_Table},
-    {head: 'Degree Completion Status', comp: UnderConstruction},
+    {head: 'Degree Completion Status', comp: DegreeCompStatus},
   ];
-
+  const AuthState = useSelector(state => {
+    return state?.AuthReducer?.UserDetail;
+  });
+  // console.log(AuthState, 'AuthState');
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
@@ -48,12 +55,25 @@ const MarksSheet = () => {
         try {
           setLoad(true);
           const api = await clientapi.post(`/student/marksheet`, params);
-          // console.log(api.data, 'ghaxgahx');
           setData(api.data);
           setLoad(false);
         } catch (error) {
-          console.log(error, 'api error');
+          // console.log(error, 'api error');
           setLoad(false);
+          showMessage({
+            message: `500 Server Error`,
+            type: 'danger',
+            position: 'top',
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <Entypo
+                name="circle-with-cross"
+                size={windowWidth / 16}
+                color={COLORS.white}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
         }
       };
       await MarksSheetData(params);

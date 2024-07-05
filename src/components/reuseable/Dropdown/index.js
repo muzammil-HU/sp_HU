@@ -15,46 +15,43 @@ const DropdownComponent = ({
   setIsFocus,
   data,
   label,
+  height = '100%',
 }) => {
   const renderLabel = () => {
     return <Text style={[styles.label]}>{label}</Text>;
   };
-
+  // console.log(data, 'data');
   return (
-    <View style={styles.ddcontainer}>
-      {renderLabel()}
+    <View style={[styles.ddcontainer, {height: height}]}>
+      {label ? renderLabel() : null}
       <Dropdown
-        style={[styles.dropdown]}
+        style={[styles.dropdown, {height: height}]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={{
-          fontSize: windowWidth / 25,
+          fontSize: windowWidth / 28,
           color: COLORS.themeColor,
         }}
         // iconStyle={styles.iconStyle}
         itemTextStyle={{color: COLORS.themeColor, fontSize: windowWidth / 28}}
         iconColor={COLORS.themeColor}
         data={data}
-        labelField="label"
-        valueField="value"
+        labelField={data[0].label ? 'label' : 'location_name'}
+        valueField={data[0].label ? 'label' : 'location_name'}
         placeholder={!isFocus ? 'Select item' : '...'}
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={item => {
-          setValue(item.value);
+          if ((item?.label || item.location_name) === 'Select Item') {
+            setValue(null);
+          } else {
+            setValue(item);
+          }
           if (setValueIcon) {
             setValueIcon(item.icon);
           }
           setIsFocus(false);
         }}
-        renderLeftIcon={() => (
-          <FontAwesome5
-            style={styles.icon}
-            color={COLORS.themeColor}
-            name={valueIcon === null ? 'search-location' : valueIcon}
-            size={windowWidth / 20}
-          />
-        )}
       />
     </View>
   );
@@ -63,11 +60,11 @@ const DropdownComponent = ({
 const styles = StyleSheet.create({
   ddcontainer: {
     width: '100%',
-    height: '100%',
+    // height: height,
     marginHorizontal: '1%',
   },
   dropdown: {
-    height: '100%',
+    // height: height,
     borderColor: COLORS.themeColor,
     borderWidth: 1,
     borderRadius: 8,

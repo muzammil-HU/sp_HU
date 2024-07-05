@@ -6,7 +6,9 @@ import clientapi from '../../../../../api/clientapi';
 import {useSelector} from 'react-redux';
 import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
 import {useSharedValue} from 'react-native-reanimated';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Ledger_Accordion from '../../../../../components/reuseable/Cards/Ledger_Accordian';
+import {showMessage} from 'react-native-flash-message';
 
 const FeeLedger = () => {
   const TokenState = useSelector(state => {
@@ -18,6 +20,8 @@ const FeeLedger = () => {
   const [data, setData] = useState(null);
   const [fee_ledger, setFee_ledger] = useState(null);
   const [load, setLoad] = useState(false);
+  const [note, setNote] = useState(null);
+  const [note2, setNote2] = useState(null);
   const [dr_total, setDr_total] = useState(null);
   const [cr_total, setCr_total] = useState(null);
 
@@ -48,6 +52,10 @@ const FeeLedger = () => {
     return formattedDate;
   };
   useEffect(() => {
+    setNote(
+      'You must check your Fee Ledger on regular basis to monitor your fee dues status.',
+    );
+    setNote2('Tap on the Transaction / Card to see the details.');
     const feeledger = async () => {
       const params = {
         token: TokenState,
@@ -66,7 +74,20 @@ const FeeLedger = () => {
         // console.log(api?.data?.merged_array);
       } catch (error) {
         setLoad(false);
-        console.log(error, 'api error');
+        showMessage({
+          message: `500 Server Error`,
+          type: 'danger',
+          position: 'top',
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <Entypo
+              name="circle-with-cross"
+              size={windowWidth / 16}
+              color={COLORS.white}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
       }
     };
     feeledger();
@@ -84,6 +105,8 @@ const FeeLedger = () => {
             data={data}
             load={load}
             setLoad={setLoad}
+            Note={note}
+            Note2={note2}
           />
           <ScrollView
             contentContainerStyle={{

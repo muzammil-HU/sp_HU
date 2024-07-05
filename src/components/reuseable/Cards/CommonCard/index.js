@@ -159,9 +159,9 @@ const CommonCard = ({route}) => {
                 paddingVertical: '2%',
                 // height: '5%',
               }}>
-              <Text style={{color: COLORS.white}}>
+              {/* <Text style={{color: COLORS.white}}>
                 Offer Type:{item.offer_type}
-              </Text>
+              </Text> */}
               <Text style={{color: COLORS.white}}>
                 Offer ID:{item.offer_id}
               </Text>

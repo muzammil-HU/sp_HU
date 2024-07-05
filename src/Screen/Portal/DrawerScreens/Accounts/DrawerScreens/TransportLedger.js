@@ -7,6 +7,8 @@ import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
 import ScreenHead from '../../../../../components/reuseable/ScreenHead';
 import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
 import Ledger_Accordion from '../../../../../components/reuseable/Cards/Ledger_Accordian';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {showMessage} from 'react-native-flash-message';
 
 const TransportLedger = () => {
   const [data, setData] = useState(null);
@@ -64,7 +66,20 @@ const TransportLedger = () => {
         setLoad(false);
       } catch (error) {
         setLoad(false);
-        console.log(error, 'api error');
+        showMessage({
+          message: `500 Server Error`,
+          type: 'danger',
+          position: 'top',
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <Entypo
+              name="circle-with-cross"
+              size={windowWidth / 16}
+              color={COLORS.white}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
       }
     };
     transportledger();

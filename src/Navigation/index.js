@@ -60,10 +60,22 @@ const MainNavigation = () => {
           dispatch(WifiName(state?.details?.ssid));
           dispatch(ipAddress(netip));
         } else {
-          console.log('denied');
+          showMessage({
+            message: `500 Server Error`,
+            type: 'danger',
+            position: 'top',
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <Entypo
+                name="circle-with-cross"
+                size={windowWidth / 16}
+                color={COLORS.white}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
         }
       } catch (error) {
-        console.log(error, 'error');
         showMessage({
           message: '500 Server Error',
           type: 'danger',

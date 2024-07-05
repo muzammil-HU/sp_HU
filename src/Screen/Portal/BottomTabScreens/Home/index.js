@@ -4,9 +4,9 @@ import TopCard from '../../../../components/reuseable/Cards/TopCards';
 import DashboardCard from '../../../../components/reuseable/Cards/DashboardCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {COLORS} from '../../../../Constants/COLORS';
+import {COLORS, windowWidth} from '../../../../Constants/COLORS';
 import {useDispatch, useSelector} from 'react-redux';
-import WifiInfo from 'react-native-wifi-reborn';
+
 import {
   curriculumData,
   getregisteredCourses,
@@ -14,7 +14,6 @@ import {
 } from '../../../../Redux/Actions/GlobalStatesFunctions';
 import Loader from '../../../../components/reuseable/Modals/LoaderModal';
 import {useNavigation} from '@react-navigation/native';
-import clientapi from '../../../../api/clientapi';
 
 const BottomHome = () => {
   const width = Dimensions.get('window').width;
@@ -138,16 +137,16 @@ const BottomHome = () => {
       },
     },
     {
-      head: 'Register New Courses',
+      head: 'Registered Courses',
       Icon: {
         type: 'icon',
         IconComp: MaterialIcons,
         iconName: 'class',
         iconColor: COLORS.themeColor,
-        iconSize: width / 15,
+        iconSize: windowWidth / 15,
       },
       onPress: () => {
-        navigation.navigate('Register New Course');
+        navigation.navigate('Registered Courses');
       },
     },
   ];

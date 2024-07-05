@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const TeacherEvaluation = () => {
+const AdmitCard = () => {
   return (
     <View>
-      <Text>TeacherEvaluation</Text>
+      <Text>AdmitCard</Text>
     </View>
   );
 };
 
-export default TeacherEvaluation;
+export default AdmitCard;
 
 const styles = StyleSheet.create({});

@@ -25,17 +25,6 @@ const GradingCriteria = () => {
 
   return (
     <View style={styles.container}>
-      {/* <View
-        style={{
-          flexDirection: 'row',
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '10%',
-          backgroundColor: COLORS.white,
-        }}>
-        <Text style={styles.headingtext}>Grading Criteria</Text>
-      </View> */}
       <ScreenHead heading={'Grading Criteria'} NoteVisibility={false} />
       {grading_criteria.length === 0 ? (
         <View style={styles.center}>

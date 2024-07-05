@@ -88,7 +88,7 @@ const CameraComp = () => {
     try {
       const res = await clientapi.post('/student/attendance', data);
       if (res.data.success === true) {
-        console.log(res.data.output.response);
+        // console.log(res.data.output.response);
         if (res.data.output.response?.marked === true) {
           showMessage({
             message: res?.data?.output?.response?.messages,
@@ -127,7 +127,7 @@ const CameraComp = () => {
           });
         }
       } else {
-        console.log(res?.data?.output?.response);
+        // console.log(res?.data?.output?.response);
         showMessage({
           message: res?.data?.output?.response?.messages,
           type: 'danger',
@@ -146,7 +146,7 @@ const CameraComp = () => {
       }
       navigation.navigate('BtmHome');
     } catch (error) {
-      console.log(error, 'error');
+      // console.log(error, 'error');
       showMessage({
         message: `500 Server Error`,
         type: 'danger',
@@ -167,9 +167,9 @@ const CameraComp = () => {
 
   const onCodeScanned = codes => {
     if (shouldScan) {
-      console.log(`Scanned ${codes.length} codes:`, codes);
+      // console.log(`Scanned ${codes.length} codes:`, codes);
       const value = codes[0]?.value;
-      console.log(value, 'valu');
+      // console.log(value, 'valu');
       if (value == null) return;
       if (isShowingAlert.current) return;
       showCodeAlert(

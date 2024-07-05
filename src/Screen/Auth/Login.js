@@ -14,6 +14,7 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import InputText from '../../components/reuseable/InputText';
@@ -25,7 +26,7 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {LoginUserApi} from '../../Redux/Actions/AuthFunctions';
-import {COLORS} from '../../Constants/COLORS';
+import {COLORS, windowWidth} from '../../Constants/COLORS';
 import Loader from '../../components/reuseable/Modals/LoaderModal';
 
 const Login = () => {
@@ -95,17 +96,18 @@ const Login = () => {
         setLoad(false);
       }
     } catch (error) {
-      console.log('second');
-      console.log(error.message);
-      ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
+      // console.log('second');
+      // console.log(error.message);
+      // ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
       showMessage({
-        message: 'error',
+        message: `500 Server Error`,
         type: 'danger',
+        position: 'top',
         style: {justifyContent: 'center', alignItems: 'center'},
         icon: () => (
-          <MaterialIcons
-            name="error-outline"
-            size={windowwidth / 16}
+          <Entypo
+            name="circle-with-cross"
+            size={windowWidth / 16}
             color={COLORS.white}
             style={{paddingRight: 20}}
           />

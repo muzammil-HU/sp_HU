@@ -34,7 +34,20 @@ const Register = () => {
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       // console.log('GRANTED');
     } else {
-      console.log('DENIED');
+      showMessage({
+        message: `500 Server Error`,
+        type: 'danger',
+        position: 'top',
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <Entypo
+            name="circle-with-cross"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
     }
   };
   const getWifiList = async () => {
@@ -68,7 +81,20 @@ const Register = () => {
         // console.log('Async storage', netinfo);
       }
     } catch (e) {
-      console.log(e);
+      showMessage({
+        message: `500 Server Error`,
+        type: 'danger',
+        position: 'top',
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <Entypo
+            name="circle-with-cross"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
     }
   };
   getData();

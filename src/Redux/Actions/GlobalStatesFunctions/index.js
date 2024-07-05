@@ -4,7 +4,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Dimensions, PermissionsAndroid} from 'react-native';
-import {COLORS} from '../../../Constants/COLORS';
+import {COLORS, windowWidth} from '../../../Constants/COLORS';
 import WifiInfo from 'react-native-wifi-reborn';
 import {
   WifiName,
@@ -45,11 +45,24 @@ const getwifiname = async (dispatch, setLoad) => {
       // dispatch(ipAddress(state?.details?.ipAddress));
       setLoad(false);
     } else {
-      console.log('denied');
       setLoad(false);
+      showMessage({
+        message: `500 Server Error`,
+        type: 'danger',
+        position: 'top',
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <Entypo
+            name="circle-with-cross"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
     }
   } catch (error) {
-    console.log(error, 'error');
+    // console.log(error, 'error');
     showMessage({
       message: '500 Server Error',
       type: 'danger',
@@ -87,7 +100,20 @@ const getAttendenceData = async (
       setError('No Data found');
     }
   } catch (err) {
-    console.log('getAttendenceData error', err);
+    showMessage({
+      message: `500 Server Error`,
+      type: 'danger',
+      position: 'top',
+      style: {justifyContent: 'center', alignItems: 'center'},
+      icon: () => (
+        <Entypo
+          name="circle-with-cross"
+          size={windowWidth / 16}
+          color={COLORS.white}
+          style={{paddingRight: 20}}
+        />
+      ),
+    });
   }
 };
 const getclassSchedule = async (
@@ -110,8 +136,22 @@ const getclassSchedule = async (
       setLoad(false);
     }
   } catch (err) {
-    console.log('getclassSchedule error', err);
+    // console.log('getclassSchedule error', err);
     setLoad(false);
+    showMessage({
+      message: `500 Server Error`,
+      type: 'danger',
+      position: 'top',
+      style: {justifyContent: 'center', alignItems: 'center'},
+      icon: () => (
+        <Entypo
+          name="circle-with-cross"
+          size={windowWidth / 16}
+          color={COLORS.white}
+          style={{paddingRight: 20}}
+        />
+      ),
+    });
   }
 };
 const getregisteredCourses = async (setLoad, dispatch, params) => {
@@ -124,8 +164,22 @@ const getregisteredCourses = async (setLoad, dispatch, params) => {
       setLoad(false);
     }
   } catch (err) {
-    console.log('getregisteredCourses error', err);
+    // console.log('getregisteredCourses error', err);
     setLoad(false);
+    showMessage({
+      message: `500 Server Error`,
+      type: 'danger',
+      position: 'top',
+      style: {justifyContent: 'center', alignItems: 'center'},
+      icon: () => (
+        <Entypo
+          name="circle-with-cross"
+          size={windowWidth / 16}
+          color={COLORS.white}
+          style={{paddingRight: 20}}
+        />
+      ),
+    });
   }
 };
 const ActivetabChange = (dispatch, data) => {
@@ -143,8 +197,22 @@ const curriculumData = async (setLoad, dispatch, data) => {
     setLoad(false);
   } catch (error) {
     // setLoad(true);
-    console.log(error, 'api error');
+    // console.log(error, 'api error');
     setLoad(false);
+    showMessage({
+      message: `500 Server Error`,
+      type: 'danger',
+      position: 'top',
+      style: {justifyContent: 'center', alignItems: 'center'},
+      icon: () => (
+        <Entypo
+          name="circle-with-cross"
+          size={windowWidth / 16}
+          color={COLORS.white}
+          style={{paddingRight: 20}}
+        />
+      ),
+    });
   }
 };
 export {

@@ -12,6 +12,8 @@ import {useSelector} from 'react-redux';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {Divider} from 'react-native-paper';
 import clientapi from '../../../../../api/clientapi';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {showMessage} from 'react-native-flash-message';
 
 const ExaminationSchedule = () => {
   const [load, setLoad] = useState(false);
@@ -54,7 +56,7 @@ const ExaminationSchedule = () => {
     };
     (async () => {
       const ExaminationScheduleData = async params => {
-        // setLoad(true);
+        setLoad(true);
         try {
           const api = await clientapi.post(
             `/student/examination/schedule`,
@@ -64,8 +66,22 @@ const ExaminationSchedule = () => {
           setExam_Data(api?.data.examination_schedule);
           setExam_type(api?.data.exam_sch);
         } catch (error) {
-          console.log(error, 'api error');
-          // setLoad(false);
+          // console.log(error, 'api error');
+          setLoad(false);
+          showMessage({
+            message: `500 Server Error`,
+            type: 'danger',
+            position: 'top',
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <Entypo
+                name="circle-with-cross"
+                size={windowWidth / 16}
+                color={COLORS.white}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
         }
       };
       await ExaminationScheduleData(params);

@@ -7,8 +7,8 @@ import Accordion from '../Accordian';
 const MarksheetCards = ({route}) => {
   const parentHeightValue = useSharedValue(0);
   // const semester = route?.params?.data.semester;
-  const unoffical_dmc = route?.params?.data.unoffical_dmc;
-  const semesters = Object.values(unoffical_dmc);
+  const unoffical_dmc = route?.params?.data?.unoffical_dmc;
+  const semesters = Object?.values(unoffical_dmc);
   // console.log(unoffical_dmc, 'unoffical_dmc5454');
 
   return (
