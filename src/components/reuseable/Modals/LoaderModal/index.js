@@ -11,7 +11,7 @@ import {
 import React, {useEffect, useRef} from 'react';
 import {COLORS} from '../../../../Constants/COLORS';
 
-const Loader = ({load, setLoad}) => {
+const Loader = ({load, setLoad, timeout = true}) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -32,10 +32,12 @@ const Loader = ({load, setLoad}) => {
 
     if (load) {
       fadeInOut();
-      const timer = setTimeout(() => {
-        setLoad(false);
-      }, 4000);
-      return () => clearTimeout(timer);
+      if (timeout) {
+        const timer = setTimeout(() => {
+          setLoad(false);
+        }, 4000);
+        return () => clearTimeout(timer);
+      }
     } else {
       fadeAnim.setValue(0);
     }

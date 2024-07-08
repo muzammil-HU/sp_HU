@@ -1,15 +1,29 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import InputText from '../../../../../components/reuseable/InputText';
 import DropdownComponent from '../../../../../components/reuseable/Dropdown';
+import {TextInput} from 'react-native-gesture-handler';
+import clientapi from '../../../../../api/clientapi';
+// import {
+//   student_id,
+//   TokenId,
+// } from '../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import ScreenHead from '../../../../../components/reuseable/ScreenHead';
+import {useSelector} from 'react-redux';
 
 const data = [
   {label: 'Laptop', value: '1', icon: 'laptop'},
-  {label: 'Desktop PC', value: '2', icon: 'desktop'},
-  {label: 'Tablet PC', value: '3', icon: 'tablet'},
-  {label: 'Smart Phone', value: '4', icon: 'mobile'},
+  {label: 'Tablet PC', value: '2', icon: 'tablet'},
+  {label: 'Smart Phone', value: '3', icon: 'mobile'},
+  {label: 'Desktop PC', value: '4', icon: 'desktop'},
 ];
 
 const macData = [
@@ -17,81 +31,27 @@ const macData = [
   {mac: '72685214769', device_name: 'qwwwaazd', brand_name: 'smasalss'},
 ];
 
-// const DropdownComponent = ({
-//   value,
-//   setValue,
-//   valueIcon,
-//   setValueIcon,
-//   isFocus,
-//   setIsFocus,
-// }) => {
-//   const renderLabel = () => {
-//     if (value || isFocus) {
-//       return <Text style={[styles.label]}>Device</Text>;
-//     }
-//     return null;
-//   };
-
-//   return (
-//     <View style={styles.ddcontainer}>
-//       {renderLabel()}
-//       <Dropdown
-//         style={[styles.dropdown, isFocus && {borderColor: COLORS.themeColor}]}
-//         placeholderStyle={styles.placeholderStyle}
-//         selectedTextStyle={styles.selectedTextStyle}
-//         iconStyle={styles.iconStyle}
-//         iconColor={COLORS.themeColor}
-//         data={data}
-//         labelField="label"
-//         valueField="value"
-//         placeholder={!isFocus ? 'Select item' : '...'}
-//         value={value}
-//         onFocus={() => setIsFocus(true)}
-//         onBlur={() => setIsFocus(false)}
-//         onChange={item => {
-//           setValue(item.value);
-//           setValueIcon(item.icon);
-//           setIsFocus(false);
-//         }}
-//         renderLeftIcon={() => (
-//           <AntDesign
-//             style={styles.icon}
-//             color={isFocus ? COLORS.themeColor : COLORS.black}
-//             name={valueIcon === null ? 'Safety' : valueIcon}
-//             size={windowWidth / 20}
-//           />
-//         )}
-//       />
-//     </View>
-//   );
-// };
-
-const WifiForm = () => {
+const WifiForm = ({height = '32%'}) => {
   const [macAddress, setMacAddress] = useState('');
   const [isMacFocused, setIsMacFocused] = useState(false);
   const [value, setValue] = useState(null);
   const [valueIcon, setValueIcon] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-        width: '100%',
-        alignItems: 'center',
-      }}>
+    <View style={{height: height}}>
       <View
         style={{
           flexDirection: 'column',
-          width: '100%',
-          height: '30%',
           alignItems: 'center',
+          justifyContent: 'center',
           justifyContent: 'space-evenly',
         }}>
         <View
           style={{
             flexDirection: 'row',
             width: '90%',
-            height: '30%',
+            height: '35%',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -111,8 +71,7 @@ const WifiForm = () => {
             flexDirection: 'row',
             width: '90%',
             alignItems: 'center',
-            height: '25%',
-            // backgroundColor: 'red',
+            height: '35%',
             borderBottomWidth: isMacFocused ? 3 : 1,
             borderBottomColor: isMacFocused ? COLORS.themeColor : COLORS.black,
           }}>
@@ -157,42 +116,61 @@ const WifiForm = () => {
             }}
           />
         </View>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          // backgroundColor: 'red',
-          width: '96%',
-          height: '70%',
-          // alignItems: 'center',
-
-          justifyContent: 'space-evenly',
-        }}>
         <View
           style={{
             flexDirection: 'row',
-            width: '100%',
-            height: '10%',
+            width: '90%',
             justifyContent: 'center',
             alignItems: 'center',
-            borderTopWidth: 2,
-            borderBottomWidth: 2,
-            borderColor: COLORS.themeColor,
+            height: '20%',
           }}>
-          <Text
+          <TouchableOpacity
             style={{
-              color: COLORS.themeColor,
-              fontWeight: 'bold',
-              fontSize: windowWidth / 20,
+              // flex: 1,
+              height: '80%',
+              // width: '20%',
+              paddingHorizontal: '10%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: COLORS.themeColor,
             }}>
-            Registered Devices
-          </Text>
+            <Text style={{color: COLORS.white}}>Submit</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 const WifiRegistration = () => {
+  const [regDevices, setRegDevices] = useState([]);
+  const [load, setLoad] = useState(false);
+
+  const TokenState = useSelector(state => {
+    return state?.AuthReducer.TokenId;
+  });
+  const studentId = useSelector(state => {
+    return state.AuthReducer.UserDetail.student_id;
+  });
+
+  useEffect(() => {
+    const params = {
+      student_id: studentId,
+      token: TokenState,
+    };
+    const DevicesList = async () => {
+      setLoad(true);
+      try {
+        const api = await clientapi.get('/student/general/wifi/list', {params});
+        setRegDevices(api?.data?.devices);
+        // console.log(api?.data, 'api');
+      } catch (error) {
+        console.log(error);
+        setLoad(false);
+      }
+    };
+    DevicesList();
+  }, []);
+  console.log(regDevices, 'regDevices');
   return (
     <View
       style={{
@@ -215,6 +193,68 @@ const WifiRegistration = () => {
         /> */}
       </View>
       <WifiForm />
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '100%',
+          height: '10%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderTopWidth: 2,
+          borderBottomWidth: 2,
+          borderColor: COLORS.themeColor,
+        }}>
+        <Text
+          style={{
+            color: COLORS.themeColor,
+            fontWeight: 'bold',
+            fontSize: windowWidth / 20,
+          }}>
+          Registered Devices
+        </Text>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          borderWidth: 1,
+        }}>
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'space-evenly',
+          }}>
+          <Text style={styles.listHeader}>Mac</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'space-evenly',
+          }}>
+          <Text style={styles.listHeader}>Device Name</Text>
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'space-evenly',
+          }}>
+          <Text style={styles.listHeader}>Delete</Text>
+        </View>
+      </View>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        style={{
+          flexDirection: 'row',
+        }}>
+        {regDevices.map((d, index) => {
+          return (
+            <View key={index}>
+              <Text style={{}}>{d?.mac}</Text>
+            </View>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 };
@@ -228,8 +268,10 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
+    // backgroundColor: COLORS.blue,
     alignItems: 'center',
+    // height: '14%',
   },
   headingtext: {
     color: COLORS.themeColor,
@@ -293,17 +335,8 @@ const styles = StyleSheet.create({
   iconStyle: {
     color: COLORS.themeColor,
   },
+  listHeader: {
+    color: COLORS.black,
+    fontSize: windowWidth / 25,
+  },
 });
-
-{
-  /* <View style={{flexDirection: 'row', width: '100%'}}>
-          {macData.map((m, index) => {
-            // console.log('first');
-            return (
-              <View style={{backgroundColor: 'red', width: '100%', height: 20}}>
-                <Text style={{color: COLORS.black}}>{m.device_name}hello</Text>
-              </View>
-            );
-          })}
-        </View> */
-}

@@ -12,7 +12,7 @@ const ScreenHead = ({
   load,
   setLoad,
   ledger,
-  listHeader,
+  listHeader = true,
 }) => {
   return (
     <>
@@ -20,20 +20,22 @@ const ScreenHead = ({
         <Loader load={load} setLoad={setLoad} />
       ) : (
         <>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '10%',
-              backgroundColor: COLORS.white,
-            }}>
-            <Text style={styles.headingtext}>{heading}</Text>
-          </View>
+          {heading && (
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '10%',
+                backgroundColor: COLORS.white,
+              }}>
+              <Text style={styles.headingtext}>{heading}</Text>
+            </View>
+          )}
           {NoteVisibility === true && (
             <View style={{paddingHorizontal: '3%', paddingBottom: '2%'}}>
-              <Text style={styles.Notetext}>{Note}</Text>
+              {Note && <Text style={styles.Notetext}>{Note}</Text>}
               {data ? (
                 <View style={{flexDirection: 'row'}}>
                   <Text style={styles.Notetext}>Your Current Dues are </Text>
@@ -52,17 +54,19 @@ const ScreenHead = ({
                 </View>
               ) : null}
 
-              <Text
-                style={[
-                  styles.Notetext,
-                  {
-                    // backgroundColor: '#FB9678',
-                    fontWeight: 'bold',
-                    color: COLORS.black,
-                  },
-                ]}>
-                {Note2}
-              </Text>
+              {Note2 && (
+                <Text
+                  style={[
+                    styles.Notetext,
+                    {
+                      // backgroundColor: '#FB9678',
+                      fontWeight: 'bold',
+                      color: COLORS.black,
+                    },
+                  ]}>
+                  {Note2}
+                </Text>
+              )}
               {listHeader ? (
                 <View
                   style={{

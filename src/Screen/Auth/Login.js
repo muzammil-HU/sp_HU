@@ -296,7 +296,7 @@ const Login = () => {
           </View>
         </View>
       </ScrollView>
-      <Loader load={load} setLoad={setLoad} />
+      <Loader load={load} setLoad={setLoad} timeout={false} />
     </>
   );
 };
