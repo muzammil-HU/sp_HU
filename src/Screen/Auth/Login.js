@@ -9,6 +9,7 @@ import {
   Dimensions,
   ImageBackground,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -118,7 +119,9 @@ const Login = () => {
   const onPressForgotPassword = () => {
     navigation.navigate('ForgotPassword');
   };
-
+  const handlePasswordSubmit = () => {
+    onPressLogin();
+  };
   return (
     <>
       <ScrollView
@@ -187,7 +190,7 @@ const Login = () => {
                 style={{}}
               />
               <InputText
-                placeholder="Student ID"
+                placeholder="Student ID (e.g 5000-2000)"
                 placeholderTextColor={COLORS.black}
                 value={studentId}
                 maxLength={15}
@@ -200,7 +203,7 @@ const Login = () => {
                     color: 'black',
                   },
                 ]}
-                inputMode="numeric"
+                keyboardType="phone-pad"
                 onSubmitEditing={() => {
                   passwordInputRef.current.focus();
                 }}
@@ -255,6 +258,7 @@ const Login = () => {
                   onBlur={() => {
                     setIsPasswordFocused(false);
                   }}
+                  onSubmitEditing={handlePasswordSubmit}
                 />
               </View>
               <View style={{flexDirection: 'column', width: '10%'}}>
@@ -267,19 +271,6 @@ const Login = () => {
                 />
               </View>
             </View>
-            {/* <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                marginLeft: '60%',
-                width: '40%',
-              }}
-              onPress={() => onPressForgotPassword()}>
-              <Text
-                style={{color: COLORS.themeColor, fontSize: windowwidth / 28}}>
-                ForgotPassword
-              </Text>
-            </TouchableOpacity> */}
             <TouchableOpacity style={styles.button} onPress={onPressLogin}>
               <Text
                 style={[
@@ -300,7 +291,21 @@ const Login = () => {
     </>
   );
 };
-
+{
+  /* <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginLeft: '60%',
+                width: '40%',
+              }}
+              onPress={() => onPressForgotPassword()}>
+              <Text
+                style={{color: COLORS.themeColor, fontSize: windowwidth / 28}}>
+                ForgotPassword
+              </Text>
+            </TouchableOpacity> */
+}
 export default Login;
 
 const styles = StyleSheet.create({

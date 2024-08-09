@@ -12,6 +12,7 @@ const InputText = React.forwardRef(
       onFocus,
       onBlur,
       inputMode,
+      keyboardType,
       secureTextEntry,
       maxLength,
       onSubmitEditing,
@@ -33,6 +34,7 @@ const InputText = React.forwardRef(
         onFocus={onFocus}
         onBlur={onBlur}
         inputMode={inputMode}
+        keyboardType={keyboardType}
         secureTextEntry={secureTextEntry}
       />
     );
