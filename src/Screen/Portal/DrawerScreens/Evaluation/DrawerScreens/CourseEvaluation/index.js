@@ -49,13 +49,14 @@ const CourseEvaluation = () => {
       try {
         setLoad(true);
         const api = await clientapi.get(`/student/course/evaluation`, {params});
+        // console.log(api?.data?.course_evaluation, 'llll');
         setCourseEvaluation(api?.data?.course_evaluation);
         setOffer_type(api?.data?.offer_type);
         setLoad(false);
       } catch (error) {
         setLoad(false);
         showMessage({
-          message: `500 Server Error`,
+          message: `500 Server Error444`,
           type: 'danger',
           position: 'top',
           style: {justifyContent: 'center', alignItems: 'center'},
@@ -441,9 +442,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderRadius: 10,
     elevation: 24,
-    width: '97%',
+    width: '98%',
     overflow: 'hidden',
     marginVertical: windowWidth / 60,
+    alignSelf: 'center',
   },
   offerTypeContainer: {
     justifyContent: 'center',

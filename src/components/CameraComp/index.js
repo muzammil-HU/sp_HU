@@ -1,7 +1,6 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {
-  Code,
   useCameraDevice,
   useCameraPermission,
   useCodeScanner,
@@ -20,9 +19,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../reuseable/Modals/LoaderModal';
 import {showMessage} from 'react-native-flash-message';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {COLORS, windowWidth} from '../../Constants/COLORS';
+import data from '../../data/data';
 // import {COLORS} from '../../../Constants/COLORS';
 
 const showCodeAlert = (
@@ -31,6 +30,7 @@ const showCodeAlert = (
   markAttendanceCallback,
   setIsScannerActive,
 ) => {
+  console.log(value, 'val');
   const buttons = [
     {
       text: 'Try Again',
@@ -73,22 +73,24 @@ const CameraComp = () => {
   const UID = useSelector(state => {
     return state?.AuthReducer.UniqueDeviceId;
   });
+
+  // console.log(TokenState, 'Token');
+
   const ipAddress = useSelector(state => {
     return state?.AuthReducer.ipAddress;
   });
+
   const MarkAttendence = async (value, dispatch) => {
-    data = {
+    const data = {
       token: TokenState,
       qr_code: value,
       device_id: UID,
-      ip: ipAddress,
     };
 
     setLoad(true);
     try {
       const res = await clientapi.post('/student/attendance', data);
       if (res.data.success === true) {
-        // console.log(res.data.output.response);
         if (res.data.output.response?.marked === true) {
           showMessage({
             message: res?.data?.output?.response?.messages,
@@ -127,7 +129,6 @@ const CameraComp = () => {
           });
         }
       } else {
-        // console.log(res?.data?.output?.response);
         showMessage({
           message: res?.data?.output?.response?.messages,
           type: 'danger',
@@ -146,7 +147,7 @@ const CameraComp = () => {
       }
       navigation.navigate('BtmHome');
     } catch (error) {
-      // console.log(error, 'error');
+      console.log(error, 'error');
       showMessage({
         message: `500 Server Error`,
         type: 'danger',
@@ -170,6 +171,45 @@ const CameraComp = () => {
       // console.log(`Scanned ${codes.length} codes:`, codes);
       const value = codes[0]?.value;
       // console.log(value, 'valu');
+      const codeValues = value.split('-');
+      const offer_id = codeValues[0].trim();
+      const offer_no = codeValues[1].trim();
+      const course_id = codeValues[2].trim();
+      const teacher_id = codeValues[3].trim();
+      const time = codeValues[4].trim();
+      const occurance = codeValues[6].trim();
+      const session = codeValues[7].trim();
+
+      const attendance_date = new Date().toISOString().split('T')[0];
+      const entry_date = new Date()
+        .toLocaleDateString('en-GB', {
+          year: '2-digit',
+          month: 'short',
+          day: 'numeric',
+        })
+        .replace(/\./g, '-');
+
+      const entry_time = new Date().toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      });
+
+      // Output the variables (optional)
+      // console.log(
+      //   offer_id,
+      //   offer_no,
+      //   course_id,
+      //   teacher_id,
+      //   time,
+      //   occurance,
+      //   session,
+      //   attendance_date,
+      //   entry_date,
+      //   entry_time,
+      // );
+
       if (value == null) return;
       if (isShowingAlert.current) return;
       showCodeAlert(
@@ -189,8 +229,6 @@ const CameraComp = () => {
     setShouldScan(false);
     setIsScannerActive(false);
   };
-
-  // );
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],

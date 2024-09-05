@@ -42,6 +42,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -54,6 +55,7 @@ const Login = () => {
   const ipAddress = useSelector(state => {
     return state?.AuthReducer.ipAddress;
   });
+
   const DN = useSelector(state => {
     return state?.AuthReducer.UniqueName;
   });
@@ -291,21 +293,7 @@ const Login = () => {
     </>
   );
 };
-{
-  /* <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                marginLeft: '60%',
-                width: '40%',
-              }}
-              onPress={() => onPressForgotPassword()}>
-              <Text
-                style={{color: COLORS.themeColor, fontSize: windowwidth / 28}}>
-                ForgotPassword
-              </Text>
-            </TouchableOpacity> */
-}
+
 export default Login;
 
 const styles = StyleSheet.create({

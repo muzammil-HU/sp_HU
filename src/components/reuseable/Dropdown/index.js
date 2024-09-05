@@ -16,6 +16,8 @@ const DropdownComponent = ({
   data,
   label,
   height = '100%',
+  nav = '',
+  disabled = false,
 }) => {
   const renderLabel = () => {
     return <Text style={[styles.label]}>{label}</Text>;
@@ -25,6 +27,7 @@ const DropdownComponent = ({
     <View style={[styles.ddcontainer, {height: height}]}>
       {label ? renderLabel() : null}
       <Dropdown
+        // disable={disabled}
         style={[styles.dropdown, {height: height}]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={{
@@ -35,17 +38,18 @@ const DropdownComponent = ({
         itemTextStyle={{color: COLORS.themeColor, fontSize: windowWidth / 28}}
         iconColor={COLORS.themeColor}
         data={data}
-        labelField={data[0].label ? 'label' : 'location_name'}
-        valueField={data[0].label ? 'label' : 'location_name'}
-        placeholder={!isFocus ? 'Select item' : '...'}
-        value={value}
+        labelField={data[0]?.label ? 'label' : 'location_name'}
+        valueField={data[0]?.label ? 'label' : 'location_name'}
+        // placeholder={!isFocus ? 'Select item' : '...'}
+        value={nav === '' ? value : value?.label}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={item => {
-          if ((item?.label || item.location_name) === 'Select Item') {
+          // console.log(item, 'item');
+          if ((item?.label || item?.location_name) === 'Select Item') {
             setValue(null);
           } else {
-            setValue(item);
+            setValue(nav === '' ? item.value : item);
           }
           if (setValueIcon) {
             setValueIcon(item.icon);

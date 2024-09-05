@@ -12,32 +12,125 @@ import InputText from '../../../../../components/reuseable/InputText';
 import DropdownComponent from '../../../../../components/reuseable/Dropdown';
 import {TextInput} from 'react-native-gesture-handler';
 import clientapi from '../../../../../api/clientapi';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 // import {
 //   student_id,
 //   TokenId,
 // } from '../../../../../Redux/Reducers/AuthReducer/AuthReducer';
 import ScreenHead from '../../../../../components/reuseable/ScreenHead';
 import {useSelector} from 'react-redux';
-
-const data = [
-  {label: 'Laptop', value: '1', icon: 'laptop'},
-  {label: 'Tablet PC', value: '2', icon: 'tablet'},
-  {label: 'Smart Phone', value: '3', icon: 'mobile'},
-  {label: 'Desktop PC', value: '4', icon: 'desktop'},
-];
+import {showMessage} from 'react-native-flash-message';
 
 const macData = [
   {mac: '44545454554', device_name: 'aknmaksn', brand_name: 'anxkaksm'},
   {mac: '72685214769', device_name: 'qwwwaazd', brand_name: 'smasalss'},
 ];
-
-const WifiForm = ({height = '32%'}) => {
+const WifiForm = ({regDevices, height = '32%', setRefresh, refresh}) => {
   const [macAddress, setMacAddress] = useState('');
   const [isMacFocused, setIsMacFocused] = useState(false);
   const [value, setValue] = useState(null);
   const [valueIcon, setValueIcon] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  // console.log(regDevices, 'regDevices');
+  const TokenState = useSelector(state => {
+    return state?.AuthReducer.TokenId;
+  });
 
+  const initialData = [
+    {label: 'Laptop', value: '1', icon: 'laptop'},
+    {label: 'Tablet PC', value: '2', icon: 'tablet'},
+    {label: 'Smart Phone', value: '3', icon: 'mobile'},
+    {label: 'Desktop PC', value: '4', icon: 'desktop'},
+  ];
+
+  // Filter out already registered devices
+  const filteredData = initialData.filter(item => {
+    if (item.label === 'Tablet PC' || item.label === 'Smart Phone') {
+      return !regDevices.some(
+        device =>
+          device.device_name === 'Tablet PC' ||
+          device.device_name === 'Smart Phone',
+      );
+    }
+    if (item.label === 'Desktop PC' || item.label === 'Laptop') {
+      return !regDevices.some(
+        device =>
+          device.device_name === 'Desktop PC' ||
+          device.device_name === 'Laptop',
+      );
+    }
+    return true;
+  });
+  const studentId = useSelector(state => {
+    return state.AuthReducer.UserDetail.student_id;
+  });
+  const wifiReg = async () => {
+    const params = {
+      token: TokenState,
+      student_id: studentId,
+      device_id: value,
+      mac: macAddress,
+    };
+    // console.log(params, 'params');
+    try {
+      const api = await clientapi.post('student/general/wifi/reg', params);
+      if (api?.data?.success === false) {
+        showMessage({
+          message: 'Required fields are not filled',
+          type: 'warning',
+          duration: 10000,
+          position: 'top',
+          // backgroundColor: COLORS.themeColor,
+          color: COLORS.black,
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <FontAwesome6
+              name="circle-exclamation"
+              size={windowWidth / 16}
+              color={COLORS.black}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
+      } else {
+        setRefresh(!refresh);
+        showMessage({
+          message: api?.data?.output?.response?.messages,
+          type: 'success',
+          duration: 10000,
+          position: 'top',
+          backgroundColor: COLORS.themeColor,
+          color: COLORS.white,
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <FontAwesome6
+              name="check-circle"
+              size={windowWidth / 16}
+              color={COLORS.white}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      showMessage({
+        message: `500 Server Error`,
+        type: 'danger',
+        position: 'top',
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <Entypo
+            name="circle-with-cross"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
+    }
+  };
   return (
     <View style={{height: height}}>
       <View
@@ -63,7 +156,8 @@ const WifiForm = ({height = '32%'}) => {
             isFocus={isFocus}
             setIsFocus={setIsFocus}
             label={'Device'}
-            data={data}
+            data={filteredData}
+            nav={'wifi_device'}
           />
         </View>
         <View
@@ -133,7 +227,8 @@ const WifiForm = ({height = '32%'}) => {
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: COLORS.themeColor,
-            }}>
+            }}
+            onPress={wifiReg}>
             <Text style={{color: COLORS.white}}>Submit</Text>
           </TouchableOpacity>
         </View>
@@ -144,13 +239,80 @@ const WifiForm = ({height = '32%'}) => {
 const WifiRegistration = () => {
   const [regDevices, setRegDevices] = useState([]);
   const [load, setLoad] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
+
   const studentId = useSelector(state => {
     return state.AuthReducer.UserDetail.student_id;
   });
+  const wifiReg = async () => {
+    const params = {
+      token: TokenState,
+      student_id: studentId,
+      device_id: value,
+      mac: macAddress,
+    };
+    console.log(params, 'params');
+    try {
+      const api = await clientapi.post('student/general/wifi/reg', params);
+      if (api?.data?.success === false) {
+        showMessage({
+          message: 'Required fields are not filled',
+          type: 'warning',
+          duration: 10000,
+          position: 'top',
+          // backgroundColor: COLORS.themeColor,
+          color: COLORS.black,
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <FontAwesome6
+              name="circle-exclamation"
+              size={windowWidth / 16}
+              color={COLORS.black}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
+      } else {
+        showMessage({
+          message: api?.data?.output?.response?.messages,
+          type: 'success',
+          duration: 10000,
+          position: 'top',
+          backgroundColor: COLORS.themeColor,
+          color: COLORS.white,
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <FontAwesome6
+              name="check-circle"
+              size={windowWidth / 16}
+              color={COLORS.white}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      showMessage({
+        message: `500 Server Error`,
+        type: 'danger',
+        position: 'top',
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <Entypo
+            name="circle-with-cross"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
+    }
+  };
 
   useEffect(() => {
     const params = {
@@ -162,15 +324,65 @@ const WifiRegistration = () => {
       try {
         const api = await clientapi.get('/student/general/wifi/list', {params});
         setRegDevices(api?.data?.devices);
-        // console.log(api?.data, 'api');
+        // console.log(api?.data?.devices, 'api');
+        setLoad(false);
       } catch (error) {
         console.log(error);
         setLoad(false);
       }
     };
     DevicesList();
-  }, []);
-  console.log(regDevices, 'regDevices');
+  }, [refresh]);
+
+  const Delete_Device = async id => {
+    let data = {
+      student_id: studentId,
+      token: TokenState,
+      id: id,
+    };
+    console.log(data, 'pa');
+    setLoad(true);
+    try {
+      const api = await clientapi.post('/student/general/wifi/delete', data);
+      // console.log(api?.data?.devices, 'api');
+      showMessage({
+        message: api?.data?.output?.response?.messages,
+        type: 'success',
+        duration: 10000,
+        position: 'top',
+        backgroundColor: COLORS.themeColor,
+        color: COLORS.white,
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <FontAwesome6
+            name="check-circle"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
+      setRefresh(!refresh);
+      setLoad(false);
+    } catch (error) {
+      console.log(error);
+      setLoad(false);
+      showMessage({
+        message: `500 Server Error`,
+        type: 'danger',
+        position: 'top',
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <Entypo
+            name="circle-with-cross"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
+    }
+  };
   return (
     <View
       style={{
@@ -184,15 +396,8 @@ const WifiRegistration = () => {
           previous device and register new one if you have changed one of your
           device.
         </Text>
-        {/* <Divider
-          style={{
-            backgroundColor: COLORS.TextthemeColor,
-            height: '2%',
-            width: '95%',
-          }}
-        /> */}
       </View>
-      <WifiForm />
+      <WifiForm regDevices={regDevices} />
       <View
         style={{
           flexDirection: 'row',
@@ -222,14 +427,20 @@ const WifiRegistration = () => {
         <View
           style={{
             flexDirection: 'column',
-            justifyContent: 'space-evenly',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '40%',
+            borderRightWidth: 1,
           }}>
           <Text style={styles.listHeader}>Mac</Text>
         </View>
         <View
           style={{
             flexDirection: 'column',
-            justifyContent: 'space-evenly',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '30%',
+            borderRightWidth: 1,
           }}>
           <Text style={styles.listHeader}>Device Name</Text>
         </View>
@@ -237,7 +448,9 @@ const WifiRegistration = () => {
         <View
           style={{
             flexDirection: 'column',
-            justifyContent: 'space-evenly',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '30%',
           }}>
           <Text style={styles.listHeader}>Delete</Text>
         </View>
@@ -247,10 +460,61 @@ const WifiRegistration = () => {
         style={{
           flexDirection: 'row',
         }}>
-        {regDevices.map((d, index) => {
+        {regDevices?.map((d, index) => {
           return (
-            <View key={index}>
-              <Text style={{}}>{d?.mac}</Text>
+            <View
+              key={index}
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                height: '20%',
+                borderBottomWidth: 1,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '40%',
+                  borderRightWidth: 1,
+                }}>
+                <Text style={{color: COLORS.black, fontWeight: 'bold'}}>
+                  {d?.mac}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '30%',
+                  borderRightWidth: 1,
+                }}>
+                <Text style={{color: COLORS.black, fontWeight: 'bold'}}>
+                  {d?.device_name}
+                  {/* {d?.id} */}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '30%',
+                }}>
+                <TouchableOpacity
+                  style={{}}
+                  onPress={() => {
+                    console.log(d, 'd');
+                    Delete_Device(d?.rd_id);
+                  }}>
+                  <AntDesign
+                    name="delete"
+                    size={windowWidth / 12}
+                    color={COLORS.themeColor}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           );
         })}

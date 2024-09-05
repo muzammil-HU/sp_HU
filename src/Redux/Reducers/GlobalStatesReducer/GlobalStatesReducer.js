@@ -2,6 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   WifiName: '',
+  Gateway: '',
   isConnected: false,
   dayAttendence: [],
   class_schedule: [],
@@ -20,6 +21,9 @@ export const GlobalStatesReducer = createSlice({
   reducers: {
     WifiName: (state, action) => {
       state.WifiName = action.payload;
+    },
+    Gateway: (state, action) => {
+      state.Gateway = action.payload;
     },
     isConnected: (state, action) => {
       state.isConnected = action.payload;
@@ -57,6 +61,7 @@ export const GlobalStatesReducer = createSlice({
 export const {
   WifiName,
   isConnected,
+  Gateway,
   dayAttendence,
   ipAddress,
   class_schedule,

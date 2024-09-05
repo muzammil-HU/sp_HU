@@ -15,7 +15,7 @@ import Loader from '../../../../../../components/reuseable/Modals/LoaderModal';
 import formatDate from '../../../../../../Constants/formatDate';
 import {showMessage} from 'react-native-flash-message';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 const TeacherEvaluation = () => {
@@ -41,43 +41,78 @@ const TeacherEvaluation = () => {
     setNote2(
       'Your proper evaluation and comments is very valuable because it will help the organization to improve and grow and keep the quality level high.',
     );
-    const params = {
-      token: TokenState,
-      student_id: studentId,
-    };
-    const course_Evaluation = async () => {
-      try {
-        setLoad(true);
-        const api = await clientapi.get(`/student/teacher/evaluation`, {
-          params,
-        });
-        // console.log(api?.data, 'api');
-        setTeacherEvaluation(api?.data?.teacher_evaluation);
-        setOffer_type(api?.data?.offer_type);
-        // console.log(offer_type, 'offer_type');
-
-        setLoad(false);
-      } catch (error) {
-        setLoad(false);
-        showMessage({
-          message: `500 Server Error`,
-          type: 'danger',
-          position: 'top',
-          style: {justifyContent: 'center', alignItems: 'center'},
-          icon: () => (
-            <Entypo
-              name="circle-with-cross"
-              size={windowWidth / 16}
-              color={COLORS.white}
-              style={{paddingRight: 20}}
-            />
-          ),
-        });
-      }
-    };
-    course_Evaluation();
   }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const params = {
+        token: TokenState,
+        student_id: studentId,
+      };
+      const course_Evaluation = async () => {
+        try {
+          setLoad(true);
+          const api = await clientapi.get(`/student/teacher/evaluation`, {
+            params,
+          });
+          setTeacherEvaluation(api?.data?.teacher_evaluation);
+          setOffer_type(api?.data?.offer_type);
+          setLoad(false);
+        } catch (error) {
+          setLoad(false);
+          showMessage({
+            message: `500 Server Error`,
+            type: 'danger',
+            position: 'top',
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <Entypo
+                name="circle-with-cross"
+                size={windowWidth / 16}
+                color={COLORS.white}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+        }
+      };
+      course_Evaluation();
+    }, [TokenState, studentId]),
+  );
+  // const params = {
+  //   token: TokenState,
+  //   student_id: studentId,
+  // };
+  // const teacher_Evaluation = async () => {
+  //   try {
+  //     setLoad(true);
+  //     const api = await clientapi.get(`/student/teacher/evaluation`, {
+  //       params,
+  //     });
+  //     // console.log(api?.data, 'api');
+  //     setTeacherEvaluation(api?.data?.teacher_evaluation);
+  //     setOffer_type(api?.data?.offer_type);
+  //     // console.log(offer_type, 'offer_type');
 
+  //     setLoad(false);
+  //   } catch (error) {
+  //     setLoad(false);
+  //     showMessage({
+  //       message: `500 Server Error`,
+  //       type: 'danger',
+  //       position: 'top',
+  //       style: {justifyContent: 'center', alignItems: 'center'},
+  //       icon: () => (
+  //         <Entypo
+  //           name="circle-with-cross"
+  //           size={windowWidth / 16}
+  //           color={COLORS.white}
+  //           style={{paddingRight: 20}}
+  //         />
+  //       ),
+  //     });
+  //   }
+  // };
+  // teacher_Evaluation();
   const groupByOfferType = data => {
     return data.reduce((acc, item) => {
       const {offer_type} = item;
@@ -204,6 +239,7 @@ const TeacherEvaluation = () => {
           contentContainerStyle={{
             flex: 1,
             alignItems: 'center',
+            justifyContent: 'center',
           }}
           ListEmptyComponent={() => (
             <View style={{backgroundColor: COLORS.white}}>
@@ -226,7 +262,7 @@ const TeacherEvaluation = () => {
       {load ? (
         <Loader load={load} setLoad={setLoad} />
       ) : (
-        <>
+        <View style={{flex: 1}}>
           <ScreenHead
             heading={'Teacher Evaluation'}
             NoteVisibility={true}
@@ -239,7 +275,7 @@ const TeacherEvaluation = () => {
           <View
             style={{
               width: '95%',
-              height: '0.1%',
+              height: '0.8%',
               backgroundColor: COLORS.black,
             }}
           />
@@ -263,7 +299,7 @@ const TeacherEvaluation = () => {
             }}
             style={{backgroundColor: COLORS.white}}
           />
-        </>
+        </View>
       )}
     </View>
   );
@@ -283,14 +319,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    paddingBottom: '2%',
   },
   card: {
     flexDirection: 'column',
     borderRadius: 10,
     elevation: 24,
-    width: '97%',
+    width: '98%',
     overflow: 'hidden',
     marginVertical: windowWidth / 60,
+    alignSelf: 'center',
   },
   offerTypeContainer: {
     justifyContent: 'center',

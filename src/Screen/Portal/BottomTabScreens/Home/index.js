@@ -30,17 +30,17 @@ const BottomHome = () => {
     return state.AuthReducer.UserDetail.student_id;
   });
   useEffect(() => {
-    const params = {
+    const data = {
       token: TokenState,
       student_id: studentId,
     };
     setLoad(true);
-    getregisteredCourses(setLoad, dispatch, params);
+    getregisteredCourses(setLoad, dispatch, data);
     // data = {
     //   token: TokenState,
     //   student_id: studentId,
     // };
-    curriculumData(setLoad, dispatch, params);
+    curriculumData(setLoad, dispatch, data);
   }, []);
   const Dashcards1 = [
     {

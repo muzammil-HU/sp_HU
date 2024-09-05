@@ -18,14 +18,16 @@ import Loader from '../../../../../../components/reuseable/Modals/LoaderModal';
 import DropdownComponent from '../../../../../../components/reuseable/Dropdown';
 import InputText from '../../../../../../components/reuseable/InputText';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {showMessage} from 'react-native-flash-message';
 
 const CourseEva = ({route, navigation}) => {
   const [load, setLoad] = useState();
   const [questions, setQuestions] = useState([]);
   const {item} = route.params;
-  const [dropdownValues, setDropdownValues] = useState([]);
   const [isFocus, setIsFocus] = useState([]);
-  const [textInputValues, setTextInputValues] = useState([]);
+  const [previous_answer, setPrevious_answer] = useState(false);
+
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
@@ -34,17 +36,17 @@ const CourseEva = ({route, navigation}) => {
   });
   const data = [
     {label: 'Select Item', value: '', icon: ''},
-    {label: 'Strongly Agree', value: 'Strongly Agree', icon: 'Strongly Agree'},
-    {label: 'Agree', value: 'Agree', icon: 'Agree'},
-    {label: 'Uncertain', value: 'Uncertain', icon: 'Uncertain'},
-    {label: 'Disagree', value: 'Disagree', icon: 'Disagree'},
     {
       label: 'Strongly Disagree',
-      value: 'Strongly Disagree',
+      value: '1',
       icon: 'Strongly Disagree',
     },
+    {label: 'Disagree', value: '2', icon: 'Disagree'},
+    {label: 'Uncertain', value: '3', icon: 'Uncertain'},
+    {label: 'Agree', value: '4', icon: 'Agree'},
+    {label: 'Strongly Agree', value: '5', icon: 'Strongly Agree'},
   ];
-  // console.log(item, 'item');
+
   useEffect(() => {
     const course_evaluation_form = async () => {
       setLoad(true);
@@ -57,10 +59,11 @@ const CourseEva = ({route, navigation}) => {
         const api = await clientapi.get('/student/course/evaluation/form', {
           params,
         });
+        // console.log(api.data.course_eva_data, 'hu');
         setQuestions(api?.data?.course_eva_data);
-        setDropdownValues(Array(api?.data?.course_eva_data?.length).fill(null));
+        setPrevious_answer(api?.data?.previous_answer);
         setIsFocus(Array(api?.data?.course_eva_data?.length).fill(false));
-        setTextInputValues(Array(api?.data?.course_eva_data?.length).fill(''));
+        // setTextInputValues(Array(api?.data?.course_eva_data?.length).fill(''));
         setLoad(false);
       } catch (error) {
         showMessage({
@@ -82,20 +85,26 @@ const CourseEva = ({route, navigation}) => {
     course_evaluation_form();
   }, []);
   const handleValueChange = (value, index) => {
-    const updatedValues = [...dropdownValues];
-    updatedValues[index] = value;
-    setDropdownValues(updatedValues);
+    // console.log(value, 'vall');
+    const updatedQuestions = [...questions];
+    updatedQuestions[index] = {...updatedQuestions[index], given_answer: value};
+    setQuestions(updatedQuestions);
   };
-
+  // console.log(item.course_id, 'ju');
   const handleFocusChange = (isFocused, index) => {
     const updatedFocus = [...isFocus];
     updatedFocus[index] = isFocused;
     setIsFocus(updatedFocus);
   };
-
+  const gy = questions.map(q => q.given_answer);
+  // console.log(gy, 'gy');
   const course_evaluation_form_store = async () => {
     setLoad(true);
     try {
+      const hasAnswer = questions.some(
+        q => q.given_answer || q.given_answer_box,
+      );
+      const gy = questions.map(q => q.answer || '');
       const params = {
         token: TokenState,
         student_id: studentId,
@@ -103,16 +112,56 @@ const CourseEva = ({route, navigation}) => {
         offer_id: item.offer_id,
         offer_no: item.offer_no,
         emp_id: item.emp_id,
-        // parameter:,
+        questions: questions,
+        // parameter_id: questions.map(q => q.parameter_id),
+        // parameter: questions.map(q => q.parameter),
+        // parameter_sno: questions.map(q => q.parameter_sno),
+        // category_sno: questions.map(q => q.category_sno),
+        // category: questions.map(q => q.category),
+        // type: questions.map(q => q.type),
+        // given_answer_box: questions.map(q => q.given_answer_box || ''),
+        // answer: questions.map(q => q.answer || ''),
       };
-      const api = await clientapi.get('/student/course/evaluation/form/store', {
-        params,
+
+      let api;
+      if (previous_answer === true) {
+        api = await clientapi.post(
+          '/student/course/evaluation/form/store/update',
+          params,
+        );
+        // api = 'update';
+        console.log('update');
+      } else {
+        api = await clientapi.post(
+          '/student/course/evaluation/form/store',
+          params,
+        );
+        console.log('insert');
+      }
+      console.log(api?.data, 'api.data');
+      showMessage({
+        message: api?.data?.output?.response?.messages,
+        type: 'success',
+        duration: 10000,
+        position: 'top',
+        backgroundColor: COLORS.themeColor,
+        color: COLORS.white,
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <FontAwesome6
+            name="check-circle"
+            size={windowWidth / 16}
+            color={COLORS.white}
+            style={{paddingRight: 20}}
+          />
+        ),
       });
 
-      // console.log(api?.data, 'api?.data');
-
       setLoad(false);
+      navigation.goBack();
     } catch (error) {
+      console.log(error, 'err');
+      setLoad(false);
       showMessage({
         message: `500 Server Error`,
         type: 'danger',
@@ -129,11 +178,68 @@ const CourseEva = ({route, navigation}) => {
       });
     }
   };
+  // const course_evaluation_form_update = async () => {
+  //   setLoad(true);
+  //   try {
+  //     const params = {
+  //       token: TokenState,
+  //       student_id: studentId,
+  //       course_id: item.course_id,
+  //       offer_id: item.offer_id,
+  //       offer_no: item.offer_no,
+  //       emp_id: item.emp_id,
+  //       parameter_id: questions.map(q => q.parameter_id),
+  //       parameter: questions.map(q => q.parameter),
+  //       parameter_sno: questions.map(q => q.parameter_sno),
+  //       category_sno: questions.map(q => q.category_sno),
+  //       category: questions.map(q => q.category),
+  //       type: questions.map(q => q.type),
+  //       given_answer_box: questions.map(q => q.given_answer_box || ''),
+  //       answer: questions.map(q => q.answer || ''),
+  //     };
+  //     // console.log(params, 'huhu');
+  //     const api = await clientapi.post(
+  //       '/student/course/evaluation/form/store',
+  //       {
+  //         params,
+  //       },
+  //     );
+
+  //     console.log(api?.data, 'api?.data');
+
+  //     setLoad(false);
+  //   } catch (error) {
+  //     console.log(error, 'err');
+  //     setLoad(false);
+  //     showMessage({
+  //       message: `500 Server Error`,
+  //       type: 'danger',
+  //       position: 'top',
+  //       style: {justifyContent: 'center', alignItems: 'center'},
+  //       icon: () => (
+  //         <Entypo
+  //           name="circle-with-cross"
+  //           size={windowWidth / 16}
+  //           color={COLORS.white}
+  //           style={{paddingRight: 20}}
+  //         />
+  //       ),
+  //     });
+  //   }
+  // };
   const handleTextInputChange = (text, index) => {
-    const updatedTextInputValues = [...textInputValues];
-    updatedTextInputValues[index] = text;
-    setTextInputValues(updatedTextInputValues);
+    const updatedQuestions = [...questions];
+    updatedQuestions[index] = {
+      ...updatedQuestions[index],
+      given_answer_box: text,
+    };
+    setQuestions(updatedQuestions);
   };
+  // console.log(
+  //   questions.map(q => q.answer || ''),
+  //   'quest',
+  // );
+  // console.log(questions, 'dropdownvalues');
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headcontainer}>
@@ -238,12 +344,14 @@ const CourseEva = ({route, navigation}) => {
                 ]}>
                 {e?.type === 'Radio Button' ? (
                   <DropdownComponent
-                    value={dropdownValues[index]}
-                    setValue={value => handleValueChange(value, index)}
-                    valueIcon={dropdownValues[index]}
-                    setValueIcon={valueIcon =>
-                      handleValueChange(valueIcon, index)
-                    }
+                    value={data[e.given_answer]}
+                    setValue={value => {
+                      handleValueChange(value, index);
+                    }}
+                    valueIcon={e.given_answer}
+                    // setValueIcon={valueIcon =>
+                    //   handleValueChange(valueIcon, index)
+                    // }
                     isFocus={isFocus[index]}
                     setIsFocus={isFocused =>
                       handleFocusChange(isFocused, index)
@@ -255,7 +363,7 @@ const CourseEva = ({route, navigation}) => {
                   <InputText
                     placeholder="Write Your Comments"
                     placeholderTextColor={COLORS.themeColor}
-                    value={textInputValues[index]}
+                    value={e.given_answer_box}
                     onChangeText={text => handleTextInputChange(text, index)}
                     TextStyle={[
                       styles.inputText,
@@ -287,12 +395,13 @@ const CourseEva = ({route, navigation}) => {
                 alignItems: 'center',
                 borderRadius: 8,
               }}
-              onPress={() => {}}>
+              onPress={course_evaluation_form_store}>
               <Text style={{color: COLORS.white}}>Apply Changes</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
       )}
+      <Loader load={load} setLoad={setLoad} />
     </View>
   );
 };

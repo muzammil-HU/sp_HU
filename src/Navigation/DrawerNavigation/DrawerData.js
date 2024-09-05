@@ -266,7 +266,7 @@ const DrawerData = props => {
         ].map((Section, index) => renderDrawerSection(Section, index))}
       </View>
       {/* Profile */}
-      <View style={{flex: 1}}>
+      {/* <View style={{flex: 1}}>
         <DrawerItem
           onPress={() => {
             setExpandedItem(null);
@@ -294,9 +294,9 @@ const DrawerData = props => {
             </View>
           )}
         />
-      </View>
+      </View> */}
       {/* Settings */}
-      <View style={{flex: 1}}>
+      {/* <View style={{flex: 1}}>
         <DrawerItem
           onPress={() => {
             setExpandedItem(null);
@@ -332,7 +332,7 @@ const DrawerData = props => {
             </View>
           )}
         />
-      </View>
+      </View> */}
       {/* LogOut Btn */}
       <View style={{flex: 1}}>
         <DrawerItem

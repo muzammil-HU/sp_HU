@@ -14,13 +14,15 @@ import {
   registered_courses,
   days,
   makeup_classes,
-  ipAddress,
   isConnected,
   ActiveTab,
   curriculum,
   grading_criteria,
+  Gateway,
 } from '../../Reducers/GlobalStatesReducer/GlobalStatesReducer';
 import NetInfo from '@react-native-community/netinfo';
+import {NetworkInfo} from 'react-native-network-info';
+
 const windowwidth = Dimensions.get('window').width;
 
 const getwifiname = async (dispatch, setLoad) => {
@@ -35,14 +37,11 @@ const getwifiname = async (dispatch, setLoad) => {
       },
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      // const unsubscribe = NetInfo.addEventListener(state => {
-      //   dispatch(isConnected(state.isConnected));
-      //   dispatch(WifiName(state?.details?.ssid));
-      // });
       const state = await NetInfo.fetch();
       dispatch(isConnected(state.isConnected));
       dispatch(WifiName(state?.details?.ssid));
-      // dispatch(ipAddress(state?.details?.ipAddress));
+      const gate = await NetworkInfo.getGatewayIPAddress();
+      dispatch(Gateway(gate));
       setLoad(false);
     } else {
       setLoad(false);
@@ -62,7 +61,6 @@ const getwifiname = async (dispatch, setLoad) => {
       });
     }
   } catch (error) {
-    // console.log(error, 'error');
     showMessage({
       message: '500 Server Error',
       type: 'danger',
@@ -136,7 +134,6 @@ const getclassSchedule = async (
       setLoad(false);
     }
   } catch (err) {
-    // console.log('getclassSchedule error', err);
     setLoad(false);
     showMessage({
       message: `500 Server Error`,
@@ -154,9 +151,9 @@ const getclassSchedule = async (
     });
   }
 };
-const getregisteredCourses = async (setLoad, dispatch, params) => {
+const getregisteredCourses = async (setLoad, dispatch, data) => {
   try {
-    const res = await clientapi.post(`/student/registered/courses`, params);
+    const res = await clientapi.post(`/student/registered/courses`, data);
     if (res?.data?.success === true) {
       dispatch(registered_courses(res?.data?.registered_courses));
       setLoad(false);
@@ -190,14 +187,10 @@ const curriculumData = async (setLoad, dispatch, data) => {
   setLoad(true);
   try {
     const api = await clientapi.post(`/student/course/curriculum`, data);
-    // console.log(api?.data?.curriculum, 'api.data');
     dispatch(curriculum(api?.data?.curriculum));
     dispatch(grading_criteria(api?.data?.grading_criteria));
-    // setCourses(api?.data?.curriculum);
     setLoad(false);
   } catch (error) {
-    // setLoad(true);
-    // console.log(error, 'api error');
     setLoad(false);
     showMessage({
       message: `500 Server Error`,

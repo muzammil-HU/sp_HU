@@ -28,34 +28,16 @@ import axios from 'axios';
 
 const clientapi = axios.create({
   baseURL:
-    // hjh
     // remote local
     // 'http://172.23.12.71:80/api',
+    // 'http://192.168.137.16:8000/api',
+    // 'http://127.0.0.1:8000/api',
     // 'http://sp.hamdard.edu.pk/api',
     'https://snologies.com/sp_backend_lara/public/api',
-  // 'http://192.168.137.173:8000/api',
-  // 'http://192.168.137.16:8000/api',
-  // 'http://172.23.163.37:8000/api',
-  // 'http://192.168.137.41:8000/api',
-  // 'http://192.168.137.16:8000/api',
-  // 'https://sp.hamdard.edu.pk/api',
-  // 'https://172.23.12.71:443/api',
-  // local
-  // 'http://172.23.12.98:8000/api',
-  // 'http://192.168.137.155:8000/api',
-  // 'http://192.168.137.75:8000/api',
-  // 'http://localhost:8000/api',
-
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 });
-
-// clientapi.interceptors.request.use(function (config) {
-//   return new Promise(resolve =>
-//     setTimeout(() => resolve(config), 5000, console.log('first')),
-//   );
-// });
 
 export default clientapi;

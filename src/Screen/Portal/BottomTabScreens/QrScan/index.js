@@ -1,94 +1,124 @@
-import {
-  Alert,
-  Dimensions,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  View,
-  PermissionsAndroid,
-} from 'react-native';
+import {StyleSheet, Text, View, Platform} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   Camera,
   getCameraDevice,
-  useCameraDevice,
-  useCameraDevices,
   useCameraPermission,
-  useCodeScanner,
 } from 'react-native-vision-camera';
 import {useNavigation} from '@react-navigation/native';
 import {showMessage} from 'react-native-flash-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import WifiInfo from 'react-native-wifi-reborn';
 import {COLORS, windowWidth} from '../../../../Constants/COLORS';
 import {useDispatch, useSelector} from 'react-redux';
-import {useAppState} from '@react-native-community/hooks';
-import {useIsFocused, useFocusEffect} from '@react-navigation/native';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import NetInfo from '@react-native-community/netinfo';
+import {useFocusEffect} from '@react-navigation/native';
 import {getwifiname} from '../../../../Redux/Actions/GlobalStatesFunctions';
 import CameraComp from '../../../../components/CameraComp';
-import DeviceInfo from 'react-native-device-info';
-
+import {
+  isLocationEnabled,
+  promptForEnableLocationIfNeeded,
+} from 'react-native-android-location-enabler';
+import Entypo from 'react-native-vector-icons/Entypo';
+import clientapi from '../../../../api/clientapi';
 const QrScan = () => {
   const SSID = useSelector(state => {
     return state?.GlobalStatesReducer.WifiName;
   });
+
+  const Gateway = useSelector(state => {
+    return state?.GlobalStatesReducer.Gateway;
+  });
+
   const UID = useSelector(state => {
     return state?.AuthReducer.UniqueDeviceId;
   });
+
   const CurrentUID = useSelector(state => {
     return state?.AuthReducer?.CurrentUniqueDeviceId;
   });
+
   const ipAddress = useSelector(state => {
     return state?.AuthReducer.ipAddress;
   });
+
   const navigation = useNavigation();
+
   const dispatch = useDispatch();
+
   const [load, setLoad] = useState(true);
-  // const cameraRef = React.useRef(null);
-  const [isCameraInitialized, setIsCameraInitialized] = useState(false);
+
+  const [isCamera, setIsCamera] = useState(false);
+
+  // const [cameraMessage, setCameraMessage] = useState(false);
+
   const {hasPermission, requestPermission} = useCameraPermission();
+
   const devices = Camera.getAvailableCameraDevices();
+
   const device = getCameraDevice(devices, 'back', {
     physicalDevices: ['wide-angle-camera'],
   });
-  const [WifiName, setWifiName] = useState('HUWIFI');
-  const currentAppState = useAppState();
-  const IsFocused = useIsFocused();
-  const camActive = IsFocused && currentAppState === 'active';
+
+  const [HuGateway, setHuGateway] = useState('172.23.160.2');
+
+  const TokenState = useSelector(state => {
+    return state?.AuthReducer.TokenId;
+  });
+
+  const studentId = useSelector(state => {
+    return state.AuthReducer.UserDetail.student_id;
+  });
 
   useFocusEffect(
     useCallback(() => {
-      // DeviceInfo.getUniqueId().then(uniqueId => {
-      //   // console.log(uniqueId, 'uniqueId');
-      //   setLiveUID(uniqueId);
-      //   // dispatch(UniqueDeviceId(uniqueId));
-      // });
+      const params = {
+        student_id: studentId,
+        token: TokenState,
+      };
+      async function handleCheckPressed() {
+        if (Platform.OS === 'android') {
+          const checkEnabled = await isLocationEnabled();
+          if (checkEnabled === false) {
+            try {
+              const enableResult = await promptForEnableLocationIfNeeded();
+              console.log('enableResult', enableResult);
+            } catch (error) {
+              if (error instanceof Error) {
+                showMessage({
+                  message: `Location Disabled`,
+                  type: 'danger',
+                  position: 'top',
+                  style: {justifyContent: 'center', alignItems: 'center'},
+                  icon: () => (
+                    <Entypo
+                      name="circle-with-cross"
+                      size={windowWidth / 16}
+                      color={COLORS.white}
+                      style={{paddingRight: 20}}
+                    />
+                  ),
+                });
+              }
+            }
+          }
+        }
+        getwifiname(dispatch, setLoad);
+      }
+      async function cameraValidation() {
+        try {
+          const api = await clientapi.post('/student/cameravalidate', params);
+          setIsCamera(api?.data?.output?.response.success);
+          // console.log(isCamera,  'huhu');
+          // setCameraMessage(api?.data?.output?.response?.messages);
+        } catch (error) {
+          console.log(error, 'cameravalidation');
+        }
+      }
+      handleCheckPressed();
       getwifiname(dispatch, setLoad);
-      // console.log(SSID, 'SSID');
-      // console.log(ipAddress, 'ipAddress');
-      // console.log(UID, 'UID');
-      // if (SSID !== WifiName) {
-      //   console.log('Not Connected to HUWIFI');
-      //   showMessage({
-      //     message: '401 Internet Error',
-      //     type: 'danger',
-      //     // backgroundColor: ,
-      //     color: COLORS.white,
-      //     style: {justifyContent: 'center', alignItems: 'center'},
-      //     icon: () => (
-      //       <MaterialIcons
-      //         name="error-outline"
-      //         size={windowwidth / 16}
-      //         color={COLORS.white}
-      //         style={{paddingRight: 20}}
-      //       />
-      //     ),
-      //   });
-      // }
+      cameraValidation();
     }, []),
   );
+
   useEffect(() => {
     requestPermission();
   }, []);
@@ -101,8 +131,7 @@ const QrScan = () => {
     );
   return (
     <View style={styles.container}>
-      {/* {CurrentUID === UID ? ( */}
-      {SSID === WifiName && CurrentUID === UID ? (
+      {isCamera === true && Gateway === HuGateway && CurrentUID === UID ? (
         <CameraComp />
       ) : (
         <View
@@ -132,9 +161,12 @@ const QrScan = () => {
               alignItems: 'center',
             }}>
             <Text style={styles.text}>QR Scanner not Accessable</Text>
-            {SSID !== WifiName && (
+            {isCamera === false && (
+              <Text style={styles.text}>No Class Created for today!</Text>
+            )}
+            {Gateway !== HuGateway && (
               <Text style={styles.text}>
-                Connect to university Wifi to access the Qr Scanner
+                Connect to university Wifi to access the Qr Scanner ({SSID})
               </Text>
             )}
             {CurrentUID !== UID && (
@@ -154,7 +186,6 @@ export default QrScan;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: 'red',
   },
   text: {
     color: COLORS.red,
@@ -162,16 +193,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-{
-  /* <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={styles.text}>
-              Connect to university Wifi to access the Qr Scanner
-            </Text>
-          </View> */
-}
