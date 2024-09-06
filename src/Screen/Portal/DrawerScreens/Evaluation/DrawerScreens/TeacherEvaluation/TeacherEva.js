@@ -11,7 +11,7 @@ import {
   windowHeight,
   windowWidth,
 } from '../../../../../../Constants/COLORS';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import clientapi from '../../../../../../api/clientapi';
 import Loader from '../../../../../../components/reuseable/Modals/LoaderModal';
 import DropdownComponent from '../../../../../../components/reuseable/Dropdown';
@@ -19,6 +19,12 @@ import InputText from '../../../../../../components/reuseable/InputText';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {showMessage} from 'react-native-flash-message';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const TeacherEva = ({route, navigation}) => {
   const [load, setLoad] = useState();
@@ -28,7 +34,7 @@ const TeacherEva = ({route, navigation}) => {
   const [dropdownValues, setDropdownValues] = useState([]);
   const [isFocus, setIsFocus] = useState([]);
   const [textInputValues, setTextInputValues] = useState([]);
-
+  const dispatch = useDispatch();
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
@@ -60,11 +66,38 @@ const TeacherEva = ({route, navigation}) => {
         const api = await clientapi.get('/student/teacher/evaluation/form', {
           params,
         });
-        console.log(api?.data, 'appppi');
-        setQuestions(api?.data?.teacher_eva_data);
-        setPrevious_answer(api?.data?.previous_answer);
-        setIsFocus(Array(api?.data?.course_eva_data?.length).fill(false));
-        setLoad(false);
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          setQuestions(api?.data?.teacher_eva_data);
+          setPrevious_answer(api?.data?.previous_answer);
+          setIsFocus(Array(api?.data?.course_eva_data?.length).fill(false));
+          setLoad(false);
+        }
       } catch (error) {
         showMessage({
           message: `500 Server Error`,

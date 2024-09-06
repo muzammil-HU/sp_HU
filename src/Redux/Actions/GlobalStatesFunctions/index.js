@@ -22,6 +22,11 @@ import {
 } from '../../Reducers/GlobalStatesReducer/GlobalStatesReducer';
 import NetInfo from '@react-native-community/netinfo';
 import {NetworkInfo} from 'react-native-network-info';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../Reducers/AuthReducer/AuthReducer';
 
 const windowwidth = Dimensions.get('window').width;
 
@@ -86,16 +91,43 @@ const getAttendenceData = async (
   params,
 ) => {
   try {
-    const res = await clientapi.post(
+    setLoad(true);
+    const api = await clientapi.post(
       `/student/attendance/inquiry`,
       // `/test`,
       params,
     );
-    if (res?.data?.success === true && res?.data?.data != []) {
-      dispatch(dayAttendence(res?.data?.data));
+    // console.log(api.data, 'daatt');
+    if (
+      api?.data?.success === false &&
+      api?.data?.output?.response?.messages ===
+        'Session expired Please Login Again'
+    ) {
+      dispatch(LoginUser(false));
+      dispatch(TokenId(null));
+      dispatch(UserDetail(null));
+      dispatch(registered_courses(null));
+      showMessage({
+        message: 'Session expired Please Login Again',
+        type: 'warning',
+        position: 'top',
+        // backgroundColor: COLORS.themeColor,
+        color: COLORS.black,
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <FontAwesome6
+            name="circle-exclamation"
+            size={windowWidth / 16}
+            color={COLORS.black}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
       setLoad(false);
     } else {
-      setError('No Data found');
+      // console.log(api?.data?.success, 'cf');
+      dispatch(dayAttendence(api?.data?.data));
+      setLoad(false);
     }
   } catch (err) {
     showMessage({
@@ -122,15 +154,38 @@ const getclassSchedule = async (
   params,
 ) => {
   try {
-    const res = await clientapi.post(`/student/class/schedule`, params);
-    if (res?.data?.success === true && res?.data?.data != []) {
-      dispatch(class_schedule(res?.data?.class_schedule));
-      dispatch(makeup_classes(res?.data?.upcoming_classes));
-      dispatch(course_content(res?.data?.course_content));
-      dispatch(days(res?.data?.days));
+    const api = await clientapi.post(`/student/class/schedule`, params);
+    if (
+      api?.data?.success === false &&
+      api?.data?.output?.response?.messages ===
+        'Session expired Please Login Again'
+    ) {
+      dispatch(LoginUser(false));
+      dispatch(TokenId(null));
+      dispatch(UserDetail(null));
+      dispatch(registered_courses(null));
+      showMessage({
+        message: 'Session expired Please Login Again',
+        type: 'warning',
+        position: 'top',
+        // backgroundColor: COLORS.themeColor,
+        color: COLORS.black,
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <FontAwesome6
+            name="circle-exclamation"
+            size={windowWidth / 16}
+            color={COLORS.black}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
       setLoad(false);
     } else {
-      setError('No Data found');
+      dispatch(class_schedule(api?.data?.class_schedule));
+      dispatch(makeup_classes(api?.data?.upcoming_classes));
+      dispatch(course_content(api?.data?.course_content));
+      dispatch(days(api?.data?.days));
       setLoad(false);
     }
   } catch (err) {
@@ -153,11 +208,35 @@ const getclassSchedule = async (
 };
 const getregisteredCourses = async (setLoad, dispatch, data) => {
   try {
-    const res = await clientapi.post(`/student/registered/courses`, data);
-    if (res?.data?.success === true) {
-      dispatch(registered_courses(res?.data?.registered_courses));
+    const api = await clientapi.post(`/student/registered/courses`, data);
+    if (
+      api?.data?.success === false &&
+      api?.data?.output?.response?.messages ===
+        'Session expired Please Login Again'
+    ) {
+      dispatch(LoginUser(false));
+      dispatch(TokenId(null));
+      dispatch(UserDetail(null));
+      dispatch(registered_courses(null));
+      showMessage({
+        message: 'Session expired Please Login Again',
+        type: 'warning',
+        position: 'top',
+        // backgroundColor: COLORS.themeColor,
+        color: COLORS.black,
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <FontAwesome6
+            name="circle-exclamation"
+            size={windowWidth / 16}
+            color={COLORS.black}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
       setLoad(false);
     } else {
+      dispatch(registered_courses(api?.data?.registered_courses));
       setLoad(false);
     }
   } catch (err) {
@@ -187,9 +266,37 @@ const curriculumData = async (setLoad, dispatch, data) => {
   setLoad(true);
   try {
     const api = await clientapi.post(`/student/course/curriculum`, data);
-    dispatch(curriculum(api?.data?.curriculum));
-    dispatch(grading_criteria(api?.data?.grading_criteria));
-    setLoad(false);
+    if (
+      api?.data?.success === false &&
+      api?.data?.output?.response?.messages ===
+        'Session expired Please Login Again'
+    ) {
+      dispatch(LoginUser(false));
+      dispatch(TokenId(null));
+      dispatch(UserDetail(null));
+      dispatch(registered_courses(null));
+      showMessage({
+        message: 'Session expired Please Login Again',
+        type: 'warning',
+        position: 'top',
+        // backgroundColor: COLORS.themeColor,
+        color: COLORS.black,
+        style: {justifyContent: 'center', alignItems: 'center'},
+        icon: () => (
+          <FontAwesome6
+            name="circle-exclamation"
+            size={windowWidth / 16}
+            color={COLORS.black}
+            style={{paddingRight: 20}}
+          />
+        ),
+      });
+      setLoad(false);
+    } else {
+      dispatch(curriculum(api?.data?.curriculum));
+      dispatch(grading_criteria(api?.data?.grading_criteria));
+      setLoad(false);
+    }
   } catch (error) {
     setLoad(false);
     showMessage({

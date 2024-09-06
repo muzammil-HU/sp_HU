@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import clientapi from '../../../../../../api/clientapi';
 import {COLORS, windowWidth} from '../../../../../../Constants/COLORS';
 import ScreenHead from '../../../../../../components/reuseable/ScreenHead';
@@ -17,6 +17,12 @@ import {showMessage} from 'react-native-flash-message';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const TeacherEvaluation = () => {
   const TokenState = useSelector(state => {
@@ -27,7 +33,7 @@ const TeacherEvaluation = () => {
   });
 
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const [teacherEvaluation, setTeacherEvaluation] = useState(null);
   const [load, setLoad] = useState(false);
   const [note, setNote] = useState(null);
@@ -54,9 +60,37 @@ const TeacherEvaluation = () => {
           const api = await clientapi.get(`/student/teacher/evaluation`, {
             params,
           });
-          setTeacherEvaluation(api?.data?.teacher_evaluation);
-          setOffer_type(api?.data?.offer_type);
-          setLoad(false);
+          if (
+            api?.data?.success === false &&
+            api?.data?.output?.response?.messages ===
+              'Session expired Please Login Again'
+          ) {
+            dispatch(LoginUser(false));
+            dispatch(TokenId(null));
+            dispatch(UserDetail(null));
+            dispatch(registered_courses(null));
+            showMessage({
+              message: 'Session expired Please Login Again',
+              type: 'warning',
+              position: 'top',
+              // backgroundColor: COLORS.themeColor,
+              color: COLORS.black,
+              style: {justifyContent: 'center', alignItems: 'center'},
+              icon: () => (
+                <FontAwesome6
+                  name="circle-exclamation"
+                  size={windowWidth / 16}
+                  color={COLORS.black}
+                  style={{paddingRight: 20}}
+                />
+              ),
+            });
+            setLoad(false);
+          } else {
+            setTeacherEvaluation(api?.data?.teacher_evaluation);
+            setOffer_type(api?.data?.offer_type);
+            setLoad(false);
+          }
         } catch (error) {
           setLoad(false);
           showMessage({
@@ -78,41 +112,7 @@ const TeacherEvaluation = () => {
       course_Evaluation();
     }, [TokenState, studentId]),
   );
-  // const params = {
-  //   token: TokenState,
-  //   student_id: studentId,
-  // };
-  // const teacher_Evaluation = async () => {
-  //   try {
-  //     setLoad(true);
-  //     const api = await clientapi.get(`/student/teacher/evaluation`, {
-  //       params,
-  //     });
-  //     // console.log(api?.data, 'api');
-  //     setTeacherEvaluation(api?.data?.teacher_evaluation);
-  //     setOffer_type(api?.data?.offer_type);
-  //     // console.log(offer_type, 'offer_type');
 
-  //     setLoad(false);
-  //   } catch (error) {
-  //     setLoad(false);
-  //     showMessage({
-  //       message: `500 Server Error`,
-  //       type: 'danger',
-  //       position: 'top',
-  //       style: {justifyContent: 'center', alignItems: 'center'},
-  //       icon: () => (
-  //         <Entypo
-  //           name="circle-with-cross"
-  //           size={windowWidth / 16}
-  //           color={COLORS.white}
-  //           style={{paddingRight: 20}}
-  //         />
-  //       ),
-  //     });
-  //   }
-  // };
-  // teacher_Evaluation();
   const groupByOfferType = data => {
     return data.reduce((acc, item) => {
       const {offer_type} = item;

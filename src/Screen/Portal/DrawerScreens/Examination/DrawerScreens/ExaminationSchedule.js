@@ -8,14 +8,21 @@ import {
 import React, {useEffect, useState} from 'react';
 import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
 import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {Divider} from 'react-native-paper';
 import clientapi from '../../../../../api/clientapi';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {showMessage} from 'react-native-flash-message';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const ExaminationSchedule = () => {
+  const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectedCourseName, setSelectedCourseName] = useState();
@@ -62,11 +69,36 @@ const ExaminationSchedule = () => {
             `/student/examination/schedule`,
             params,
           );
-          // console.log(api?.data, '789czcaca');
+          if (
+            api?.data?.success === false &&
+            api?.data?.output?.response?.messages ===
+              'Session expired Please Login Again'
+          ) {
+            dispatch(LoginUser(false));
+            dispatch(TokenId(null));
+            dispatch(UserDetail(null));
+            dispatch(registered_courses(null));
+            showMessage({
+              message: 'Session expired Please Login Again',
+              type: 'success',
+              position: 'top',
+              backgroundColor: COLORS.themeColor,
+              color: COLORS.white,
+              style: {justifyContent: 'center', alignItems: 'center'},
+              icon: () => (
+                <FontAwesome6
+                  name="check-circle"
+                  size={windowWidth / 16}
+                  color={COLORS.white}
+                  style={{paddingRight: 20}}
+                />
+              ),
+            });
+          }
           setExam_Data(api?.data.examination_schedule);
           setExam_type(api?.data.exam_sch);
         } catch (error) {
-          // console.log(error, 'api error');
+          console.log(error, 'api error');
           setLoad(false);
           showMessage({
             message: `500 Server Error`,
@@ -116,7 +148,7 @@ const ExaminationSchedule = () => {
       }
     });
   };
-  const days = Object.values(ff);
+  const days = Object?.values(ff);
   return (
     <>
       {load ? (
@@ -131,7 +163,7 @@ const ExaminationSchedule = () => {
           <View style={{alignItems: 'center'}}>
             <Text style={styles.mainheading}>Examination Schedule</Text>
           </View>
-          {exam_Data.length === 0 ? (
+          {exam_Data?.length === 0 ? (
             <View style={{flex: 1, alignItems: 'center', paddingTop: '8%'}}>
               <Text
                 style={{fontSize: windowWidth / 23, color: COLORS.themeColor}}>
@@ -144,14 +176,14 @@ const ExaminationSchedule = () => {
                 flexGrow: 1,
                 paddingHorizontal: '3%',
               }}>
-              {Object.keys(ff).map(key => {
+              {Object?.keys(ff)?.map(key => {
                 const exam_type = ff[key];
                 // console.log(exam_type);
-                const daySchedule = exam_Data.filter(
-                  item => item.exam_type === exam_type,
+                const daySchedule = exam_Data?.filter(
+                  item => item?.exam_type === exam_type,
                 );
 
-                if (daySchedule.length > 0) {
+                if (daySchedule?.length > 0) {
                   return (
                     <View key={key} style={styles.dayContainer}>
                       <TouchableOpacity
@@ -168,7 +200,7 @@ const ExaminationSchedule = () => {
                         <Text style={styles.dayText}>{exam_type}</Text>
                         <FontAwesome6
                           name={
-                            expandedDays.includes(exam_type)
+                            expandedDays?.includes(exam_type)
                               ? 'angle-up'
                               : 'angle-down'
                           }
@@ -177,11 +209,11 @@ const ExaminationSchedule = () => {
                           style={{paddingRight: 10}}
                         />
                       </TouchableOpacity>
-                      {expandedDays.includes(exam_type) && (
+                      {expandedDays?.includes(exam_type) && (
                         <>
                           {exam_Data
-                            .filter(item => item.exam_type === exam_type)
-                            .map((scheduleItem, scheduleIndex) => {
+                            ?.filter(item => item?.exam_type === exam_type)
+                            ?.map((scheduleItem, scheduleIndex) => {
                               return (
                                 <View
                                   key={scheduleIndex}
@@ -212,9 +244,9 @@ const ExaminationSchedule = () => {
                                         },
                                       ]}>
                                       {/* {scheduleItem.exam_date} */}
-                                      {scheduleItem.exam_date === null
+                                      {scheduleItem?.exam_date === null
                                         ? '-'
-                                        : convertDate(scheduleItem.exam_date)}
+                                        : convertDate(scheduleItem?.exam_date)}
                                     </Text>
                                     <Text
                                       style={[
@@ -225,9 +257,9 @@ const ExaminationSchedule = () => {
                                           color: COLORS.TextthemeColor,
                                         },
                                       ]}>
-                                      {scheduleItem.exam_day === null
+                                      {scheduleItem?.exam_day === null
                                         ? '-'
-                                        : scheduleItem.exam_day}
+                                        : scheduleItem?.exam_day}
                                     </Text>
                                   </View>
                                   <View
@@ -246,9 +278,9 @@ const ExaminationSchedule = () => {
                                           color: COLORS.TextthemeColor,
                                         },
                                       ]}>
-                                      {scheduleItem.offer_no
+                                      {scheduleItem?.offer_no
                                         ? '-'
-                                        : scheduleItem.offer_no}
+                                        : scheduleItem?.offer_no}
                                     </Text>
                                     <Text
                                       style={[
@@ -259,9 +291,9 @@ const ExaminationSchedule = () => {
                                           color: COLORS.TextthemeColor,
                                         },
                                       ]}>
-                                      {scheduleItem.exam_room === null
+                                      {scheduleItem?.exam_room === null
                                         ? '-'
-                                        : scheduleItem.exam_room}
+                                        : scheduleItem?.exam_room}
                                     </Text>
                                   </View>
                                   <Divider
@@ -291,7 +323,7 @@ const ExaminationSchedule = () => {
                                             color: COLORS.TextthemeColor,
                                           },
                                         ]}>
-                                        {scheduleItem.course_title}
+                                        {scheduleItem?.course_title}
                                       </Text>
                                       <Text
                                         style={[
@@ -302,7 +334,7 @@ const ExaminationSchedule = () => {
                                             color: COLORS.TextthemeColor,
                                           },
                                         ]}>
-                                        {scheduleItem.lecturer}
+                                        {scheduleItem?.lecturer}
                                       </Text>
                                     </View>
                                     <View
@@ -332,9 +364,9 @@ const ExaminationSchedule = () => {
                                             color: COLORS.TextthemeColor,
                                           },
                                         ]}>
-                                        {scheduleItem.exam_time === null
+                                        {scheduleItem?.exam_time === null
                                           ? '-'
-                                          : scheduleItem.exam_time}
+                                          : scheduleItem?.exam_time}
                                       </Text>
                                     </View>
                                   </View>

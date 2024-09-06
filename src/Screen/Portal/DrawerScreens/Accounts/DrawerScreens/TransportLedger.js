@@ -1,7 +1,7 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useSharedValue} from 'react-native-reanimated';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import clientapi from '../../../../../api/clientapi';
 import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
 import ScreenHead from '../../../../../components/reuseable/ScreenHead';
@@ -9,6 +9,12 @@ import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
 import Ledger_Accordion from '../../../../../components/reuseable/Cards/Ledger_Accordian';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {showMessage} from 'react-native-flash-message';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const TransportLedger = () => {
   const [data, setData] = useState(null);
@@ -17,7 +23,7 @@ const TransportLedger = () => {
   const [dr_total, setDr_total] = useState(null);
   const [cr_total, setCr_total] = useState(null);
   const parentHeightValue = useSharedValue(0);
-
+  const dispatch = useDispatch();
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
@@ -58,12 +64,39 @@ const TransportLedger = () => {
       try {
         setLoad(true);
         const api = await clientapi.post(`/student/ledger/transport`, params);
-        // console.log(api.data, 'api');
-        setData(api?.data?.due_payment[0].v_dues);
-        setTransport_ledger(api?.data?.transport_ledger);
-        setCr_total(api?.data?.cr_total[0]?.v_dues);
-        setDr_total(api?.data?.dr_total[0]?.v_dues);
-        setLoad(false);
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          setData(api?.data?.due_payment[0].v_dues);
+          setTransport_ledger(api?.data?.transport_ledger);
+          setCr_total(api?.data?.cr_total[0]?.v_dues);
+          setDr_total(api?.data?.dr_total[0]?.v_dues);
+          setLoad(false);
+        }
       } catch (error) {
         setLoad(false);
         showMessage({

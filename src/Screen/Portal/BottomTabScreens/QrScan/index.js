@@ -18,7 +18,14 @@ import {
   promptForEnableLocationIfNeeded,
 } from 'react-native-android-location-enabler';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import clientapi from '../../../../api/clientapi';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 const QrScan = () => {
   const SSID = useSelector(state => {
     return state?.GlobalStatesReducer.WifiName;
@@ -106,11 +113,54 @@ const QrScan = () => {
       async function cameraValidation() {
         try {
           const api = await clientapi.post('/student/cameravalidate', params);
-          setIsCamera(api?.data?.output?.response.success);
+          if (
+            api?.data?.success === false &&
+            api?.data?.output?.response?.messages ===
+              'Session expired Please Login Again'
+          ) {
+            dispatch(LoginUser(false));
+            dispatch(TokenId(null));
+            dispatch(UserDetail(null));
+            dispatch(registered_courses(null));
+            showMessage({
+              message: 'Session expired Please Login Again',
+              type: 'warning',
+              position: 'top',
+              // backgroundColor: COLORS.themeColor,
+              color: COLORS.black,
+              style: {justifyContent: 'center', alignItems: 'center'},
+              icon: () => (
+                <FontAwesome6
+                  name="circle-exclamation"
+                  size={windowWidth / 16}
+                  color={COLORS.black}
+                  style={{paddingRight: 20}}
+                />
+              ),
+            });
+            setLoad(false);
+          } else {
+            setIsCamera(api?.data?.output?.response.success);
+            setLoad(false);
+          }
           // console.log(isCamera,  'huhu');
           // setCameraMessage(api?.data?.output?.response?.messages);
         } catch (error) {
-          console.log(error, 'cameravalidation');
+          showMessage({
+            message: '500 server error',
+            type: 'danger',
+            position: 'top',
+            color: COLORS.white,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="check-circle"
+                size={windowWidth / 16}
+                color={COLORS.white}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
         }
       }
       handleCheckPressed();

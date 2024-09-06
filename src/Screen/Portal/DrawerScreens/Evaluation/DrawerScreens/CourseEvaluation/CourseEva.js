@@ -12,7 +12,7 @@ import {
   windowHeight,
   windowWidth,
 } from '../../../../../../Constants/COLORS';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import clientapi from '../../../../../../api/clientapi';
 import Loader from '../../../../../../components/reuseable/Modals/LoaderModal';
 import DropdownComponent from '../../../../../../components/reuseable/Dropdown';
@@ -20,6 +20,12 @@ import InputText from '../../../../../../components/reuseable/InputText';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {showMessage} from 'react-native-flash-message';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const CourseEva = ({route, navigation}) => {
   const [load, setLoad] = useState();
@@ -27,7 +33,7 @@ const CourseEva = ({route, navigation}) => {
   const {item} = route.params;
   const [isFocus, setIsFocus] = useState([]);
   const [previous_answer, setPrevious_answer] = useState(false);
-
+  const dispatch = useDispatch();
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
@@ -59,12 +65,38 @@ const CourseEva = ({route, navigation}) => {
         const api = await clientapi.get('/student/course/evaluation/form', {
           params,
         });
-        // console.log(api.data.course_eva_data, 'hu');
-        setQuestions(api?.data?.course_eva_data);
-        setPrevious_answer(api?.data?.previous_answer);
-        setIsFocus(Array(api?.data?.course_eva_data?.length).fill(false));
-        // setTextInputValues(Array(api?.data?.course_eva_data?.length).fill(''));
-        setLoad(false);
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          setQuestions(api?.data?.course_eva_data);
+          setPrevious_answer(api?.data?.previous_answer);
+          setIsFocus(Array(api?.data?.course_eva_data?.length).fill(false));
+          setLoad(false);
+        }
       } catch (error) {
         showMessage({
           message: `500 Server Error`,
@@ -129,36 +161,58 @@ const CourseEva = ({route, navigation}) => {
           '/student/course/evaluation/form/store/update',
           params,
         );
-        // api = 'update';
-        console.log('update');
       } else {
         api = await clientapi.post(
           '/student/course/evaluation/form/store',
           params,
         );
-        console.log('insert');
       }
-      console.log(api?.data, 'api.data');
-      showMessage({
-        message: api?.data?.output?.response?.messages,
-        type: 'success',
-        duration: 10000,
-        position: 'top',
-        backgroundColor: COLORS.themeColor,
-        color: COLORS.white,
-        style: {justifyContent: 'center', alignItems: 'center'},
-        icon: () => (
-          <FontAwesome6
-            name="check-circle"
-            size={windowWidth / 16}
-            color={COLORS.white}
-            style={{paddingRight: 20}}
-          />
-        ),
-      });
-
-      setLoad(false);
-      navigation.goBack();
+      if (
+        api?.data?.success === false &&
+        api?.data?.output?.response?.messages ===
+          'Session expired Please Login Again'
+      ) {
+        dispatch(LoginUser(false));
+        dispatch(TokenId(null));
+        dispatch(UserDetail(null));
+        dispatch(registered_courses(null));
+        showMessage({
+          message: 'Session expired Please Login Again',
+          type: 'warning',
+          position: 'top',
+          color: COLORS.black,
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <FontAwesome6
+              name="circle-exclamation"
+              size={windowWidth / 16}
+              color={COLORS.black}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
+        setLoad(false);
+      } else {
+        showMessage({
+          message: api?.data?.output?.response?.messages,
+          type: 'success',
+          duration: 10000,
+          position: 'top',
+          backgroundColor: COLORS.themeColor,
+          color: COLORS.white,
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <FontAwesome6
+              name="check-circle"
+              size={windowWidth / 16}
+              color={COLORS.white}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
+        setLoad(false);
+        navigation.goBack();
+      }
     } catch (error) {
       console.log(error, 'err');
       setLoad(false);
@@ -178,55 +232,7 @@ const CourseEva = ({route, navigation}) => {
       });
     }
   };
-  // const course_evaluation_form_update = async () => {
-  //   setLoad(true);
-  //   try {
-  //     const params = {
-  //       token: TokenState,
-  //       student_id: studentId,
-  //       course_id: item.course_id,
-  //       offer_id: item.offer_id,
-  //       offer_no: item.offer_no,
-  //       emp_id: item.emp_id,
-  //       parameter_id: questions.map(q => q.parameter_id),
-  //       parameter: questions.map(q => q.parameter),
-  //       parameter_sno: questions.map(q => q.parameter_sno),
-  //       category_sno: questions.map(q => q.category_sno),
-  //       category: questions.map(q => q.category),
-  //       type: questions.map(q => q.type),
-  //       given_answer_box: questions.map(q => q.given_answer_box || ''),
-  //       answer: questions.map(q => q.answer || ''),
-  //     };
-  //     // console.log(params, 'huhu');
-  //     const api = await clientapi.post(
-  //       '/student/course/evaluation/form/store',
-  //       {
-  //         params,
-  //       },
-  //     );
 
-  //     console.log(api?.data, 'api?.data');
-
-  //     setLoad(false);
-  //   } catch (error) {
-  //     console.log(error, 'err');
-  //     setLoad(false);
-  //     showMessage({
-  //       message: `500 Server Error`,
-  //       type: 'danger',
-  //       position: 'top',
-  //       style: {justifyContent: 'center', alignItems: 'center'},
-  //       icon: () => (
-  //         <Entypo
-  //           name="circle-with-cross"
-  //           size={windowWidth / 16}
-  //           color={COLORS.white}
-  //           style={{paddingRight: 20}}
-  //         />
-  //       ),
-  //     });
-  //   }
-  // };
   const handleTextInputChange = (text, index) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index] = {
@@ -235,11 +241,7 @@ const CourseEva = ({route, navigation}) => {
     };
     setQuestions(updatedQuestions);
   };
-  // console.log(
-  //   questions.map(q => q.answer || ''),
-  //   'quest',
-  // );
-  // console.log(questions, 'dropdownvalues');
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headcontainer}>

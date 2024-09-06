@@ -22,6 +22,12 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {COLORS, windowWidth} from '../../Constants/COLORS';
 import data from '../../data/data';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 // import {COLORS} from '../../../Constants/COLORS';
 
 const showCodeAlert = (
@@ -74,8 +80,6 @@ const CameraComp = () => {
     return state?.AuthReducer.UniqueDeviceId;
   });
 
-  // console.log(TokenState, 'Token');
-
   const ipAddress = useSelector(state => {
     return state?.AuthReducer.ipAddress;
   });
@@ -89,11 +93,37 @@ const CameraComp = () => {
 
     setLoad(true);
     try {
-      const res = await clientapi.post('/student/attendance', data);
-      if (res.data.success === true) {
-        if (res.data.output.response?.marked === true) {
+      const api = await clientapi.post('/student/attendance', data);
+      if (
+        api?.data?.success === false &&
+        api?.data?.output?.response?.messages ===
+          'Session expired Please Login Again'
+      ) {
+        dispatch(LoginUser(false));
+        dispatch(TokenId(null));
+        dispatch(UserDetail(null));
+        dispatch(registered_courses(null));
+        showMessage({
+          message: 'Session expired Please Login Again',
+          type: 'warning',
+          position: 'top',
+          // backgroundColor: COLORS.themeColor,
+          color: COLORS.black,
+          style: {justifyContent: 'center', alignItems: 'center'},
+          icon: () => (
+            <FontAwesome6
+              name="circle-exclamation"
+              size={windowWidth / 16}
+              color={COLORS.black}
+              style={{paddingRight: 20}}
+            />
+          ),
+        });
+        setLoad(false);
+      } else {
+        if (api.data.output.response?.marked === true) {
           showMessage({
-            message: res?.data?.output?.response?.messages,
+            message: api?.data?.output?.response?.messages,
             type: 'warning',
             duration: 10000,
             position: 'top',
@@ -111,7 +141,7 @@ const CameraComp = () => {
           });
         } else {
           showMessage({
-            message: res?.data?.output?.response?.messages,
+            message: api?.data?.output?.response?.messages,
             type: 'success',
             duration: 10000,
             position: 'top',
@@ -128,22 +158,6 @@ const CameraComp = () => {
             ),
           });
         }
-      } else {
-        showMessage({
-          message: res?.data?.output?.response?.messages,
-          type: 'danger',
-          position: 'top',
-          duration: 10000,
-          style: {justifyContent: 'center', alignItems: 'center'},
-          icon: () => (
-            <Entypo
-              name="circle-with-cross"
-              size={windowWidth / 16}
-              color={COLORS.white}
-              style={{paddingRight: 20}}
-            />
-          ),
-        });
       }
       navigation.navigate('BtmHome');
     } catch (error) {

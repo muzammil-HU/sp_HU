@@ -19,8 +19,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 //   TokenId,
 // } from '../../../../../Redux/Reducers/AuthReducer/AuthReducer';
 import ScreenHead from '../../../../../components/reuseable/ScreenHead';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {showMessage} from 'react-native-flash-message';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const macData = [
   {mac: '44545454554', device_name: 'aknmaksn', brand_name: 'anxkaksm'},
@@ -32,7 +38,7 @@ const WifiForm = ({regDevices, height = '32%', setRefresh, refresh}) => {
   const [value, setValue] = useState(null);
   const [valueIcon, setValueIcon] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  // console.log(regDevices, 'regDevices');
+  const dispatch = useDispatch();
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
@@ -46,15 +52,15 @@ const WifiForm = ({regDevices, height = '32%', setRefresh, refresh}) => {
 
   // Filter out already registered devices
   const filteredData = initialData.filter(item => {
-    if (item.label === 'Tablet PC' || item.label === 'Smart Phone') {
-      return !regDevices.some(
+    if (item?.label === 'Tablet PC' || item?.label === 'Smart Phone') {
+      return !regDevices?.some(
         device =>
           device.device_name === 'Tablet PC' ||
           device.device_name === 'Smart Phone',
       );
     }
-    if (item.label === 'Desktop PC' || item.label === 'Laptop') {
-      return !regDevices.some(
+    if (item?.label === 'Desktop PC' || item?.label === 'Laptop') {
+      return !regDevices?.some(
         device =>
           device.device_name === 'Desktop PC' ||
           device.device_name === 'Laptop',
@@ -75,11 +81,18 @@ const WifiForm = ({regDevices, height = '32%', setRefresh, refresh}) => {
     // console.log(params, 'params');
     try {
       const api = await clientapi.post('student/general/wifi/reg', params);
-      if (api?.data?.success === false) {
+      if (
+        api?.data?.success === false &&
+        api?.data?.output?.response?.messages ===
+          'Session expired Please Login Again'
+      ) {
+        dispatch(LoginUser(false));
+        dispatch(TokenId(null));
+        dispatch(UserDetail(null));
+        dispatch(registered_courses(null));
         showMessage({
-          message: 'Required fields are not filled',
+          message: 'Session expired Please Login Again',
           type: 'warning',
-          duration: 10000,
           position: 'top',
           // backgroundColor: COLORS.themeColor,
           color: COLORS.black,
@@ -94,24 +107,44 @@ const WifiForm = ({regDevices, height = '32%', setRefresh, refresh}) => {
           ),
         });
       } else {
-        setRefresh(!refresh);
-        showMessage({
-          message: api?.data?.output?.response?.messages,
-          type: 'success',
-          duration: 10000,
-          position: 'top',
-          backgroundColor: COLORS.themeColor,
-          color: COLORS.white,
-          style: {justifyContent: 'center', alignItems: 'center'},
-          icon: () => (
-            <FontAwesome6
-              name="check-circle"
-              size={windowWidth / 16}
-              color={COLORS.white}
-              style={{paddingRight: 20}}
-            />
-          ),
-        });
+        if (api?.data?.success === false) {
+          showMessage({
+            message: 'Required fields are not filled',
+            type: 'warning',
+            duration: 10000,
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+        } else {
+          setRefresh(!refresh);
+          showMessage({
+            message: api?.data?.output?.response?.messages,
+            type: 'success',
+            duration: 10000,
+            position: 'top',
+            backgroundColor: COLORS.themeColor,
+            color: COLORS.white,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="check-circle"
+                size={windowWidth / 16}
+                color={COLORS.white}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -240,7 +273,7 @@ const WifiRegistration = () => {
   const [regDevices, setRegDevices] = useState([]);
   const [load, setLoad] = useState(false);
   const [refresh, setRefresh] = useState(false);
-
+  const dispatch = useDispatch();
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
   });
@@ -248,21 +281,142 @@ const WifiRegistration = () => {
   const studentId = useSelector(state => {
     return state.AuthReducer.UserDetail.student_id;
   });
-  const wifiReg = async () => {
+  // const wifiReg = async () => {
+  //   const params = {
+  //     token: TokenState,
+  //     student_id: studentId,
+  //     device_id: value,
+  //     mac: macAddress,
+  //   };
+  //   console.log(params, 'params');
+  //   try {
+  //     const api = await clientapi.post('student/general/wifi/reg', params);
+  //     if (api?.data?.success === false) {
+  //       showMessage({
+  //         message: 'Required fields are not filled',
+  //         type: 'warning',
+  //         duration: 10000,
+  //         position: 'top',
+  //         // backgroundColor: COLORS.themeColor,
+  //         color: COLORS.black,
+  //         style: {justifyContent: 'center', alignItems: 'center'},
+  //         icon: () => (
+  //           <FontAwesome6
+  //             name="circle-exclamation"
+  //             size={windowWidth / 16}
+  //             color={COLORS.black}
+  //             style={{paddingRight: 20}}
+  //           />
+  //         ),
+  //       });
+  //     } else {
+  //       showMessage({
+  //         message: api?.data?.output?.response?.messages,
+  //         type: 'success',
+  //         duration: 10000,
+  //         position: 'top',
+  //         backgroundColor: COLORS.themeColor,
+  //         color: COLORS.white,
+  //         style: {justifyContent: 'center', alignItems: 'center'},
+  //         icon: () => (
+  //           <FontAwesome6
+  //             name="check-circle"
+  //             size={windowWidth / 16}
+  //             color={COLORS.white}
+  //             style={{paddingRight: 20}}
+  //           />
+  //         ),
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     showMessage({
+  //       message: `500 Server Error`,
+  //       type: 'danger',
+  //       position: 'top',
+  //       style: {justifyContent: 'center', alignItems: 'center'},
+  //       icon: () => (
+  //         <Entypo
+  //           name="circle-with-cross"
+  //           size={windowWidth / 16}
+  //           color={COLORS.white}
+  //           style={{paddingRight: 20}}
+  //         />
+  //       ),
+  //     });
+  //   }
+  // };
+
+  useEffect(() => {
     const params = {
-      token: TokenState,
       student_id: studentId,
-      device_id: value,
-      mac: macAddress,
+      token: TokenState,
     };
-    console.log(params, 'params');
+    const DevicesList = async () => {
+      setLoad(true);
+      try {
+        const api = await clientapi.get('/student/general/wifi/list', {params});
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          setRegDevices(api?.data?.devices);
+          // console.log(api?.data?.devices, 'api');
+          setLoad(false);
+        }
+      } catch (error) {
+        console.log(error);
+        setLoad(false);
+      }
+    };
+    DevicesList();
+  }, [refresh]);
+
+  const Delete_Device = async id => {
+    let data = {
+      student_id: studentId,
+      token: TokenState,
+      id: id,
+    };
+    // console.log(data, 'pa');
+    setLoad(true);
     try {
-      const api = await clientapi.post('student/general/wifi/reg', params);
-      if (api?.data?.success === false) {
+      const api = await clientapi.post('/student/general/wifi/delete', data);
+      if (
+        api?.data?.success === false &&
+        api?.data?.output?.response?.messages ===
+          'Session expired Please Login Again'
+      ) {
+        dispatch(LoginUser(false));
+        dispatch(TokenId(null));
+        dispatch(UserDetail(null));
+        dispatch(registered_courses(null));
         showMessage({
-          message: 'Required fields are not filled',
+          message: 'Session expired Please Login Again',
           type: 'warning',
-          duration: 10000,
           position: 'top',
           // backgroundColor: COLORS.themeColor,
           color: COLORS.black,
@@ -276,6 +430,7 @@ const WifiRegistration = () => {
             />
           ),
         });
+        setLoad(false);
       } else {
         showMessage({
           message: api?.data?.output?.response?.messages,
@@ -294,76 +449,9 @@ const WifiRegistration = () => {
             />
           ),
         });
-      }
-    } catch (error) {
-      console.log(error);
-      showMessage({
-        message: `500 Server Error`,
-        type: 'danger',
-        position: 'top',
-        style: {justifyContent: 'center', alignItems: 'center'},
-        icon: () => (
-          <Entypo
-            name="circle-with-cross"
-            size={windowWidth / 16}
-            color={COLORS.white}
-            style={{paddingRight: 20}}
-          />
-        ),
-      });
-    }
-  };
-
-  useEffect(() => {
-    const params = {
-      student_id: studentId,
-      token: TokenState,
-    };
-    const DevicesList = async () => {
-      setLoad(true);
-      try {
-        const api = await clientapi.get('/student/general/wifi/list', {params});
-        setRegDevices(api?.data?.devices);
-        // console.log(api?.data?.devices, 'api');
-        setLoad(false);
-      } catch (error) {
-        console.log(error);
+        setRefresh(!refresh);
         setLoad(false);
       }
-    };
-    DevicesList();
-  }, [refresh]);
-
-  const Delete_Device = async id => {
-    let data = {
-      student_id: studentId,
-      token: TokenState,
-      id: id,
-    };
-    console.log(data, 'pa');
-    setLoad(true);
-    try {
-      const api = await clientapi.post('/student/general/wifi/delete', data);
-      // console.log(api?.data?.devices, 'api');
-      showMessage({
-        message: api?.data?.output?.response?.messages,
-        type: 'success',
-        duration: 10000,
-        position: 'top',
-        backgroundColor: COLORS.themeColor,
-        color: COLORS.white,
-        style: {justifyContent: 'center', alignItems: 'center'},
-        icon: () => (
-          <FontAwesome6
-            name="check-circle"
-            size={windowWidth / 16}
-            color={COLORS.white}
-            style={{paddingRight: 20}}
-          />
-        ),
-      });
-      setRefresh(!refresh);
-      setLoad(false);
     } catch (error) {
       console.log(error);
       setLoad(false);

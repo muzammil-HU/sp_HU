@@ -17,6 +17,12 @@ import {showMessage} from 'react-native-flash-message';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import formatDate from '../../Constants/formatDate';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const TransportRequestList = () => {
   const [load, setLoad] = useState(false);
@@ -39,9 +45,37 @@ const TransportRequestList = () => {
           `/student/transport/request/history`,
           params,
         );
-        // console.log(api.data, 'api');
-        setData(api?.data?.history_list);
-        setLoad(false);
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          // console.log(api.data, 'api');
+          setData(api?.data?.history_list);
+          setLoad(false);
+        }
         // setVal(api?.data?.due_payment[0]?.v_dues);
         // console.log(api?.data?.merged_array);
       } catch (error) {

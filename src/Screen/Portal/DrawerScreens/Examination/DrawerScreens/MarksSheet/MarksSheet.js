@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS, windowWidth} from '../../../../../../Constants/COLORS';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import clientapi from '../../../../../../api/clientapi';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -14,8 +14,15 @@ import GradingCriteria from '../../../Academics/DrawersScreens/GradingCriteria';
 import Grading_Table from '../../../../../../components/reuseable/Grading_Table';
 import ScreenHead from '../../../../../../components/reuseable/ScreenHead';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {showMessage} from 'react-native-flash-message';
 import DegreeCompStatus from './DegreeCompStatus';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const MarksSheet = () => {
   const [load, setLoad] = useState(false);
@@ -23,7 +30,7 @@ const MarksSheet = () => {
   const route = useRoute();
   const nav = useNavigation();
   const Tab = createMaterialTopTabNavigator();
-
+  const dispatch = useDispatch();
   const Tabsheads = [
     {head: 'Unofficial DMC', comp: MarksheetCards},
     // {head: 'Semester GPA', comp: UnderConstruction},
@@ -55,8 +62,36 @@ const MarksSheet = () => {
         try {
           setLoad(true);
           const api = await clientapi.post(`/student/marksheet`, params);
-          setData(api.data);
-          setLoad(false);
+          if (
+            api?.data?.success === false &&
+            api?.data?.output?.response?.messages ===
+              'Session expired Please Login Again'
+          ) {
+            dispatch(LoginUser(false));
+            dispatch(TokenId(null));
+            dispatch(UserDetail(null));
+            dispatch(registered_courses(null));
+            showMessage({
+              message: 'Session expired Please Login Again',
+              type: 'warning',
+              position: 'top',
+              // backgroundColor: COLORS.themeColor,
+              color: COLORS.black,
+              style: {justifyContent: 'center', alignItems: 'center'},
+              icon: () => (
+                <FontAwesome6
+                  name="circle-exclamation"
+                  size={windowWidth / 16}
+                  color={COLORS.black}
+                  style={{paddingRight: 20}}
+                />
+              ),
+            });
+            setLoad(false);
+          } else {
+            setData(api.data);
+            setLoad(false);
+          }
         } catch (error) {
           // console.log(error, 'api error');
           setLoad(false);

@@ -26,6 +26,12 @@ import clientapi from '../../api/clientapi';
 import Loader from '../reuseable/Modals/LoaderModal';
 import ScreenHead from '../reuseable/ScreenHead';
 import {useSelector} from 'react-redux';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const TransportRequestForm = () => {
   const [load, setLoad] = useState(true);
@@ -84,12 +90,39 @@ const TransportRequestForm = () => {
           params,
         );
         // console.log(api.data.location_list, 'api');
-
-        setData([
-          {location_name: 'Select Item', status: ''},
-          ...api.data.location_list,
-        ]);
-        setLoad(false);
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          setData([
+            {location_name: 'Select Item', status: ''},
+            ...api.data.location_list,
+          ]);
+          setLoad(false);
+        }
       } catch (error) {
         setLoad(false);
         showMessage({
@@ -243,34 +276,63 @@ const TransportRequestForm = () => {
         const {message, type} = getMessageString(
           api?.data?.output?.response?.messages,
         );
-        showMessage({
-          message: message,
-          type: type,
-          duration: 10000,
-          position: 'top',
-          backgroundColor: type === 'success' ? COLORS.themeColor : COLORS.red,
-          color: COLORS.white,
-          style: {justifyContent: 'center', alignItems: 'center'},
-          icon: () => (
-            <>
-              {type === 'success' ? (
-                <FontAwesome6
-                  name="check-circle"
-                  size={windowWidth / 16}
-                  color={COLORS.white}
-                  style={{paddingRight: 20}}
-                />
-              ) : (
-                <Entypo
-                  name="circle-with-cross"
-                  size={windowWidth / 16}
-                  color={COLORS.white}
-                  style={{paddingRight: 20}}
-                />
-              )}
-            </>
-          ),
-        });
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          showMessage({
+            message: message,
+            type: type,
+            duration: 10000,
+            position: 'top',
+            backgroundColor:
+              type === 'success' ? COLORS.themeColor : COLORS.red,
+            color: COLORS.white,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <>
+                {type === 'success' ? (
+                  <FontAwesome6
+                    name="check-circle"
+                    size={windowWidth / 16}
+                    color={COLORS.white}
+                    style={{paddingRight: 20}}
+                  />
+                ) : (
+                  <Entypo
+                    name="circle-with-cross"
+                    size={windowWidth / 16}
+                    color={COLORS.white}
+                    style={{paddingRight: 20}}
+                  />
+                )}
+              </>
+            ),
+          });
+        }
       }
       setLoad(false);
     } catch (error) {

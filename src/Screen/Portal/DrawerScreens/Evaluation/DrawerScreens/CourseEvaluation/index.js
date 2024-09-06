@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import clientapi from '../../../../../../api/clientapi';
 import {COLORS, windowWidth} from '../../../../../../Constants/COLORS';
 import ScreenHead from '../../../../../../components/reuseable/ScreenHead';
@@ -17,6 +17,12 @@ import {showMessage} from 'react-native-flash-message';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
 
 const CourseEvaluation = () => {
   const TokenState = useSelector(state => {
@@ -27,7 +33,7 @@ const CourseEvaluation = () => {
   });
 
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const [courseEvaluation, setCourseEvaluation] = useState(null);
   const [load, setLoad] = useState(false);
   const [note, setNote] = useState(null);
@@ -49,10 +55,37 @@ const CourseEvaluation = () => {
       try {
         setLoad(true);
         const api = await clientapi.get(`/student/course/evaluation`, {params});
-        // console.log(api?.data?.course_evaluation, 'llll');
-        setCourseEvaluation(api?.data?.course_evaluation);
-        setOffer_type(api?.data?.offer_type);
-        setLoad(false);
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          setCourseEvaluation(api?.data?.course_evaluation);
+          setOffer_type(api?.data?.offer_type);
+          setLoad(false);
+        }
       } catch (error) {
         setLoad(false);
         showMessage({

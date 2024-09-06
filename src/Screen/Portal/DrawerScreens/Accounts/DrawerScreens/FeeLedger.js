@@ -3,13 +3,19 @@ import React, {useEffect, useState} from 'react';
 import {COLORS, windowWidth} from '../../../../../Constants/COLORS';
 import ScreenHead from '../../../../../components/reuseable/ScreenHead';
 import clientapi from '../../../../../api/clientapi';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
 import {useSharedValue} from 'react-native-reanimated';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ledger_Accordion from '../../../../../components/reuseable/Cards/Ledger_Accordian';
 import {showMessage} from 'react-native-flash-message';
-
+import {
+  LoginUser,
+  TokenId,
+  UserDetail,
+} from '../../../../../Redux/Reducers/AuthReducer/AuthReducer';
+import {registered_courses} from '../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 const FeeLedger = () => {
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
@@ -17,6 +23,7 @@ const FeeLedger = () => {
   const studentId = useSelector(state => {
     return state.AuthReducer.UserDetail.student_id;
   });
+  const dispatch = useDispatch();
   const [data, setData] = useState(null);
   const [fee_ledger, setFee_ledger] = useState(null);
   const [load, setLoad] = useState(false);
@@ -65,15 +72,42 @@ const FeeLedger = () => {
         setLoad(true);
         const api = await clientapi.post(`/student/ledger/fee`, params);
         // console.log(api.data, 'api');
-        setData(api?.data?.due_payment[0].v_dues);
-        setFee_ledger(api?.data?.merged_array);
-        setCr_total(api?.data?.cr_total[0]?.v_dues);
-        setDr_total(api?.data?.dr_total[0]?.v_dues);
-        setLoad(false);
-        // setVal(api?.data?.due_payment[0]?.v_dues);
-        // console.log(api?.data?.merged_array);
+        if (
+          api?.data?.success === false &&
+          api?.data?.output?.response?.messages ===
+            'Session expired Please Login Again'
+        ) {
+          dispatch(LoginUser(false));
+          dispatch(TokenId(null));
+          dispatch(UserDetail(null));
+          dispatch(registered_courses(null));
+          showMessage({
+            message: 'Session expired Please Login Again',
+            type: 'warning',
+            position: 'top',
+            // backgroundColor: COLORS.themeColor,
+            color: COLORS.black,
+            style: {justifyContent: 'center', alignItems: 'center'},
+            icon: () => (
+              <FontAwesome6
+                name="circle-exclamation"
+                size={windowWidth / 16}
+                color={COLORS.black}
+                style={{paddingRight: 20}}
+              />
+            ),
+          });
+          setLoad(false);
+        } else {
+          setData(api?.data?.due_payment[0].v_dues);
+          setFee_ledger(api?.data?.merged_array);
+          setCr_total(api?.data?.cr_total[0]?.v_dues);
+          setDr_total(api?.data?.dr_total[0]?.v_dues);
+          setLoad(false);
+        }
       } catch (error) {
         setLoad(false);
+        console.log(error, 'err');
         showMessage({
           message: `500 Server Error`,
           type: 'danger',
