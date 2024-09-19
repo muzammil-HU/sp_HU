@@ -81,8 +81,8 @@ android {
         applicationId "com.studentportal.hamdarduniversity"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.7"
+        versionCode 10
+        versionName "1.8"
     }
     signingConfigs {
         debug {

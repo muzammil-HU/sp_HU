@@ -167,10 +167,10 @@ const DrawerNav = () => {
       name: 'Transport Ledger',
       component: TransportLedger,
     },
-    // {
-    //   name: 'Generate Account Voucher',
-    //   component: GenerateVoucher,
-    // },
+    {
+      name: 'Generate Account Voucher',
+      component: GenerateVoucher,
+    },
   ];
   const GeneralScreens = [
     {

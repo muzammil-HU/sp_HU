@@ -10,6 +10,7 @@ import {
   ImageBackground,
   ScrollView,
   TextInput,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -124,6 +125,7 @@ const Login = () => {
   const handlePasswordSubmit = () => {
     onPressLogin();
   };
+
   return (
     <>
       <ScrollView
@@ -131,7 +133,7 @@ const Login = () => {
           flexGrow: 1,
         }}
         style={styles.container}>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, alignItems: 'center'}}>
           <View
             style={{
               justifyContent: 'space-evenly',
@@ -171,16 +173,17 @@ const Login = () => {
           <View
             style={{
               flexDirection: 'column',
-              // backgroundColor: 'red',
+              // backgroundColor: 'blue',
               justifyContent: 'space-evenly',
               alignItems: 'center',
-              height: '50%',
+              height: '30%',
               width: '100%',
             }}>
             <View
               style={{
                 flexDirection: 'row',
                 width: '90%',
+                height: '30%',
                 alignItems: 'center',
                 borderBottomWidth: isStuIdFocused ? 3 : 1,
                 borderBottomColor: COLORS.black,
@@ -224,11 +227,12 @@ const Login = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 width: '90%',
+                height: '30%',
                 borderBottomWidth: isPasswordFocused ? 3 : 1,
                 borderBottomColor: COLORS.black,
               }}>
               <MaterialIcons
-                name="password"
+                name="lock"
                 size={windowwidth / 16}
                 color={COLORS.black}
               />
@@ -287,13 +291,70 @@ const Login = () => {
               </Text>
             </TouchableOpacity>
           </View>
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '30%',
+              width: '95%',
+            }}>
+            <Text
+              selectable={true}
+              style={{
+                color: COLORS.black,
+                fontWeight: '600',
+              }}>
+              Need help logging in or have questions about our App? We're here
+              to help! Please don't hesitate to reach out to our support team
+              at:{' '}
+              <Text
+                style={{
+                  color: COLORS.themeColor,
+                  fontWeight: 'bold',
+                  fontSize: windowWidth / 25,
+                }}
+                onPress={() => Linking.openURL('mailto:ums@hamdard.edu.pk')}>
+                ums@hamdard.edu.pk
+              </Text>{' '}
+              and we'll get back to you as soon as possible. If you encounter
+              any issues or bugs within the app, please feel free to report them
+              to the System department or via email.
+            </Text>
+          </View>
         </View>
       </ScrollView>
       <Loader load={load} setLoad={setLoad} timeout={false} />
     </>
   );
 };
-
+{
+  /* <TouchableOpacity>
+              <Text
+                selectable={true}
+                onPress={handleEmailPress}
+                style={{color: COLORS.themeColor, fontWeight: 'bold'}}>
+                ums@hamdard.edu.pk
+              </Text>
+            </TouchableOpacity> */
+}
+{
+  /* <Text
+              selectable={true}
+              style={{color: COLORS.black, fontWeight: '600'}}>
+              
+            </Text> */
+}
+{
+  /* <TouchableOpacity>
+              <Text
+                selectable={true}
+                onPress={handleEmailPress}
+                style={{color: COLORS.themeColor, fontWeight: 'bold'}}>
+                syed.sami@hamdard.edu.pk
+              </Text>
+            </TouchableOpacity> */
+}
 export default Login;
 
 const styles = StyleSheet.create({
@@ -359,11 +420,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   button: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: '25%',
+    // marginBottom: '25%',
     width: '70%',
-    height: '12%',
+    height: '20%',
     backgroundColor: COLORS.themeColor,
     borderRadius: 10,
   },

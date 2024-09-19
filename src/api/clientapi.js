@@ -31,9 +31,9 @@ const clientapi = axios.create({
     // remote local
     // 'http://172.23.12.71:80/api',
     // 'http://192.168.137.16:8000/api',
-    // 'http://127.0.0.1:8000/api',
-    // 'http://sp.hamdard.edu.pk/api',
-    'http://192.168.137.16:8000/api',
+    'http://172.23.163.37:8000/api',
+  // 'http://sp.hamdard.edu.pk/api',
+  // 'http://172.23.163.37:8000/api',
   // 'https://snologies.com/sp_backend_lara/public/api',
   headers: {
     'Content-Type': 'application/json',

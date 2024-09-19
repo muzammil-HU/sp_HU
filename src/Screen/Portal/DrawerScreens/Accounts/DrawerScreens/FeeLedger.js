@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../../../../components/reuseable/Modals/LoaderModal';
 import {useSharedValue} from 'react-native-reanimated';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Ledger_Accordion from '../../../../../components/reuseable/Cards/Ledger_Accordian';
 import {showMessage} from 'react-native-flash-message';
 import {
@@ -15,7 +16,7 @@ import {
   UserDetail,
 } from '../../../../../Redux/Reducers/AuthReducer/AuthReducer';
 import {registered_courses} from '../../../../../Redux/Reducers/GlobalStatesReducer/GlobalStatesReducer';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+
 const FeeLedger = () => {
   const TokenState = useSelector(state => {
     return state?.AuthReducer.TokenId;
@@ -147,7 +148,7 @@ const FeeLedger = () => {
               flexGrow: 1,
               paddingHorizontal: '3%',
             }}>
-            {fee_ledger && fee_ledger.length > 0 ? (
+            {fee_ledger?.length > 0 ? (
               fee_ledger
                 .sort(
                   (a, b) =>
@@ -165,7 +166,7 @@ const FeeLedger = () => {
             ) : (
               <Text>No data found</Text>
             )}
-            {fee_ledger && fee_ledger.length > 0 ? (
+            {fee_ledger?.length > 0 ? (
               <View
                 style={{
                   flexDirection: 'row',

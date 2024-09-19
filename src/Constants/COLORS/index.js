@@ -19,7 +19,7 @@ export const COLORS = {
   leafGreen: '#7eaf3c',
   starGreen: '#86a701',
 
-  grey: '#464646',
+  grey: '#808080',
   greyish: '#1e2329',
   lighGrey: '#262932',
   lightGrey2: '#555555',

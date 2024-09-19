@@ -12,6 +12,7 @@ const ScreenHead = ({
   load,
   setLoad,
   ledger,
+  notetextcolor = COLORS.themeColor,
   listHeader = true,
 }) => {
   return (
@@ -35,7 +36,11 @@ const ScreenHead = ({
           )}
           {NoteVisibility === true && (
             <View style={{paddingHorizontal: '3%', paddingBottom: '2%'}}>
-              {Note && <Text style={styles.Notetext}>{Note}</Text>}
+              {Note && (
+                <Text style={[styles.Notetext, {color: notetextcolor}]}>
+                  {Note}
+                </Text>
+              )}
               {data ? (
                 <View style={{flexDirection: 'row'}}>
                   <Text style={styles.Notetext}>Your Current Dues are </Text>

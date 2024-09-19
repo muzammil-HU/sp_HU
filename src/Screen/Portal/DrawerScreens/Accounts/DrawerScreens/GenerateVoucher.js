@@ -22,10 +22,26 @@ const GenerateVoucher = () => {
   const Tab = createMaterialTopTabNavigator();
 
   const Tabsheads = [
-    {head: 'Fee Voucher', comp: FeeVoucher},
-    {head: 'Hostel Voucher', comp: HostelVoucher},
-    {head: 'Transport Voucher', comp: TransportVoucher},
-    {head: 'Voucher Guidlines', comp: VoucherGuidlines},
+    {
+      head: 'Fee Voucher',
+      comp: FeeVoucher,
+      params: {type: 'Fee'},
+    },
+    {
+      head: 'Hostel Voucher',
+      comp: FeeVoucher,
+      params: {type: 'Hostel'},
+    },
+    {
+      head: 'Transport Voucher',
+      comp: FeeVoucher,
+      params: {type: 'Transport'},
+    },
+    {
+      head: 'Voucher Guidlines',
+      comp: VoucherGuidlines,
+      params: {type: 'guidelines'},
+    },
   ];
 
   const TokenState = useSelector(state => {
@@ -39,7 +55,15 @@ const GenerateVoucher = () => {
   return (
     <>
       <View style={{flex: 1, backgroundColor: COLORS.white}}>
-        <ScreenHead heading={'Generate Voucher'} NoteVisibility={false} />
+        <ScreenHead
+          heading={'Generate Voucher'}
+          NoteVisibility={true}
+          listHeader={false}
+          Note={
+            'Note! Student can not generate voucher if he/she has pending voucher in due date or not having any outstanding balance.'
+          }
+          notetextcolor={COLORS.red}
+        />
         <Tab.Navigator
           screenOptions={{
             activeBackgroundColor: COLORS.themeColor,
@@ -48,7 +72,12 @@ const GenerateVoucher = () => {
           tabBar={props => <CustomTabBar {...props} />}>
           {Tabsheads.map((head, index) => {
             return (
-              <Tab.Screen key={index} name={head.head} component={head.comp} />
+              <Tab.Screen
+                key={index}
+                name={head.head}
+                component={head.comp}
+                initialParams={head.params}
+              />
             );
           })}
         </Tab.Navigator>
